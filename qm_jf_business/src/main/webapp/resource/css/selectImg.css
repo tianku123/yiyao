@@ -1,0 +1,71 @@
+.select-imglib{height:280px;width:100%;border-bottom:1px solid #92aed0;background:#efefef;}
+
+.select-imglib-left{float:left;width:24.8%;height:280px;border-right:1px solid #92aed0;text-align: left;background:#fff;overflow-y:auto;overflow-x:hidden;}
+
+.select-imglib-left .imglib-tree{width:80%;padding:6px}
+
+.select-imglib-left .tree-menu{line-height:26px;font-size:12px;color:#000;height:26px;width:100%;padding-left:43px;}
+.select-imglib-left .tree-menu a:link{text-decoration:none;display:block;}
+.select-imglib-left .tree-menu-sub{background: url(../images/secure_icon.png) no-repeat 0 0;background-position: 0 -470px;}
+.select-imglib-left .tree-menu-sub a:link{font-weight:bold;}
+
+.select-imglib-left .tree-menu-close{background: url(../images/secure_icon.png) no-repeat 0 0;background-position: 0 -493px;}
+.select-imglib-left .tree-menu-open{background: url(../images/secure_icon.png) no-repeat 0 0;background-position: 0 -518px;}
+.select-imglib-left .tree-menu-open a:link{text-decoration:none;display:block;font-weight:bold;color:#af0018}
+
+.select-imglib-right{float:right;width:75%;height:280px;background:#fff;}
+
+.select-imglib-list{height:246px;text-align: left;border-bottom:1px solid #92aed0;}
+.select-imglib-list div{padding:8px 0 10px 5px;}
+.select-imglib-list label{float:left; margin:0px 3px 0 0; padding-top:8px;padding-bottom:8px;display:block; }
+.select-imglib-list img{margin-bottom:0px;border:1px solid #FFF; vertical-align:top;background-color: #f5f4f4;width:105px;height:95px; cursor:pointer;text-align:center;display: inline-block;line-height: 20px;}
+.select-imglib-list img:hover{border:1px solid #92AED0;}
+
+.select-imglib-page{height:30px;width:100%;background:#efefef;text-align: right;padding-top: 3px;}
+
+.select-imglib-box{height:102px;width:100%;overflow-x:auto ;overflow-y:hidden; text-align: left; padding-top:6px; display:inline-block;white-space:nowrap;vertical-align:middle;}
+.select-imglib-box div{padding-left:6px;}
+.select-imglib-box label{margin-right:6px}
+.select-imglib-box img{margin-bottom:0px;vertical-align:top;border:1px solid #CCCCCC;background-color: #f5f4f4;width:80px;height:80px; cursor:pointer;text-align:center;display: inline-block;line-height: 20px;}
+.select-imglib-box .del{padding:0 4px;margin-left:-18px;cursor:pointer;background: #fff;border:1px solid #CCCCCC;}
+.select-imglib-box .del a{text-decoration:none;}
+
+.select-imgUpload{height:390px;width:100%;}
+.select-imgUpload-left{float:left;height:365px;overflow:scroll;margin:12px;border:1px solid #ccc;width:45%;}
+.select-imgUpload-left .view-img-div{float:left;display:inline-block;width:120px;height:120px;}
+.select-imgUpload-left .view-img-box{float:left;  margin-left:2px;margin-top:3px;margin-bottom:1px;margin-right:10px;display:inline-block;width:108px;height:92px; }
+.select-imgUpload-left .view-img-box .view-img{vertical-align:top;border:1px solid #FFF;width:105px;height:90px; cursor:pointer;display: inline-block;line-height: 20px;background:url("../images/add_img_btn.jpg") no-repeat;}
+.select-imgUpload-left .view-img-box .view-img img{width:105px;height:90px;display:block;text-align: center;}
+.select-imgUpload-left .view-img-box .view-img .img{width:105px;height:90px;display:block;text-align: center;}
+.select-imgUpload-left .view-img-box .view-img .fileUploadBtn{margin-top:-94px;float:left; width:105px; height:90px;cursor:pointer;filter:alpha(opacity:0); opacity:0;font-size:20px;}
+.select-imgUpload-left .view-img-box .view-img .btn-top{margin-top:-94px;}
+.select-imgUpload-left .view-img-box .fileUploadImgPath{}
+
+.select-imgUpload-left .view-img-info{margin-bottom:6px;}
+.select-imgUpload-left .view-img-info .del{float:right; padding:0 4px;text-align: right;margin-right:10px;width:25px;background: #fff;border:0px solid #CCCCCC;display:inline-block;}
+.select-imgUpload-left .view-img-info .del a{text-decoration:none;cursor:pointer;font-size:12px;color:#666}
+.select-imgUpload-left .view-img-info .info{float:left;margin-left:4px;display:inline-block;color:#666}
+
+.select-imgUpload-right{float:right;height:365px;margin:12px 12px 12px 0;border:0px solid #ccc;width:45%;}
+.select-imgUpload-right .img-tool{height:180px;}
+.select-imgUpload-right .img-view{height:185px;border-top:1px dotted #ccc;}
+.select-imgUpload-right .img-view-title{padding-left:2px;padding-top:8px;text-align: left;font-weight:bold;font-size:14px}
+.select-imgUpload-right .img-view-box{margin-left:30px;margin-top:8px;border:1px solid #ccc;height:145px;width:145px}
+.select-imgUpload-right .img-tool .file-upload{height:55px;width:100%;border-bottom:1px dotted #ccc;padding-top:5px}
+.select-imgUpload-right .img-tool .file-upload-btn{width:156px; height:43px; margin:0 auto; display:block; background:url("../images/upload_img_btn.jpg") no-repeat;}
+.select-imgUpload-right .img-tool  #fileUploadImg{width:156px; height:43px;cursor:pointer;float:left;filter:alpha(opacity:10); opacity:10;font-size:30px}
+.select-imgUpload-right .img-tool  .fileUploadImgs{width:156px; height:43px;cursor:pointer;float:left;filter:alpha(opacity:0); opacity:0;font-size:30px}
+
+.select-imgUpload-right .img-tool .add-img-sort{float:right;height:25px;width:60px;text-align:center;display:block; cursor:pointer;margin-right:8px;}
+.select-imgUpload-right .img-tool .add-img-sort-select{height:26px;border-top:1px solid #ccc;border-left:1px solid #ccc;border-right:1px solid #ccc;background:#fff;margin-top:-1px;margin-right:7px}
+.select-imgUpload-right .img-tool .add-img-sort-box{height:68px;width:100%;border:1px solid #ccc;}
+.select-imgUpload-right .img-tool .upload-img-note{padding-top:5px;line-height: 20px;color:#666}
+
+.select-ImgUrl{height:390px;width:100%;}
+.select-ImgUrl-box{padding:20px 10px 20px 20px;text-align: left;}
+.select-ImgUrl-box .item{height: 33px;line-height: 30px;margin-bottom:20px;}
+.select-ImgUrl-box .label{float:left;margin-right:10px;text-align: center;width:47px;height:30px;border:1px solid #ccc;display:block; cursor:pointer;background-color: #f5f4f4;}
+.select-ImgUrl-box .label-selected{border:1px solid #006da5;color:#006da5}
+.select-ImgUrl-box .lock{width:30px;height:50px;margin-top:20px;padding-top:15px;background:url("../images/lock.gif") no-repeat;}
+
+.select-ImgUrl-box .view-img-box{float:right;border:1px solid #ccc;height:300px;width:330px;margin-right:16px;vertical-align:middle;background:#eee;}

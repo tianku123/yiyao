@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.omp.business.dao.img.ImgCategoryMapper">
+    <resultMap type="com.qm.omp.business.pojo.img.ImgCategoryBean" id="BaseResultMap">
+		<id column="F_CATEGORY_ID" jdbcType="DECIMAL" property="categoryId" />
+		<result column="F_CATEGORY_NAME" jdbcType="VARCHAR" property="categoryName" />
+		<result column="F_BELONG_ID" jdbcType="VARCHAR" property="merchantId" />
+		<result column="F_BELONG_TYPE" jdbcType="VARCHAR" property="belongType" />
+		<result column="F_UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+		<result column="F_UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+    
+    <!-- Base_Column_List -->
+    <sql id="Base_Column_List" >
+    	F_CATEGORY_ID,F_CATEGORY_NAME,F_BELONG_ID,F_BELONG_TYPE,F_UPDATE_USER,F_UPDATE_TIME
+    </sql>
+    
+    <!-- selectCount -->
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT COUNT(1) AS NUM FROM T_IMG_CATEGORY_INFO
+		<where>
+		    F_BELONG_TYPE = '2'
+			<if test="categoryId != null and categoryId != ''">
+				<![CDATA[ and F_CATEGORY_ID = #{categoryId,jdbcType=DECIMAL}]]>
+			</if>
+			<if test="categoryName != null and categoryName != ''">
+				<![CDATA[ and binary F_CATEGORY_NAME = #{categoryName,jdbcType=VARCHAR}]]>
+			</if>
+			<if test="merchantId != null and merchantId != ''">
+				<![CDATA[ and binary F_BELONG_ID = #{merchantId,jdbcType=VARCHAR}]]>
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				<![CDATA[ and binary F_UPDATE_USER = #{updateUser,jdbcType=VARCHAR}]]>
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				<![CDATA[ and binary F_UPDATE_TIME = #{updateTime,jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</select>
+    
+    <!-- selectList   rh-->
+	<select id="selectList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		F_CATEGORY_ID,
+		F_CATEGORY_NAME,
+		F_BELONG_ID,
+		F_BELONG_TYPE,
+		F_UPDATE_USER,
+		F_UPDATE_TIME
+		FROM t_img_category_info
+				
+	</select>
+	
+	<!-- insertSelective -->
+	<insert id="insertSelective" parameterType="com.qm.omp.business.pojo.img.ImgCategoryBean">
+		INSERT INTO T_IMG_CATEGORY_INFO
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="categoryName != null" >F_CATEGORY_NAME,</if>
+			<if test="merchantId != null" >F_BELONG_ID,</if>
+			<if test="belongType != null" >F_BELONG_TYPE,</if>
+			<if test="updateUser != null" >F_UPDATE_USER,</if>
+			<if test="updateTime != null" >F_UPDATE_TIME,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="categoryName != null" >#{categoryName,jdbcType=VARCHAR},</if>
+			<if test="merchantId != null" >#{merchantId,jdbcType=VARCHAR},</if>
+			<if test="belongType != null" >#{belongType,jdbcType=VARCHAR},</if>
+			<if test="updateUser != null" >#{updateUser,jdbcType=VARCHAR},</if>
+			<if test="updateTime != null" >#{updateTime,jdbcType=VARCHAR},</if>
+		</trim>
+	</insert>
+</mapper>

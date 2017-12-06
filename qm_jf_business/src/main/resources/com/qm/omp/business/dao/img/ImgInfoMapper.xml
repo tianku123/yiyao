@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.omp.business.dao.img.ImgInfoMapper">
+    <resultMap type="com.qm.omp.business.pojo.img.ImgInfoBean" id="BaseResultMap">
+		<id column="F_IMG_ID" jdbcType="DECIMAL" property="imgId" />
+		<result column="F_IMG_NAME" jdbcType="VARCHAR" property="imgName" />
+		<result column="F_IMG_URL" jdbcType="VARCHAR" property="imgUrl" />
+		<result column="F_IMG_EXT_NAME" jdbcType="VARCHAR" property="imgExtName" />
+		<result column="F_CATEGORY_ID" jdbcType="DECIMAL" property="categoryId" />
+		<result column="F_BELONG_ID" jdbcType="VARCHAR" property="merchantId" />
+		<result column="F_BELONG_TYPE" jdbcType="VARCHAR" property="belongType" />
+		<result column="F_UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+		<result column="F_UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+	
+    <!-- Base_Column_List -->
+    <sql id="Base_Column_List" >
+    	F_IMG_ID,F_IMG_NAME,F_IMG_URL,F_IMG_EXT_NAME,F_CATEGORY_ID,F_BELONG_ID,F_BELONG_TYPE,F_UPDATE_USER,
+		F_UPDATE_TIME
+    </sql>
+    
+    <!-- selectCount rh-->
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT COUNT(1) AS NUM FROM T_IMG_INFO
+		<if test="categoryId!=null and categoryId!=''">
+			WHERE F_CATEGORY_ID=#{categoryId}
+		</if>
+	</select>
+    
+    <!-- selectList rh-->
+	<select id="selectList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		F_IMG_ID,
+		F_IMG_NAME,
+		F_IMG_URL,
+		F_IMG_EXT_NAME,
+		F_CATEGORY_ID,
+		F_BELONG_ID,
+		F_BELONG_TYPE,
+		F_UPDATE_USER,
+		F_UPDATE_TIME
+		FROM t_img_info 
+		<if test="categoryId!=null and categoryId!=''">
+			WHERE F_CATEGORY_ID=#{categoryId}
+		</if>
+		<if test="pageSize != null and pageSize != '' and pageSize != 0">  
+			LIMIT #{pageStart,jdbcType=DECIMAL},#{pageSize,jdbcType=DECIMAL}
+		</if>
+	</select>
+	
+	<!-- insertSelective -->
+	<insert id="insertSelective" parameterType="com.qm.omp.business.pojo.img.ImgInfoBean">
+		INSERT INTO T_IMG_INFO
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="imgName != null" >F_IMG_NAME,</if>
+			<if test="imgUrl != null" >F_IMG_URL,</if>
+			<if test="imgExtName != null" >F_IMG_EXT_NAME,</if>
+			<if test="categoryId != null" >F_CATEGORY_ID,</if>
+			<if test="merchantId != null" >F_BELONG_ID,</if>
+			<if test="belongType != null" >F_BELONG_TYPE,</if>
+			<if test="updateUser != null" >F_UPDATE_USER,</if>
+			<if test="updateTime != null" >F_UPDATE_TIME,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="imgName != null" >#{imgName,jdbcType=VARCHAR},</if>
+			<if test="imgUrl != null" >#{imgUrl,jdbcType=VARCHAR},</if>
+			<if test="imgExtName != null" >#{imgExtName,jdbcType=VARCHAR},</if>
+			<if test="categoryId != null" >#{categoryId,jdbcType=DECIMAL},</if>
+			<if test="merchantId != null" >#{merchantId,jdbcType=VARCHAR},</if>
+			<if test="belongType != null" >#{belongType,jdbcType=VARCHAR},</if>
+			<if test="updateUser != null" >#{updateUser,jdbcType=VARCHAR},</if>
+			<if test="updateTime != null" >#{updateTime,jdbcType=VARCHAR},</if>
+		</trim>
+		
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="F_IMG_ID">
+			select LAST_INSERT_ID() AS F_IMG_ID
+		</selectKey>
+	</insert>
+</mapper>

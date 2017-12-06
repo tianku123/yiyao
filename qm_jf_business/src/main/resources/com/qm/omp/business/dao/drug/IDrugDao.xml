@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IDrugDao">
+	<resultMap id="BaseResultMap" type="com.qm.omp.business.pojo.drug.Drug">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_SPECIFICATION" property="fSpecification"
+			jdbcType="VARCHAR" />
+		<result column="F_ADDRESS" property="fAddress" jdbcType="VARCHAR" />
+		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+		<result column="F_BATCH_NUMBER" property="fBatchNumber"
+			jdbcType="VARCHAR" />
+		<result column="F_EXPIRY_DATE" property="fExpiryDate" jdbcType="VARCHAR" />
+		<result column="F_NUMBER" property="fNumber" jdbcType="INTEGER" />
+		<result column="F_NUMBER_BAK" property="fNumberBak" jdbcType="INTEGER" />
+		<result column="F_IMG" property="fImg" jdbcType="VARCHAR" />
+		<result column="F_INTRO" property="fIntro" jdbcType="VARCHAR" />
+		<result column="F_PRICE" property="fPrice" jdbcType="DOUBLE" />
+		<result column="F_GONGYE_PRICE" property="fGongyePrice"
+			jdbcType="DOUBLE" />
+		<result column="F_BUYING_PRICE" property="fBuyingPrice"
+			jdbcType="DOUBLE" />
+		<result column="F_SUPPLY_PRICE" property="fSupplyPrice"
+			jdbcType="DOUBLE" />
+		<result column="F_RETAIL_PRICE" property="fRetailPrice"
+			jdbcType="DOUBLE" />
+		<result column="F_WAREHOUSE_ID" property="fWareHouseId"
+			jdbcType="BIGINT" />
+		<result column="F_WAREHOUSE_NAME" property="fWareHouseName"
+			jdbcType="VARCHAR" />
+		<result column="F_COMPANY_ID" property="fCompanyId" jdbcType="BIGINT" />
+		<result column="F_COMPANY_NAME" property="fCompanyName"
+			jdbcType="VARCHAR" />
+		<result column="F_DRUG_ONLY_ID" property="fDrugOnlyId"
+			jdbcType="BIGINT" />
+		<result column="F_BALANCE_ID" property="fBalanceId" jdbcType="BIGINT" />
+		<result column="F_XQ_TC" property="fXqTc" jdbcType="DOUBLE" />
+		<result column="F_DQ_TC" property="fDqTc" jdbcType="DOUBLE" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID,
+		F_NAME,
+		F_SPECIFICATION,
+		F_ADDRESS,
+		F_BATCH_NUMBER,
+		F_EXPIRY_DATE,
+		F_NUMBER,
+		F_NUMBER_BAK,
+		F_WAREHOUSE_ID,
+		F_TIME,
+		F_STATE,
+		F_IMG,
+		F_INTRO,
+		F_RETAIL_PRICE,
+		F_SUPPLY_PRICE,
+		F_PRICE,
+		F_GONGYE_PRICE,
+		F_BUYING_PRICE,
+		F_BALANCE_ID,
+		F_COMPANY_ID,
+		F_DRUG_ONLY_ID
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) from
+		t_drug a LEFT JOIN t_warehouse b ON
+		a.F_WAREHOUSE_ID=b.F_ID where a.F_STATE
+		in(0,3)
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+		<if test="time !=null and time !=''">
+			and a.F_TIME like CONCAT("",#{time} ,"%")
+		</if>
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_NAME,
+		a.F_SPECIFICATION,
+		a.F_ADDRESS,
+		a.F_BATCH_NUMBER,
+		a.F_EXPIRY_DATE,
+		a.F_NUMBER,
+		a.F_NUMBER_BAK,
+		a.F_WAREHOUSE_ID,
+		a.F_DRUG_ONLY_ID,
+		a.F_TIME,
+		a.F_STATE,
+		a.F_IMG,
+		a.F_INTRO,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_BUYING_PRICE,
+		a.F_RETAIL_PRICE,
+		a.F_SUPPLY_PRICE,
+		a.F_COMPANY_ID,
+		b.F_NAME F_WAREHOUSE_NAME,
+		c.F_NAME F_COMPANY_NAME
+		FROM
+		t_drug a LEFT JOIN t_warehouse b ON a.F_WAREHOUSE_ID=b.F_ID left join
+		t_company c on a.F_COMPANY_ID=c.F_ID
+		where a.F_STATE in(0,3)
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+		<if test="time !=null and time !=''">
+			and a.F_TIME like CONCAT("",#{time} ,"%")
+		</if>
+		order by a.F_ID desc
+		LIMIT #{page}, #{rows}
+	</select>
+
+	<select id="queryStockTotal" resultType="int">
+		select count(1) from
+		t_drug a LEFT JOIN t_warehouse b ON
+		a.F_WAREHOUSE_ID=b.F_ID where a.F_STATE
+		in(0,2,3)
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+		<if
+			test="beginTime !=null and beginTime !='' and endTime !=null and endTime !=''">
+			and a.F_TIME <![CDATA[>= ]]>
+			#{beginTime} AND a.F_TIME <![CDATA[<= ]]>
+			#{endTime}
+		</if>
+	</select>
+	<select id="queryStock" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_NAME,
+		a.F_SPECIFICATION,
+		a.F_ADDRESS,
+		a.F_BATCH_NUMBER,
+		a.F_EXPIRY_DATE,
+		a.F_NUMBER,
+		a.F_NUMBER_BAK,
+		a.F_WAREHOUSE_ID,
+		a.F_DRUG_ONLY_ID,
+		a.F_TIME,
+		a.F_STATE,
+		a.F_IMG,
+		a.F_INTRO,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_BUYING_PRICE,
+		a.F_RETAIL_PRICE,
+		a.F_SUPPLY_PRICE,
+		b.F_NAME F_WAREHOUSE_NAME
+		FROM
+		t_drug a LEFT JOIN t_warehouse b ON
+		a.F_WAREHOUSE_ID=b.F_ID
+		where a.F_STATE in(0,2,3)
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+		<if
+			test="beginTime !=null and beginTime !='' and endTime !=null and endTime !=''">
+			and a.F_TIME <![CDATA[>= ]]>
+			#{beginTime} AND a.F_TIME <![CDATA[<= ]]>
+			#{endTime}
+		</if>
+		order by a.F_ID desc
+		LIMIT #{page}, #{rows}
+	</select>
+
+	<!-- 订单管理选择药品 start -->
+	<select id="getListByUserTotal" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		t_drug a LEFT JOIN t_warehouse b ON
+		a.F_WAREHOUSE_ID=b.F_ID LEFT JOIN t_user_drug c ON
+		a.F_DRUG_ONLY_ID=c.F_DRUG_ID
+		WHERE c.F_USER_ID=#{userId} and
+		a.F_NUMBER!=0 and a.F_STATE in(0,3)
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+	</select>
+	<select id="getListByUser_ExceptSelectedIdsTotal" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		t_drug a LEFT JOIN t_warehouse b ON
+		a.F_WAREHOUSE_ID=b.F_ID LEFT JOIN t_user_drug c ON
+		a.F_DRUG_ONLY_ID=c.F_DRUG_ID LEFT JOIN t_drug_only d ON
+		a.F_DRUG_ONLY_ID=d.F_ID
+		WHERE c.F_USER_ID=#{userId} and a.F_NUMBER!=0
+		and a.F_STATE in(0,3)
+		<if test="fCompanyIds !=null and fCompanyIds !=''">
+			AND a.F_COMPANY_ID in(${fCompanyIds})
+		</if>
+		<if test="fDrugPrinterIds !=null and fDrugPrinterIds !=''">
+			AND d.F_DRUG_PRINTER_ID in(${fDrugPrinterIds})
+		</if>
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+		<if test="idList != null and idList.size>0">
+			and a.F_ID not in
+			<foreach collection="idList" item="item" open="(" separator=","
+				close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="time !=null and time !=''">
+			and a.F_TIME like CONCAT("",#{time} ,"%")
+		</if>
+	</select>
+	
+	<select id="getListByUser" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_NAME,
+		a.F_SPECIFICATION,
+		a.F_ADDRESS,
+		a.F_BATCH_NUMBER,
+		a.F_DRUG_ONLY_ID,
+		a.F_EXPIRY_DATE,
+		a.F_NUMBER,
+		a.F_WAREHOUSE_ID,
+		a.F_TIME,
+		a.F_STATE,
+		a.F_IMG,
+		a.F_INTRO,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_BUYING_PRICE,
+		b.F_NAME F_WAREHOUSE_NAME
+		FROM
+		t_drug a LEFT JOIN
+		t_warehouse b ON a.F_WAREHOUSE_ID=b.F_ID LEFT JOIN t_user_drug c ON
+		a.F_DRUG_ONLY_ID=c.F_DRUG_ID
+		WHERE c.F_USER_ID=#{userId} and
+		a.F_NUMBER!=0 and a.F_STATE in(0,3)
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+		ORDER BY a.F_NAME, a.F_EXPIRY_DATE ASC
+		LIMIT #{page}, #{rows}
+	</select>
+	<select id="getListByUser_ExceptSelectedIds" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_NAME,
+		a.F_SPECIFICATION,
+		a.F_ADDRESS,
+		a.F_BATCH_NUMBER,
+		a.F_DRUG_ONLY_ID,
+		a.F_EXPIRY_DATE,
+		a.F_NUMBER,
+		a.F_WAREHOUSE_ID,
+		a.F_TIME,
+		a.F_STATE,
+		a.F_IMG,
+		a.F_INTRO,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_BUYING_PRICE,
+		b.F_NAME F_WAREHOUSE_NAME,
+		d.F_DRUG_PRINTER_ID,
+		d.F_DQ_TC,
+		d.F_XQ_TC
+		FROM
+		t_drug a JOIN t_warehouse b ON a.F_WAREHOUSE_ID=b.F_ID 
+		JOIN t_user_drug c ON a.F_DRUG_ONLY_ID=c.F_DRUG_ID 
+		JOIN t_drug_only d ON a.F_DRUG_ONLY_ID=d.F_ID 
+		<!-- JOIN t_drug_printer tp ON d.F_DRUG_PRINTER_ID=tp.F_ID  -->
+		WHERE c.F_USER_ID=#{userId} and a.F_NUMBER!=0
+		and a.F_STATE in(0,3) AND d.F_STATE=0 AND b.F_STATE=0 <!-- AND tp.F_STATE=0 -->
+		<if test="fCompanyIds !=null and fCompanyIds !=''">
+			AND a.F_COMPANY_ID in(${fCompanyIds})
+		</if>
+		<if test="fDrugPrinterIds !=null and fDrugPrinterIds !=''">
+			AND d.F_DRUG_PRINTER_ID in(${fDrugPrinterIds})
+		</if>
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%")
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%")
+		</if>
+		<if test="idList != null and idList.size>0">
+			and a.F_ID not in
+			<foreach collection="idList" item="item" open="(" separator=","
+				close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="time !=null and time !=''">
+			and a.F_TIME like CONCAT("",#{time} ,"%")
+		</if>
+		ORDER BY a.F_NAME, a.F_EXPIRY_DATE ASC, a.F_NUMBER asc
+		LIMIT #{page},
+		#{rows}
+	</select>
+	
+	<select id="getListByUser_ExceptSelected" resultMap="BaseResultMap">
+		SELECT
+		F_ID,F_NUMBER
+		FROM
+		t_drug where f_state in(0,3)
+		<if test="time !=null and time !=''">
+			and F_TIME like CONCAT("",#{time} ,"%")
+		</if>
+	</select>
+
+	<!-- 订单管理选择药品 end -->
+
+	<select id="getDrugList" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_NAME,
+		a.F_SPECIFICATION,
+		a.F_ADDRESS,
+		a.F_BATCH_NUMBER,
+		a.F_EXPIRY_DATE,
+		a.F_NUMBER,
+		a.F_WAREHOUSE_ID,
+		a.F_TIME,
+		a.F_STATE,
+		a.F_IMG,
+		a.F_INTRO,
+		a.F_DRUG_ONLY_ID,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		b.F_NAME F_WAREHOUSE_NAME
+		FROM
+		t_drug a LEFT JOIN t_warehouse b ON a.F_WAREHOUSE_ID=b.F_ID
+		where
+		a.F_STATE=0
+	</select>
+
+	<select id="getBean" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM
+		t_drug
+		where F_ID=#{fDrugId}
+	</select>
+
+	<select id="getBeanByDrugOnlyId" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_NAME,
+		a.F_SPECIFICATION,
+		a.F_ADDRESS,
+		a.F_BATCH_NUMBER,
+		a.F_EXPIRY_DATE,
+		a.F_NUMBER,
+		a.F_WAREHOUSE_ID,
+		a.F_TIME,
+		a.F_STATE,
+		a.F_IMG,
+		a.F_INTRO,
+		a.F_DRUG_ONLY_ID,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE
+		FROM
+		t_drug a LEFT JOIN t_warehouse b ON a.F_WAREHOUSE_ID=b.F_ID
+		LEFT JOIN
+		t_user_drug c ON a.F_DRUG_ONLY_ID=c.F_DRUG_ID
+		LEFT JOIN t_drug_only d
+		ON a.F_DRUG_ONLY_ID=d.F_ID
+		where a.F_DRUG_ONLY_ID=#{fDrugOnlyId} and
+		a.F_NUMBER!=0 and a.F_STATE
+		in(0,3)
+		<if test="idList != null and idList.size>0">
+			and a.F_ID not in
+			<foreach collection="idList" item="item" open="(" separator=","
+				close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="fCompanyIds !=null and fCompanyIds !=''">
+			AND a.F_COMPANY_ID in(${fCompanyIds})
+		</if>
+		<if test="fDrugPrinterIds !=null and fDrugPrinterIds !=''">
+			AND d.F_DRUG_PRINTER_ID in(${fDrugPrinterIds})
+		</if>
+		<if test="time !=null and time !=''">
+			and a.F_TIME like CONCAT("",#{time} ,"%")
+		</if>
+		ORDER BY a.F_NAME, a.F_EXPIRY_DATE ASC, a.F_NUMBER asc
+	</select>
+
+	<select id="getCheckedDrugList" resultType="map">
+		SELECT
+		F_DRUG_ID
+		FROM
+		t_user_drug where F_USER_ID=#{userId}
+	</select>
+
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.Drug">
+		INSERT INTO t_drug
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fImg != null">
+				F_IMG,
+			</if>
+			<if test="fAddress != null">
+				F_ADDRESS,
+			</if>
+			<if test="fName != null">
+				F_NAME,
+			</if>
+			<if test="fState != null">
+				F_STATE,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+			<if test="fSpecification != null">
+				F_SPECIFICATION,
+			</if>
+			<if test="fBatchNumber != null">
+				F_BATCH_NUMBER,
+			</if>
+			<if test="fExpiryDate != null">
+				F_EXPIRY_DATE,
+			</if>
+			<if test="fNumber != null">
+				F_NUMBER,
+			</if>
+			<if test="fNumberBak != null">
+				F_NUMBER_BAK,
+			</if>
+			<if test="fIntro != null">
+				F_INTRO,
+			</if>
+			<if test="fWareHouseId != null">
+				F_WAREHOUSE_ID,
+			</if>
+			<if test="fPrice != null">
+				F_PRICE,
+			</if>
+			<if test="fGongyePrice != null">
+				F_GONGYE_PRICE,
+			</if>
+			<if test="fSupplyPrice != null">
+				F_SUPPLY_PRICE,
+			</if>
+			<if test="fRetailPrice != null">
+				F_RETAIL_PRICE,
+			</if>
+			<if test="fDrugOnlyId != null">
+				F_DRUG_ONLY_ID,
+			</if>
+			<if test="fBuyingPrice != null">
+				F_BUYING_PRICE,
+			</if>
+			<if test="fBalanceId != null">
+				F_BALANCE_ID,
+			</if>
+			<if test="fCompanyId != null">
+				F_COMPANY_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fImg != null">
+				#{fImg,jdbcType=VARCHAR},
+			</if>
+			<if test="fAddress != null">
+				#{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fName != null">
+				#{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				#{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fSpecification != null">
+				#{fSpecification,jdbcType=VARCHAR},
+			</if>
+			<if test="fBatchNumber != null">
+				#{fBatchNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="fExpiryDate != null">
+				#{fExpiryDate,jdbcType=VARCHAR},
+			</if>
+			<if test="fNumber != null">
+				#{fNumber,jdbcType=INTEGER},
+			</if>
+			<if test="fNumberBak != null">
+				#{fNumberBak,jdbcType=INTEGER},
+			</if>
+			<if test="fIntro != null">
+				#{fIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fWareHouseId != null">
+				#{fWareHouseId,jdbcType=INTEGER},
+			</if>
+			<if test="fPrice != null">
+				#{fPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGongyePrice != null">
+				#{fGongyePrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fSupplyPrice != null">
+				#{fSupplyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fRetailPrice != null">
+				#{fRetailPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fDrugOnlyId != null">
+				#{fDrugOnlyId,jdbcType=INTEGER},
+			</if>
+			<if test="fBuyingPrice != null">
+				#{fBuyingPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fBalanceId != null">
+				#{fBalanceId,jdbcType=INTEGER},
+			</if>
+			<if test="fCompanyId != null">
+				#{fCompanyId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="edit">
+		UPDATE t_drug
+		<set>
+			<if test="fAddress != null">
+				F_ADDRESS = #{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fName != null">
+				F_NAME = #{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				F_STATE = #{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fSpecification != null">
+				F_SPECIFICATION = #{fSpecification,jdbcType=VARCHAR},
+			</if>
+			<if test="fBatchNumber != null">
+				F_BATCH_NUMBER = #{fBatchNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="fExpiryDate != null">
+				F_EXPIRY_DATE = #{fExpiryDate,jdbcType=VARCHAR},
+			</if>
+			<if test="fNumber != null">
+				F_NUMBER = #{fNumber,jdbcType=INTEGER},
+			</if>
+			<if test="fNumberBak != null">
+				F_NUMBER_BAK = #{fNumberBak,jdbcType=INTEGER},
+			</if>
+			<if test="fIntro != null">
+				F_INTRO = #{fIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fWareHouseId != null">
+				F_WAREHOUSE_ID = #{fWareHouseId,jdbcType=INTEGER},
+			</if>
+			<if test="fPrice != null">
+				F_PRICE = #{fPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGongyePrice != null">
+				F_GONGYE_PRICE = #{fGongyePrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fImg != null">
+				F_IMG = #{fImg,jdbcType=VARCHAR},
+			</if>
+			<if test="fSupplyPrice != null">
+				F_SUPPLY_PRICE = #{fSupplyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fRetailPrice != null">
+				F_RETAIL_PRICE = #{fRetailPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fDrugOnlyId != null">
+				F_DRUG_ONLY_ID = #{fDrugOnlyId,jdbcType=INTEGER},
+			</if>
+			<if test="fBuyingPrice != null">
+				F_BUYING_PRICE = #{fBuyingPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fCompanyId != null">
+				F_COMPANY_ID = #{fCompanyId,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE F_ID = #{fId}
+	</update>
+
+	<delete id="deleteUserDrugByDrugOnlyId">
+		delete from t_user_drug where F_DRUG_ID=#{id}
+	</delete>
+
+	<delete id="deleteUserDrug">
+		delete from t_user_drug where F_USER_ID=#{userId}
+	</delete>
+	<insert id="saveUserDrug">
+		insert into t_user_drug(F_USER_ID,F_DRUG_ID)
+		values(#{userId}, #{drugId})
+	</insert>
+
+	<delete id="deleteUserDrugOnly_setPrice">
+		delete from t_user_drugonly_price where
+		F_USER_ID=#{userId} and F_DRUG_ONLY_ID=#{drugOnlyId}
+	</delete>
+	<insert id="userDrugOnly_setPrice">
+		insert into
+		t_user_drugonly_price(F_USER_ID,F_DRUG_ONLY_ID, F_SUPPLY_PRICE,
+		F_RETAIL_PRICE) values(#{userId}, #{drugOnlyId}, #{fSupplyPrice},
+		#{fRetailPrice})
+	</insert>
+
+	<select id="userDrugOnly_showPrice" resultType="map">
+		select
+		F_SUPPLY_PRICE, F_RETAIL_PRICE from t_user_drugonly_price
+		where
+		F_USER_ID=#{userId} and F_DRUG_ONLY_ID=#{drugOnlyId}
+	</select>
+
+	<update id="minusNumber">
+		UPDATE t_drug SET F_NUMBER=F_NUMBER+#{fNumber} WHERE
+		F_ID=#{fDrugId}
+	</update>
+
+	<update id="deleteBeanByWareHouseId">
+		UPDATE t_drug set F_WAREHOUSE_ID = null where
+		F_WAREHOUSE_ID = #{fId}
+	</update>
+
+	<select id="getListByTime" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from t_drug where F_TIME like concat('', #{yyyyMM}, '%') and
+		F_NUMBER>0 and F_STATE in(0,3)
+	</select>
+</mapper>

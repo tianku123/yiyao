@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.ICompanyDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.Company">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID, F_NAME, F_STATE,F_TIME
+	</sql>
+
+	<select id="getAllBean" resultMap="BaseResultMap">
+		SELECT F_ID, F_NAME 
+		FROM t_company where F_STATE=0 
+	</select>
+	
+	<select id="getCheckedCompanyList" resultType="map">
+		select F_COMPANY_ID from t_customer_company where F_CUSTOMER_ID=#{customerId}
+	</select>
+</mapper>

@@ -1,0 +1,857 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IOrderDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.Order">
+		<id column="F_ID" property="fId" jdbcType="VARCHAR" />
+		<result column="F_SOURCE_ID" property="fSourceId" jdbcType="VARCHAR" />
+		
+		<result column="F_CUSTOMER_ID" property="fCustomerId" jdbcType="INTEGER" />
+		<result column="F_CUSTOMER_NAME" property="fCustomerName" jdbcType="VARCHAR" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
+		<result column="F_ADDRESS" property="fAddress" jdbcType="VARCHAR" />
+		<result column="F_PHONE" property="fPhone" jdbcType="VARCHAR" />
+		<result column="F_SALE_TIME" property="fSaleTime" jdbcType="VARCHAR" />
+		<result column="F_SALE_USER_ID" property="fSaleUserId" jdbcType="INTEGER" />
+		<result column="F_SALE_USER_NAME" property="fSaleUserName" jdbcType="VARCHAR" />
+		
+		<result column="F_FINANCE_TIME" property="fFinanceTime" jdbcType="VARCHAR" />
+		<result column="F_FINANCE_USER_ID" property="fFinanceUserId" jdbcType="INTEGER" />
+		<result column="F_FINANCE_USER_NAME" property="fFinanceUserName" jdbcType="VARCHAR" />
+		
+		<result column="F_SHIPPER_TIME" property="fShipperTime" jdbcType="VARCHAR" />
+		<result column="F_SHIPPER_USER_ID" property="fShipperUserId" jdbcType="INTEGER" />
+		<result column="F_SHIPPER_USER_NAME" property="fShipperUserName" jdbcType="VARCHAR" />
+		
+		<result column="F_EXPRESS_ID" property="fExpressId" jdbcType="VARCHAR" />
+		<result column="F_EXPRESS_NAME" property="fExpressName" jdbcType="VARCHAR" />
+		<result column="F_MONEY" property="fMoney" jdbcType="DOUBLE" />
+		<result column="F_MONEY_NOTAX" property="fMoney_noTax" jdbcType="DOUBLE" />
+		<result column="F_MONEY_BUYINGPRICE" property="fMoney_buyingPrice" jdbcType="DOUBLE" />
+		<result column="F_GUOJIFEI" property="fGuoJiFei" jdbcType="DOUBLE" />
+		<result column="F_FANDIAN" property="fFanDian" jdbcType="DOUBLE" />
+		<result column="F_GAOKAIFEI" property="fGaoKaiFei" jdbcType="DOUBLE" />
+		<result column="F_TAX" property="fTax" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+		<result column="F_SALE_INTRO" property="fSaleIntro" jdbcType="VARCHAR" />
+		<result column="F_FINANCE_INTRO" property="fFinanceIntro" jdbcType="VARCHAR" />
+		<result column="F_SHIPPER_INTRO" property="fShipperIntro" jdbcType="VARCHAR" />
+		<result column="F_PAYMENT_STATE" property="fPaymentState" jdbcType="VARCHAR" />
+		
+		<result column="F_YAOFNAG" property="fYaofang" jdbcType="VARCHAR" />
+		<result column="F_TOWNSHIP" property="fTownship" jdbcType="VARCHAR" />
+		
+		<result column="F_SOURCE_ID" property="fSourceId" jdbcType="VARCHAR" />
+		<result column="F_ISEDITPRICE" property="fIsEditPrice" jdbcType="VARCHAR" />
+		
+		<result column="F_ISPOLICY" property="isPolicy" jdbcType="VARCHAR" />
+		<result column="F_POLICY_INTRO" property="fPolicyIntro" jdbcType="VARCHAR" />
+		
+		<result column="F_POLICY_TIME" property="fPolicyTime" jdbcType="VARCHAR" />
+		<result column="F_POLICY_USER_NAME" property="fPolicyUserName" jdbcType="VARCHAR" />
+		<result column="F_POLICY_USER_ID" property="fPolicyUserId" jdbcType="INTEGER" />
+		<result column="F_POLICY_INTRO2" property="fPolicyIntro2" jdbcType="VARCHAR" />
+		
+		<result column="F_XQ_TC_MONEY" property="fXqTc_Money" jdbcType="DOUBLE" />
+		<result column="F_DQ_TC_MONEY" property="fDqTc_Money" jdbcType="DOUBLE" />
+		
+		<result column="F_UNIT" property="fUnit" jdbcType="VARCHAR" />
+		<result column="F_EXAMINE" property="fExamine" jdbcType="INTEGER" />
+		
+		<result column="F_PAYMENT_TIME" property="fPaymentTime" jdbcType="VARCHAR" />
+		<result column="F_PAYMENT_SOURCE" property="fPaymentSource" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID,
+		F_PAYMENT_TIME,
+		F_PAYMENT_SOURCE,
+		F_EXAMINE,
+		F_XQ_TC_MONEY,
+		F_DQ_TC_MONEY,
+		F_POLICY_TIME,
+		F_POLICY_USER_NAME,
+		F_POLICY_USER_ID,
+		F_POLICY_INTRO2,
+		F_ISPOLICY,
+		F_POLICY_INTRO,
+		F_SOURCE_ID,
+		F_ISEDITPRICE,
+		F_TOWNSHIP,
+		F_YAOFNAG,
+		F_CUSTOMER_ID,
+		F_NAME,
+		F_ADDRESS,
+		F_PHONE,
+		F_SALE_TIME,
+		F_SALE_USER_ID,
+		F_SALE_USER_NAME,
+		F_FINANCE_TIME,
+		F_FINANCE_USER_ID,
+		F_FINANCE_USER_NAME,
+		F_SHIPPER_TIME,
+		F_SHIPPER_USER_ID,
+		F_SHIPPER_USER_NAME,
+		F_EXPRESS_ID,
+		F_EXPRESS_NAME,
+		F_STATE,
+		F_MONEY,
+		F_GUOJIFEI,
+		F_FANDIAN,
+		F_GAOKAIFEI,
+		F_TAX,
+		F_MONEY_NOTAX,
+		F_MONEY_BUYINGPRICE,
+		F_SALE_INTRO,
+		F_FINANCE_INTRO,
+		F_SHIPPER_INTRO,
+		F_PAYMENT_STATE,
+		F_TIME
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) from t_order where 1=1
+		<if test="fName !=null and fName !=''">
+			and F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_ADDRESS,
+		a.F_CUSTOMER_ID,
+		a.F_NAME,
+		a.F_PHONE,
+		a.F_SALE_TIME,
+		a.F_SALE_USER_ID,
+		a.F_SALE_USER_NAME,
+		a.F_FINANCE_TIME,
+		a.F_FINANCE_USER_ID,
+		a.F_FINANCE_USER_NAME,
+		a.F_SHIPPER_TIME,
+		a.F_SHIPPER_USER_ID,
+		a.F_SHIPPER_USER_NAME,
+		a.F_EXPRESS_ID,
+		a.F_EXPRESS_NAME,
+		a.F_STATE,
+		a.F_MONEY,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_TAX,
+		a.F_TIME,
+		a.F_SALE_INTRO,
+		a.F_FINANCE_INTRO,
+		a.F_SHIPPER_INTRO,
+		a.F_TOWNSHIP,
+		a.F_YAOFNAG,
+		b.F_NAME F_CUSTOMER_NAME,
+		b.F_UNIT 
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where 1=1 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		order by a.F_ID desc 
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	<select id="getList_State0" resultMap="BaseResultMap">
+		SELECT
+		F_ID,
+		F_TIME
+		FROM
+		t_order 
+		where F_STATE=#{fState}  
+	</select>
+
+	<!-- 业务员只可以看到自己的订单的所有状态  start -->
+	<select id="getListTotal_ywy" resultType="int">
+		select count(1) from t_order where F_SALE_USER_ID in (${userId}) and F_STATE in(0,1,2,3,4,8,9) AND F_ISEDITPRICE in(0,1)
+		<if test="fName !=null and fName !=''">
+			and F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+	</select>
+	<select id="getList_ywy" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_ADDRESS,
+		a.F_CUSTOMER_ID,
+		a.F_NAME,
+		a.F_PHONE,
+		a.F_SALE_TIME,
+		a.F_SALE_USER_ID,
+		a.F_SALE_USER_NAME,
+		a.F_FINANCE_TIME,
+		a.F_FINANCE_USER_ID,
+		a.F_FINANCE_USER_NAME,
+		a.F_SHIPPER_TIME,
+		a.F_SHIPPER_USER_ID,
+		a.F_SHIPPER_USER_NAME,
+		a.F_EXPRESS_ID,
+		a.F_EXPRESS_NAME,
+		a.F_STATE,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_TAX,
+		a.F_TIME,
+		a.F_SALE_INTRO,
+		a.F_FINANCE_INTRO,
+		a.F_SHIPPER_INTRO,
+		a.F_TOWNSHIP,
+		a.F_YAOFNAG,
+		a.F_ISPOLICY,
+		a.F_POLICY_INTRO,
+		b.F_NAME F_CUSTOMER_NAME,
+		b.F_UNIT 
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where a.F_SALE_USER_ID in (${userId})  and a.F_STATE in(0,1,2,3,4,8,9) AND F_ISEDITPRICE in(0,1) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		order by a.F_ID desc
+		LIMIT #{page}, #{rows}  
+	</select>
+	<!-- 业务员只可以看到自己的订单的所有状态  end -->
+	
+
+	<!-- 主管只可以看到自己的订单的所有状态  start -->
+	<select id="getListTotal_zg" resultType="int">
+		select count(1) from t_order where F_SALE_USER_ID in (${userId}) and F_STATE in(0,1,2,3) AND F_ISEDITPRICE in(0,2) AND F_ISPOLICY=0 
+		<if test="fYwyName != null and fYwyName != ''">
+			and F_SALE_USER_NAME like CONCAT("%",#{fYwyName} ,"%") 
+		</if>
+		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			and F_TIME between #{beginTime} and #{endTime}
+		</if>
+	</select>
+	<select id="getList_zg" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_ADDRESS,
+		a.F_CUSTOMER_ID,
+		a.F_NAME,
+		a.F_PHONE,
+		a.F_SALE_TIME,
+		a.F_SALE_USER_ID,
+		a.F_SALE_USER_NAME,
+		a.F_FINANCE_TIME,
+		a.F_FINANCE_USER_ID,
+		a.F_FINANCE_USER_NAME,
+		a.F_SHIPPER_TIME,
+		a.F_SHIPPER_USER_ID,
+		a.F_SHIPPER_USER_NAME,
+		a.F_EXPRESS_ID,
+		a.F_EXPRESS_NAME,
+		a.F_STATE,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_TAX,
+		a.F_TIME,
+		a.F_SALE_INTRO,
+		a.F_FINANCE_INTRO,
+		a.F_SHIPPER_INTRO,
+		a.F_TOWNSHIP,
+		a.F_YAOFNAG,
+		a.F_ISPOLICY,
+		a.F_POLICY_INTRO,
+		b.F_NAME F_CUSTOMER_NAME,
+		b.F_UNIT 
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where a.F_SALE_USER_ID in (${userId})  and a.F_STATE in(0,1,2,3) AND F_ISEDITPRICE in(0,2)  AND a.F_ISPOLICY=0 
+		<if test="fYwyName != null and fYwyName != ''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fYwyName} ,"%") 
+		</if>
+		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+			and a.F_TIME between #{beginTime} and #{endTime}
+		</if>
+		order by a.F_ID desc
+		<if test="page != null and rows != null">
+			LIMIT #{page}, #{rows}  
+		</if>
+	</select>
+	<!-- 主管只可以看到自己的订单的所有状态  end -->
+	
+
+	<!-- 政策报单环节  start -->
+	<select id="getListTotal_policy" resultType="int">
+		select count(1) from 
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where a.F_STATE in(10,1,2,3) and a.F_ISPOLICY=1 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+	</select>
+	<select id="getList_policy" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_ADDRESS,
+		a.F_CUSTOMER_ID,
+		a.F_NAME,
+		a.F_PHONE,
+		a.F_SALE_TIME,
+		a.F_SALE_USER_ID,
+		a.F_SALE_USER_NAME,
+		a.F_FINANCE_TIME,
+		a.F_FINANCE_USER_ID,
+		a.F_FINANCE_USER_NAME,
+		a.F_SHIPPER_TIME,
+		a.F_SHIPPER_USER_ID,
+		a.F_SHIPPER_USER_NAME,
+		a.F_EXPRESS_ID,
+		a.F_EXPRESS_NAME,
+		a.F_STATE,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_TAX,
+		a.F_TIME,
+		a.F_SALE_INTRO,
+		a.F_FINANCE_INTRO,
+		a.F_SHIPPER_INTRO,
+		a.F_TOWNSHIP,
+		a.F_YAOFNAG,
+		a.F_ISPOLICY,
+		a.F_POLICY_INTRO,
+		b.F_NAME F_CUSTOMER_NAME,
+		b.F_UNIT 
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where a.F_STATE in(10,1,2,3) and a.F_ISPOLICY=1 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		order by a.F_ID desc
+		LIMIT #{page}, #{rows}  
+	</select>
+	<!-- 业务员只可以看到自己的订单的所有状态  end -->
+	
+	<!-- 财务除了未提交的其他状态都可以看见  start -->
+	<select id="getListTotal_cw" resultType="int">
+		select count(1) from t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where  F_ISEDITPRICE in(0,2) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		<if test="fState !=null and fState !=''">
+			and a.F_STATE in(#{fState}) 
+		</if>
+		<if test="fPaymentState !=null and fPaymentState !=''">
+			and a.F_PAYMENT_STATE in(#{fPaymentState}) 
+		</if>
+	</select>
+	<select id="getList_cw" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_EXAMINE,
+		a.F_ADDRESS,
+		a.F_CUSTOMER_ID,
+		a.F_NAME,
+		a.F_PHONE,
+		a.F_SALE_TIME,
+		a.F_SALE_USER_ID,
+		a.F_SALE_USER_NAME,
+		a.F_FINANCE_TIME,
+		a.F_FINANCE_USER_ID,
+		a.F_FINANCE_USER_NAME,
+		a.F_SHIPPER_TIME,
+		a.F_SHIPPER_USER_ID,
+		a.F_SHIPPER_USER_NAME,
+		a.F_PAYMENT_STATE,
+		a.F_EXPRESS_ID,
+		a.F_EXPRESS_NAME,
+		a.F_STATE,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY_BUYINGPRICE,
+		a.F_MONEY,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_TAX,
+		a.F_TIME,
+		a.F_SALE_INTRO,
+		a.F_FINANCE_INTRO,
+		a.F_SHIPPER_INTRO,
+		a.F_TOWNSHIP,
+		a.F_YAOFNAG,
+		a.F_ISPOLICY,
+		a.F_POLICY_INTRO,
+		a.F_XQ_TC_MONEY,
+		a.F_DQ_TC_MONEY,
+		b.F_NAME F_CUSTOMER_NAME,
+		b.F_UNIT
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where  F_ISEDITPRICE in(0,2) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		<if test="fState !=null and fState !=''">
+			and a.F_STATE in(#{fState}) 
+		</if>
+		<if test="fPaymentState !=null and fPaymentState !=''">
+			and a.F_PAYMENT_STATE in(#{fPaymentState}) 
+		</if>
+		order by a.F_ID desc
+		LIMIT #{page}, #{rows}  
+	</select>
+	<!-- 财务除了未提交的其他状态都可以看见  end -->
+	
+	<!-- 发货员可以看到财务审批通过和已发货的订单  start -->
+	<select id="getListTotal_fh" resultType="int">
+		select count(1) from 
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where a.F_STATE in(2,3) AND F_ISEDITPRICE in(0,2) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		<if test="fPaymentState !=null and fPaymentState !=''">
+			and a.F_PAYMENT_STATE in(#{fPaymentState}) 
+		</if>
+		<if test="fExamine !=null and fExamine !=''">
+			and a.F_EXAMINE in(#{fExamine}) 
+		</if>
+	</select>
+	<select id="getList_fh" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_EXAMINE,
+		a.F_ADDRESS,
+		a.F_CUSTOMER_ID,
+		a.F_PAYMENT_STATE,
+		a.F_NAME,
+		a.F_PHONE,
+		a.F_SALE_TIME,
+		a.F_SALE_USER_ID,
+		a.F_SALE_USER_NAME,
+		a.F_FINANCE_TIME,
+		a.F_FINANCE_USER_ID,
+		a.F_FINANCE_USER_NAME,
+		a.F_SHIPPER_TIME,
+		a.F_SHIPPER_USER_ID,
+		a.F_SHIPPER_USER_NAME,
+		a.F_EXPRESS_ID,
+		a.F_EXPRESS_NAME,
+		a.F_STATE,
+		a.F_MONEY,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_TAX,
+		a.F_TIME,
+		a.F_SALE_INTRO,
+		a.F_FINANCE_INTRO,
+		a.F_SHIPPER_INTRO,
+		b.F_NAME F_CUSTOMER_NAME,
+		b.F_UNIT
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where a.F_STATE in(2,3) AND F_ISEDITPRICE in(0,2) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		<if test="fPaymentState !=null and fPaymentState !=''">
+			and a.F_PAYMENT_STATE in(#{fPaymentState}) 
+		</if>
+		<if test="fExamine !=null and fExamine !=''">
+			and a.F_EXAMINE in(#{fExamine}) 
+		</if>
+		order by a.F_ID desc
+		LIMIT #{page}, #{rows}  
+	</select>
+	<!-- 发货员可以看到财务审批通过和已发货的订单  end -->
+	
+	
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.Order">
+		INSERT INTO t_order 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fId != null">
+				F_ID,
+			</if>
+			<if test="fSourceId != null">
+				F_SOURCE_ID,
+			</if>
+			<if test="fName != null">
+				F_NAME,
+			</if>
+			<if test="fState != null">
+				F_STATE,
+			</if>
+			<if test="fCustomerId != null">
+				F_CUSTOMER_ID,
+			</if>
+			<if test="fAddress != null">
+				F_ADDRESS,
+			</if>
+			<if test="fPhone != null">
+				F_PHONE,
+			</if>
+			<if test="fSaleTime != null">
+				F_SALE_TIME,
+			</if>
+			<if test="fSaleUserId != null">
+				F_SALE_USER_ID,
+			</if>
+			<if test="fSaleUserName != null">
+				F_SALE_USER_NAME,
+			</if>
+			<if test="fMoney != null">
+				F_MONEY,
+			</if>
+			<if test="fTax != null">
+				F_TAX,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+			<if test="fGuoJiFei != null">
+				F_GUOJIFEI,
+			</if>
+			<if test="fFanDian != null">
+				F_FANDIAN,
+			</if>
+			<if test="fGaoKaiFei != null">
+				F_GAOKAIFEI,
+			</if>
+			<if test="fMoney_noTax != null">
+				F_MONEY_NOTAX,
+			</if>
+			<if test="fMoney_buyingPrice != null">
+				F_MONEY_BUYINGPRICE,
+			</if>
+			<if test="fYaofang != null">
+				F_YAOFNAG,
+			</if>
+			<if test="fTownship != null">
+				F_TOWNSHIP,
+			</if>
+			<if test="fIsEditPrice != null">
+				F_ISEDITPRICE,
+			</if>
+			<if test="isPolicy != null">
+				F_ISPOLICY,
+			</if>
+			<if test="fPolicyIntro != null">
+				F_POLICY_INTRO,
+			</if>
+			
+			
+			<if test="fXqTc_Money != null">
+				F_XQ_TC_MONEY,
+			</if>
+			<if test="fDqTc_Money != null">
+				F_DQ_TC_MONEY,
+			</if>
+			<if test="fPaymentSource != null">
+				F_PAYMENT_SOURCE,
+			</if>
+			<if test="fPaymentState != null">
+				F_PAYMENT_STATE,
+			</if>
+			<if test="fExamine != null">
+				F_EXAMINE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fId != null">
+				#{fId,jdbcType=VARCHAR},
+			</if>
+			<if test="fSourceId != null">
+				#{fSourceId,jdbcType=VARCHAR},
+			</if>
+			<if test="fName != null">
+				#{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				#{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fCustomerId != null">
+				#{fCustomerId,jdbcType=INTEGER},
+			</if>
+			<if test="fAddress != null">
+				#{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fPhone != null">
+				#{fPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="fSaleTime != null">
+				#{fSaleTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fSaleUserId != null">
+				#{fSaleUserId,jdbcType=INTEGER},
+			</if>
+			<if test="fSaleUserName != null">
+				#{fSaleUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="fMoney != null">
+				#{fMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="fTax != null">
+				#{fTax,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fGuoJiFei != null">
+				#{fGuoJiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fFanDian != null">
+				#{fFanDian,jdbcType=DOUBLE},
+			</if>
+			<if test="fGaoKaiFei != null">
+				#{fGaoKaiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_noTax != null">
+				#{fMoney_noTax,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_buyingPrice != null">
+				#{fMoney_buyingPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fYaofang != null">
+				#{fYaofang,jdbcType=VARCHAR},
+			</if>
+			<if test="fTownship != null">
+				#{fTownship,jdbcType=VARCHAR},
+			</if>
+			<if test="fIsEditPrice != null">
+				#{fIsEditPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="isPolicy != null">
+				#{isPolicy,jdbcType=VARCHAR},
+			</if>
+			<if test="fPolicyIntro != null">
+				#{fPolicyIntro,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="fXqTc_Money != null">
+				#{fXqTc_Money,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc_Money != null">
+				#{fDqTc_Money,jdbcType=DOUBLE},
+			</if>
+			<if test="fPaymentSource != null">
+				#{fPaymentSource,jdbcType=INTEGER},
+			</if>
+			<if test="fPaymentState != null">
+				#{fPaymentState,jdbcType=VARCHAR},
+			</if>
+			<if test="fExamine != null">
+				#{fExamine,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="edit">
+		UPDATE t_order 
+		<set>
+			<if test="fPaymentSource != null">
+				F_PAYMENT_SOURCE = #{fPaymentSource,jdbcType=INTEGER},
+			</if>
+			<if test="fPaymentTime != null">
+				F_PAYMENT_TIME = #{fPaymentTime,jdbcType=INTEGER},
+			</if>
+			<if test="fState != null">
+				F_STATE = #{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fIsEditPrice != null">
+				F_ISEDITPRICE = #{fIsEditPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="fSaleTime != null">
+				F_SALE_TIME = #{fSaleTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fSaleUserId != null">
+				F_SALE_USER_ID = #{fSaleUserId,jdbcType=INTEGER},
+			</if>
+			<if test="fSaleUserName != null">
+				F_SALE_USER_NAME = #{fSaleUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="fFinanceTime != null">
+				F_FINANCE_TIME = #{fFinanceTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fFinanceUserId != null">
+				F_FINANCE_USER_ID = #{fFinanceUserId,jdbcType=INTEGER},
+			</if>
+			<if test="fFinanceUserName != null">
+				F_FINANCE_USER_NAME = #{fFinanceUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="fShipperTime != null">
+				F_SHIPPER_TIME = #{fShipperTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fShipperUserId != null">
+				F_SHIPPER_USER_ID = #{fShipperUserId,jdbcType=INTEGER},
+			</if>
+			<if test="fShipperUserName != null">
+				F_SHIPPER_USER_NAME = #{fShipperUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="fExpressId != null">
+				F_EXPRESS_ID = #{fExpressId,jdbcType=VARCHAR},
+			</if>
+			<if test="fExpressName != null">
+				F_EXPRESS_NAME = #{fExpressName,jdbcType=VARCHAR},
+			</if>
+			<if test="fPaymentState != null">
+				F_PAYMENT_STATE = #{fPaymentState,jdbcType=VARCHAR},
+			</if>
+			<if test="fShipperIntro != null">
+				F_SHIPPER_INTRO = #{fShipperIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fFinanceIntro != null">
+				F_FINANCE_INTRO = #{fFinanceIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fSaleIntro != null">
+				F_SALE_INTRO = #{fSaleIntro,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="fGuoJiFei != null">
+				F_GUOJIFEI = #{fGuoJiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fFanDian != null">
+				F_FANDIAN = #{fFanDian,jdbcType=DOUBLE},
+			</if>
+			<if test="fGaoKaiFei != null">
+				F_GAOKAIFEI = #{fGaoKaiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_noTax != null">
+				F_MONEY_NOTAX = #{fMoney_noTax,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_buyingPrice != null">
+				F_MONEY_BUYINGPRICE = #{fMoney_buyingPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney != null">
+				F_MONEY = #{fMoney,jdbcType=DOUBLE},
+			</if>
+			
+			<if test="fName != null">
+				F_NAME = #{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fCustomerId != null">
+				F_CUSTOMER_ID = #{fCustomerId,jdbcType=INTEGER},
+			</if>
+			<if test="fAddress != null">
+				F_ADDRESS = #{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fPhone != null">
+				F_PHONE = #{fPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="fTax != null">
+				F_TAX = #{fTax,jdbcType=VARCHAR},
+			</if>
+			<if test="fYaofang != null">
+				F_YAOFNAG = #{fYaofang,jdbcType=VARCHAR},
+			</if>
+			<if test="fTownship != null">
+				F_TOWNSHIP = #{fTownship,jdbcType=VARCHAR},
+			</if>
+			<if test="isPolicy != null">
+				F_ISPOLICY = #{isPolicy,jdbcType=VARCHAR},
+			</if>
+			<if test="fPolicyIntro != null">
+				F_POLICY_INTRO = #{fPolicyIntro,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="fPolicyTime != null">
+				F_POLICY_TIME = #{fPolicyTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fPolicyIntro2 != null">
+				F_POLICY_INTRO2 = #{fPolicyIntro2,jdbcType=VARCHAR},
+			</if>
+			<if test="fPolicyUserId != null">
+				F_POLICY_USER_ID = #{fPolicyUserId,jdbcType=INTEGER},
+			</if>
+			<if test="fPolicyIntro != null">
+				F_POLICY_USER_NAME = #{fPolicyUserName,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="fXqTc_Money != null">
+				F_XQ_TC_MONEY = #{fXqTc_Money,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc_Money != null">
+				F_DQ_TC_MONEY = #{fDqTc_Money,jdbcType=DOUBLE},
+			</if>
+		</set>
+		WHERE F_ID = #{fId}
+	</update>
+	
+	<select id="salePerday" resultType="map">
+		SELECT a.F_ID, a.F_USER_CODE
+			,b.F_MONEY, b.F_MONEY_BUYINGPRICE, b.F_MONEY_NOTAX, b.F_TIME
+		 FROM t_user_info a LEFT JOIN t_order b ON a.F_ID=b.F_SALE_USER_ID
+		WHERE a.F_USER_ROLE_REL='yewuyuan' 
+		<if test="fName != null and fName != ''">
+			and a.F_USER_CODE like concat('%', #{fName}, '%')
+		</if>
+		<if test="fTime != null and fTime != ''">
+			and b.F_TIME like concat('', #{fTime}, '%')
+		</if>
+	</select>
+	
+	<select id="salesSummary" resultType="map">
+		SELECT a.F_ID, a.F_NAME, a.F_ADDRESS, a.F_SPECIFICATION,
+			b.F_NUMBER, b.F_NUMBER_BAK, b.F_STATE, b.F_BALANCE_ID, b.F_BUYING_PRICE, b.F_PRICE
+		 FROM t_drug_only a LEFT JOIN t_drug b ON a.F_ID=b.F_DRUG_ONLY_ID  
+		 where b.F_STATE != 1
+		<if test="fName != null and fName != ''">
+			and a.F_NAME like concat('%', #{fName}, '%')
+		</if>
+		<if test="fTime != null and fTime != ''">
+			and b.F_TIME like concat('', #{fTime}, '%')
+		</if>
+	</select>
+	
+	
+	<select id="getOrderDetail" resultType="map">
+		SELECT b.F_DRUG_ONLY_ID, b.F_NAME, a.F_NUMBER, o.F_TIME 
+		FROM t_order o JOIN t_order_detail a ON o.F_ID=a.F_ORDER_ID JOIN t_drug b ON a.F_DRUG_ID=b.F_ID 
+		where o.F_STATE in (0,1,2,3,10) AND o.F_ISEDITPRICE in(0,2) 
+		<if test="fName != null and fName != ''">
+			and b.F_NAME like concat('%', #{fName}, '%')
+		</if>
+		<if test="fTime != null and fTime != ''">
+			and o.F_TIME like concat('', #{fTime}, '%')
+		</if>
+	</select>
+	
+	<select id="showIntro" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from t_order where F_ID=#{fId}
+	</select>
+	
+	<select id="getBeanById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include>
+		from t_order where F_ID=#{fOrderId}
+	</select>
+	
+	<update id="examine">
+		update t_order set F_EXAMINE=1 WHERE F_ID = #{fId}
+	</update>
+</mapper>

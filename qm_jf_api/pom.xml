@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  	<modelVersion>4.0.0</modelVersion>
+  	<parent>
+    	<artifactId>qm_jf</artifactId>
+    	<groupId>com.qm.jf</groupId>
+    	<version>0.0.1-SNAPSHOT</version>
+  	</parent>
+  	<artifactId>qm_jf_api</artifactId>
+  	<name>qm_jf_api</name>
+  	<url>http://maven.apache.org</url>
+  	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	</properties>
+  	<dependencies>
+    	<dependency>
+      		<groupId>junit</groupId>
+      		<artifactId>junit</artifactId>
+      		<version>3.8.1</version>
+      		<scope>test</scope>
+    	</dependency>
+  	</dependencies>
+  	<distributionManagement>
+    	<repository>
+        	<id>releases</id>
+        	<name>QM Internal Repository</name>
+        	<url>http://www.qmsvn.com:8081/nexus/content/repositories/releases</url>
+    	</repository>
+    	<snapshotRepository>
+        	<id>snapshots</id>
+        	<name>QM Internal Repository</name>
+        	<url>http://www.qmsvn.com:8081/nexus/content/repositories/snapshots</url>
+    	</snapshotRepository>
+	</distributionManagement>
+</project>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+	<display-name>OMP_BUSINESS</display-name>
+	<description>运营管理中心商户平台</description>
+
+	  
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/cfg/applicationContext.xml,
+		    /WEB-INF/cfg/applicationContext-*.xml
+		</param-value>
+	</context-param>
+	
+ 	<filter>
+		<filter-name>SetCharacterEncoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	
+	<!-- 登陆过滤器 -->
+	<filter>
+        <filter-name>AdminTokenFilter</filter-name>
+        <filter-class> com.qm.omp.business.web.filter.AdminTokenFilter</filter-class>
+    </filter>
+	
+	
+	<filter-mapping>
+		<filter-name>SetCharacterEncoding</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+        <filter-name>AdminTokenFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+	
+	<!-- 实例化spring容器 -->
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+	<!-- 一些自定义参数的初始化 -->
+	<listener>
+		<listener-class>
+			com.qm.omp.business.web.listen.ApplicationContextListener
+		</listener-class>
+	</listener>
+	
+
+	 <servlet>
+        <servlet-name>ImageUploadServlet</servlet-name>
+        <servlet-class>com.qm.omp.business.web.upload.ImageUploadServlet</servlet-class>
+    </servlet>
+    
+    <!-- 实例化springMVC上下文 -->
+	<servlet>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> 
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				/WEB-INF/cfg/controller.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+        <servlet-name>ImageUploadServlet</servlet-name>
+        <url-pattern>/imgUpload</url-pattern>
+    </servlet-mapping>
+  
+	<servlet-mapping>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	
+
+	
+	<session-config>
+		<session-timeout>120</session-timeout>
+	</session-config>
+	
+	<welcome-file-list>
+		<welcome-file>/login.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<error-page>
+       <error-code>404</error-code>
+       <location>/omp/error/404.jsp</location>
+    </error-page>
+    
+    <taglib>
+		<taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
+		<taglib-location>/WEB-INF/etc/tld/c.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>http://java.sun.com/jsp/jstl/fn</taglib-uri>
+		<taglib-location>/WEB-INF/etc/tld/fn.tld</taglib-location>
+	</taglib>
+	
+	<taglib>
+		<taglib-uri>http://www.xwtech.com/jsp/jstl/pub</taglib-uri>
+		<taglib-location>/WEB-INF/etc/tld/pub.tld</taglib-location>
+	</taglib>
+	
+</web-app>

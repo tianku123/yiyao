@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.omp.api.dao.MemcachedMapper">
+    <resultMap type="com.qm.omp.api.cache.MemcachedKeyInfo" id="BaseResultMap">
+        <result property="memKey" column="F_MEM_KEY"/>
+        <result property="sysNum" column="F_SYS_NUM"/> 
+        <result property="cacheName" column="F_CACHED_NAME"/> 
+        <result property="daoName" column="F_DAO_NAME"/>
+        <result property="method" column="F_DAO_METHOD"/>
+        <result property="needParam" column="F_IS_NEED_PARAM"/>
+        <result property="expireInSeconds" column="F_EXPIRE_IN_SECONDS"/>
+    </resultMap>
+
+    <!-- Base_Column_List 缓存key基本信息-->
+    <sql id="Base_Column_List" >
+        F_MEM_KEY, F_SYS_NUM, F_CACHED_NAME, F_DAO_NAME, F_DAO_METHOD, F_IS_NEED_PARAM, F_EXPIRE_IN_SECONDS
+    </sql>
+    
+    <select id="queryMemKeyList" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT 
+            <include refid="Base_Column_List" />
+        FROM T_MEMCACHED_KEY_DA
+        <where>
+                <![CDATA[ 1 = 1 ]]>
+            <if test="memKey != null and memKey != ''">
+                <![CDATA[ and binary F_MEM_KEY = #{memKey}]]>
+            </if>
+            <if test="sysNum != null and sysNum != ''">
+                <![CDATA[ and binary F_SYS_NUM = #{sysNum}]]>
+            </if>
+        </where>
+    </select>
+</mapper> 

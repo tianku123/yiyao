@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IZgYWYDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.admin.ZgYWYBean">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_ZHUGUAN_ID" property="fZhuGuanId" jdbcType="BIGINT" />
+		<result column="F_SALE_USER_ID" property="fYWYId" jdbcType="BIGINT" />
+		<result column="F_DEPARTMENT_ID" property="fDepartmentId" jdbcType="BIGINT" />
+		<result column="F_DEPARTMENT_NAME" property="fDepartmentName" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID, F_ZHUGUAN_ID, F_SALE_USER_ID,F_TIME,F_DEPARTMENT_ID
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) 
+		FROM t_zg_ywy t1 LEFT JOIN t_user_info t2 ON t1.F_SALE_USER_ID=t2.F_ID 
+		LEFT JOIN t_department b ON t1.F_DEPARTMENT_ID=b.F_ID 
+		where 1=1
+		<if test="fZhuGuanId !=null">
+			and F_ZHUGUAN_ID = #{fZhuGuanId}
+		</if>
+		<if test="fUserName !=null and fUserName != ''">
+			and F_USER_NAME like CONCAT('%', #{fUserName}, '%')
+		</if>
+	</select>
+	<select id="getList" resultType="map">
+		SELECT t1.F_ID, t2.F_USER_CODE, t2.F_USER_NAME, t1.F_TIME, b.F_NAME F_DEPARTMENT_NAME 
+		FROM t_zg_ywy t1 LEFT JOIN t_user_info t2 ON t1.F_SALE_USER_ID=t2.F_ID 
+		LEFT JOIN t_department b ON t1.F_DEPARTMENT_ID=b.F_ID 
+		where 1=1
+		<if test="fZhuGuanId !=null">
+			and t1.F_ZHUGUAN_ID = #{fZhuGuanId}
+		</if>
+		<if test="fUserName !=null and fUserName != ''">
+			and t2.F_USER_NAME like CONCAT('%', #{fUserName}, '%')
+		</if>
+		order by t1.F_ID desc
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	<insert id="save" parameterType="com.qm.omp.business.pojo.admin.ZgYWYBean">
+		INSERT INTO t_zg_ywy 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fZhuGuanId != null">
+				F_ZHUGUAN_ID,
+			</if>
+			<if test="fYWYId != null">
+				F_SALE_USER_ID,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+			<if test="fDepartmentId != null">
+				F_DEPARTMENT_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fZhuGuanId != null">
+				#{fZhuGuanId,jdbcType=INTEGER},
+			</if>
+			<if test="fYWYId != null">
+				#{fYWYId,jdbcType=INTEGER},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fDepartmentId != null">
+				#{fDepartmentId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM t_zg_ywy WHERE F_ID = #{fId}
+	</delete>
+	
+	<select id="getBeanByZhuguanIdAndYWYId" resultMap="BaseResultMap">
+		select * from t_zg_ywy where F_ZHUGUAN_ID = #{fZhuGuanId} and F_SALE_USER_ID = #{fYWYId} and F_DEPARTMENT_ID = #{fDepartmentId}
+	</select>
+	
+	<select id="getYWYListByZhuGuanId" resultMap="BaseResultMap">
+		select * from t_zg_ywy where F_ZHUGUAN_ID = #{fZhuGuanId}
+	</select>
+	
+	<select id="getBeansByZhuguanIdAndYWYId" resultMap="BaseResultMap">
+		select * from t_zg_ywy where F_ZHUGUAN_ID = #{fZhuGuanId} and F_SALE_USER_ID = #{fYWYId}
+	</select>
+	
+	<select id="getYWYListByZhuGuanIdAndYwyName" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_ZHUGUAN_ID,
+		a.F_SALE_USER_ID,
+		a.F_TIME,
+		a.F_DEPARTMENT_ID
+		FROM
+		t_zg_ywy AS a LEFT JOIN t_user_info b ON a.F_SALE_USER_ID=b.F_ID 
+		where a.F_ZHUGUAN_ID = #{fZhuGuanId} 
+		<if test="fYwyName != null and fYwyName != ''">
+			and b.F_USER_CODE like CONCAT("%",#{fYwyName} ,"%") 
+		</if>
+	</select>
+
+</mapper>

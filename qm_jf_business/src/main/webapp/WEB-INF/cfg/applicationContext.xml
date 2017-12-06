@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd 
+                           http://www.springframework.org/schema/aop 
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.1.xsd
+              http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+    <!--加载配置文件-->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:shopCenter_business.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">   
+        <property name="defaultEncoding" value="UTF-8" />  
+        <!-- 设置上传文件的最大尺寸为1MB -->   
+        <property name="maxUploadSize"  value="104857600" /> 
+    </bean>
+
+    <!--开启对注解的支持-->
+    <context:annotation-config/>
+    
+    <!-- 日志aop -->
+    <aop:aspectj-autoproxy/>
+    <bean id="systemLogAop" class="com.qm.omp.business.web.aop.SystemLogAOP"></bean>
+    
+    <!--启动spring事务注解功能-->      
+    <tx:annotation-driven transaction-manager="txManager" /> 
+
+    <!--扫描Service-->
+    <context:component-scan base-package="com.qm.omp.api.service"/>
+    <context:component-scan base-package="com.qm.omp.business.service"/>
+    <context:component-scan base-package="com.qm.csp.member.service"/>
+    <context:component-scan base-package="com.qm.omp.business.webservice.service"/>
+
+    <!--扫描Component-->
+    <context:component-scan base-package="com.qm.omp.business.invocation">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+    </context:component-scan>
+    <context:component-scan base-package="com.qm.omp.business.log">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+    </context:component-scan>
+    
+    <!--启动AOP切面功能-->   
+    <bean id="memcachedAdvise" class="com.qm.omp.api.cache.MemcachedAdviseExecutor"/>
+    <!--<bean id="dataSourceAdvise" class="com.qm.omp.api.datasource.DataSourceAdviseExecutor"/>-->
+    <aop:config>
+        <aop:aspect id="memcachedAop" ref="memcachedAdvise">
+            <aop:pointcut id="getApiDataByMem" expression="execution(* com.qm.omp.api.dao.*.*(..))"/>
+            <aop:pointcut id="getBusinessDataByMem" expression="execution(* com.qm.omp.business.dao.*.*.*(..))"/>
+            <aop:around pointcut-ref="getApiDataByMem" method="getMemData"/>
+            <aop:around pointcut-ref="getBusinessDataByMem" method="getMemData"/>
+        </aop:aspect>
+        
+         <!--
+        <aop:aspect id="businessOperLogAop" ref="businessOperLogAdvise">
+            <aop:pointcut id="writeBusinessOPerLog" expression="execution(com.qm.omp.api.invocation.InvocationResult com.qm.omp.business.invocation.*.*Invocation.*(com.qm.omp.api.invocation.InvocationContext))"/>
+            <aop:after-returning pointcut-ref="writeBusinessOPerLog" returning="result" method="doInvoAfterReturnLog"/>
+            <aop:after-throwing pointcut-ref="writeBusinessOPerLog" throwing="ex" method="doInvoAfterThrowLog"/>
+        </aop:aspect>
+        -->
+        <!--
+        <aop:aspect id="dataSourceAop" ref="dataSourceAdvise">
+            <aop:pointcut id="routingReadDataSource" expression="execution(* com.qm.omp.business.dao.*.impl.*.select*(..))
+                                                                                                    || execution(* com.qm.omp.business.dao.*.impl.*.query*(..))
+                                                                                                    || execution(* com.qm.omp.business.dao.*.impl.*.find*(..))"/>
+            <aop:pointcut id="routingWriteDataSource" expression="execution(* com.qm.omp.business.dao.*.impl.*.insert*(..))
+                                                                                                    || execution(* com.qm.omp.business.dao.*.impl.*.update*(..))
+                                                                                                    || execution(* com.qm.omp.business.dao.*.impl.*.delete*(..))
+                                                                                                    || execution(* com.qm.omp.business.dao.*.impl.*.modify*(..))"/>
+            <aop:before pointcut-ref="routingReadDataSource" method="transmit"/>
+            <aop:before pointcut-ref="routingWriteDataSource" method="transmit"/>
+        </aop:aspect>
+        -->
+    </aop:config>
+     <!-- 文件上传文件名称生成器 -->
+    <bean name="uploadFileNameSeqGen" class="com.qm.common.util.SequenceGenerator">
+        <constructor-arg value="${seq.clientId}%{date}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.fileName.begin}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.fileName.end}"></constructor-arg>
+    </bean>
+    
+     <!-- 订单流水号 -->
+    <bean name="orderSeqGen" class="com.qm.common.util.SequenceGenerator">
+        <constructor-arg value="${seq.clientId}%{date}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.order.begin}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.order.end}"></constructor-arg>
+    </bean>
+    
+     <!-- 支付流水号 -->
+    <bean name="paySeqGen" class="com.qm.common.util.SequenceGenerator">
+        <constructor-arg value="${seq.clientId}%{date}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.pay.begin}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.pay.end}"></constructor-arg>
+    </bean>
+    
+     <!-- 促销单号 -->
+    <bean name="promotionSeqGen" class="com.qm.common.util.SequenceGenerator">
+        <constructor-arg value="${seq.sequence.promotion}%{date}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.promotion.begin}"></constructor-arg>
+        <constructor-arg value="${seq.sequence.promotion.end}"></constructor-arg>
+    </bean>
+    
+    
+    <!-- 业务员订单自动删除start -->
+    	<!-- 定时任务 -->
+    	<bean id="terminalStateTask" class="com.qm.omp.business.timer.DeleteOrderTimerTask"></bean>
+    	<bean id="scheduledTimerTask" class="org.springframework.scheduling.timer.ScheduledTimerTask"> 
+		    <!--这里定义定时任务的对象的位置--> 
+		    <property name="timerTask"> 
+		     	<ref bean="terminalStateTask"/> 
+		    </property> 
+		    <!--这里定义每10分钟程序执行一次--> 
+		    <property name="period"> 
+		     	<value>600000</value> 
+		    </property> 
+		    <!--这里定义程序启动两分钟后开始执行--> 
+		    <property name="delay"> 
+		     	<value>120000</value> 
+		    </property> 
+		</bean> 
+    <!-- 业务员订单自动删除end   -->
+    <bean id="timerFactoryBean" class="org.springframework.scheduling.timer.TimerFactoryBean"> 
+	    <property name="scheduledTimerTasks"> 
+	     <list> 
+	        <ref bean="scheduledTimerTask"/>  
+	     </list> 
+	    </property> 
+	</bean>
+	
+	
+	<!-- 定时任务  月末库存结余   start -->
+	<bean id="stockBalancejob" class="com.qm.omp.business.timer.StockBalanceJob"></bean>
+    <task:scheduled-tasks scheduler="myScheduler">
+    	<!-- 每月1日凌晨1分执行库存结余 -->
+	  	<task:scheduled ref="stockBalancejob" method="stock" cron="30 5 0 1 1-12 ?"/>
+	</task:scheduled-tasks>
+	
+	<task:scheduler id="myScheduler" pool-size="10"/>
+	<!-- 定时任务  月末库存结余   end -->
+</beans>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.omp.api.dao.ResultMsgMapper">
+    <select id="queryResultMsgInfo4Mem" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT IFNULL(T2.MSG, T1.MSG) MSG FROM (SELECT MSG FROM T_RESULT_MSG_MAPPING A WHERE 
+		A.SUBSYS_NUM = '@ALL' AND A.SYSTEM_CODE = #{systemCode} AND A.LOGIC_CODE = #{logicCode}) T1
+		LEFT JOIN (
+			SELECT MSG FROM T_RESULT_MSG_MAPPING B WHERE 
+			B.SUBSYS_NUM = #{subSysNum} AND B.SYSTEM_CODE = #{systemCode} AND B.LOGIC_CODE = #{logicCode}
+		) T2 
+		ON 1 = 1
+    </select>
+</mapper> 

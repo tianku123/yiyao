@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IDepartmentDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.Department">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID, F_NAME, F_STATE,F_TIME
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) from t_department where F_STATE=0
+		<if test="fName !=null and fName !=''">
+			and F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT F_ID, F_NAME, F_STATE,F_TIME 
+		FROM t_department where F_STATE=0
+		<if test="fName!=null and fName!=''">
+			and F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+		order by F_ID desc
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	<select id="getAllBean" resultMap="BaseResultMap">
+		SELECT F_ID, F_NAME 
+		FROM t_department where F_STATE=0 
+	</select>
+
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.Department">
+		INSERT INTO t_department 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fName != null">
+				F_NAME,
+			</if>
+			<if test="fState != null">
+				F_STATE,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fName != null">
+				#{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				#{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="edit">
+		UPDATE t_department 
+		<set>
+			<if test="fName != null">
+				F_NAME = #{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				F_STATE = #{fState,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE F_ID = #{fId}
+	</update>
+	
+	<select id="getCheckedDepartmentList" resultType="map">
+		select * from t_ywy_department where F_YWY_ID = #{userId}
+	</select>
+	
+	<select id="getDepartmentNameByUserId" resultType="map">
+		SELECT
+		a.F_YWY_ID,
+		a.F_DEPARTMENT_ID,
+		b.F_NAME
+		FROM
+		t_ywy_department AS a LEFT JOIN t_department b ON a.F_DEPARTMENT_ID=b.F_ID 
+		where b.F_STATE=0	and a.F_YWY_ID = #{userId}
+	</select>
+	
+</mapper>

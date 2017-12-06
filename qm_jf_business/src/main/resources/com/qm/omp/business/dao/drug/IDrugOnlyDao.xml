@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IDrugOnlyDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.DrugOnly">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_SPECIFICATION" property="fSpecification" jdbcType="VARCHAR" />
+		<result column="F_ADDRESS" property="fAddress" jdbcType="VARCHAR" />
+		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+		<result column="F_IMG" property="fImg" jdbcType="VARCHAR" />
+		<result column="F_INTRO" property="fIntro" jdbcType="VARCHAR" />
+		<result column="F_SUPPLY_PRICE" property="fSupplyPrice" jdbcType="DOUBLE" />
+		<result column="F_RETAIL_PRICE" property="fRetailPrice" jdbcType="DOUBLE" />
+		<result column="F_DRUG_PRINTER_ID" property="fDrugPrinterId" jdbcType="BIGINT" />
+		<result column="F_DRUG_PRINTER_NAME" property="fDrugPrinterName" jdbcType="VARCHAR" />
+		<result column="F_DRUG_INTRO_ID" property="fDrugIntroId" jdbcType="BIGINT" />
+		<result column="F_DRUG_INTRO_NAME" property="fDrugIntroName" jdbcType="VARCHAR" />
+		<result column="F_DEPARTMENT_ID" property="fDepartmentId" jdbcType="BIGINT" />
+		<result column="F_DEPARTMENT_NAME" property="fDepartmentName" jdbcType="VARCHAR" />
+		<result column="F_EXPIRY_DATE" property="fExpiryDate" jdbcType="VARCHAR" />
+		<result column="F_NUMBER" property="fNumber" jdbcType="INTEGER" />
+		<result column="F_XQ_TC" property="fXqTc" jdbcType="DOUBLE" />
+		<result column="F_DQ_TC" property="fDqTc" jdbcType="DOUBLE" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID,
+		F_XQ_TC,
+		F_DQ_TC,
+		F_NAME,
+		F_SPECIFICATION,
+		F_ADDRESS,
+		F_TIME,
+		F_STATE,
+		F_DRUG_PRINTER_ID,
+		F_DRUG_INTRO_ID,
+		F_DEPARTMENT_ID,
+		F_IMG,
+		F_INTRO,
+		F_SUPPLY_PRICE,
+		F_RETAIL_PRICE
+	</sql>
+
+<!-- 分页查询   start -->
+	<select id="getListTotal" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		t_drug_only a LEFT JOIN t_drug_intro b ON a.F_DRUG_INTRO_ID=b.F_ID LEFT JOIN t_drug_printer c ON a.F_DRUG_PRINTER_ID=c.F_ID 
+		WHERE a.F_STATE=0
+
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fDrugIntroName != null and fDrugIntroName !=''">
+			and b.F_NAME like CONCAT("%",#{fDrugIntroName} ,"%") and b.F_STATE=0
+		</if>
+		<if test="fDrugPrinterName !=null and fDrugPrinterName !=''">
+			and c.F_NAME like CONCAT("%",#{fDrugPrinterName} ,"%") and c.F_STATE=0
+		</if>
+		<if test="isHasTc=='yes'">
+			and (a.F_XQ_TC > 0 or a.F_DQ_TC > 0)
+		</if>
+		<if test="isHasTc=='no'">
+			and (a.F_XQ_TC = 0 or a.F_DQ_TC = 0)
+		</if>
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_NAME,
+		a.F_SPECIFICATION,
+		a.F_ADDRESS,
+		a.F_STATE,
+		a.F_TIME,
+		a.F_SUPPLY_PRICE,
+		a.F_RETAIL_PRICE,
+		a.F_IMG,
+		a.F_INTRO,
+		a.F_DRUG_INTRO_ID,
+		a.F_DRUG_PRINTER_ID,
+		a.F_DEPARTMENT_ID,
+		a.F_XQ_TC,
+		a.F_DQ_TC,
+		CASE b.F_STATE 
+		WHEN 0 THEN b.F_NAME 
+		ELSE  '' END F_DRUG_INTRO_NAME
+		,
+		CASE c.F_STATE
+		WHEN 0 THEN c.F_NAME
+		ELSE '' END F_DRUG_PRINTER_NAME
+		,
+		CASE d.F_STATE
+		WHEN 0 THEN d.F_NAME
+		ELSE '' END F_DEPARTMENT_NAME
+		
+		FROM
+		t_drug_only a LEFT JOIN t_drug_intro b ON a.F_DRUG_INTRO_ID=b.F_ID LEFT JOIN t_drug_printer c ON a.F_DRUG_PRINTER_ID=c.F_ID 
+		 LEFT JOIN t_department d ON a.F_DEPARTMENT_ID=d.F_ID 
+		WHERE a.F_STATE=0
+
+		<if test="fName!=null and fName!=''">
+			and a.F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fDrugIntroName != null and fDrugIntroName !=''">
+			and b.F_NAME like CONCAT("%",#{fDrugIntroName} ,"%") and b.F_STATE=0
+		</if>
+		<if test="fDrugPrinterName !=null and fDrugPrinterName !=''">
+			and c.F_NAME like CONCAT("%",#{fDrugPrinterName} ,"%") and c.F_STATE=0
+		</if>
+		<if test="isHasTc=='yes'">
+			and (a.F_XQ_TC > 0 or a.F_DQ_TC > 0)
+		</if>
+		<if test="isHasTc=='no'">
+			and (a.F_XQ_TC = 0 or a.F_DQ_TC = 0)
+		</if>
+		order by f_id desc 
+		LIMIT #{page}, #{rows}  
+	</select>
+<!-- 分页查询   end -->
+<!-- 产品展示   start -->
+	<select id="getList_DrugOnlyIntroTotal" resultType="int">
+		SELECT
+		count(1)
+		FROM t_user_drug a LEFT JOIN t_drug_only b ON a.F_DRUG_ID=b.F_ID LEFT JOIN t_user_drugonly_price c ON a.F_USER_ID=c.F_USER_ID AND a.F_DRUG_ID=c.F_DRUG_ONLY_ID
+				LEFT JOIN t_drug d ON b.F_ID=d.F_DRUG_ONLY_ID LEFT JOIN t_drug_intro e ON b.F_DRUG_INTRO_ID=e.F_ID
+		WHERE a.F_USER_ID=#{userId} AND d.F_NUMBER !=0 
+		
+		<if test="fName!=null and fName!=''">
+			and b.F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fDrugIntroName != null and fDrugIntroName !=''">
+			and e.F_NAME like CONCAT("%",#{fDrugIntroName} ,"%") and e.F_STATE=0
+		</if>
+	</select>
+	<select id="getList_DrugOnlyIntro" resultMap="BaseResultMap">
+		SELECT a.F_USER_ID,b.F_ID,b.F_NAME,b.F_ADDRESS,b.F_IMG,b.F_INTRO
+			,b.F_SPECIFICATION
+			,case WHEN c.F_SUPPLY_PRICE IS NULL THEN b.F_SUPPLY_PRICE ELSE c.F_SUPPLY_PRICE END F_SUPPLY_PRICE
+			,case WHEN c.F_RETAIL_PRICE IS NULL THEN b.F_RETAIL_PRICE ELSE c.F_RETAIL_PRICE END F_RETAIL_PRICE
+			,d.F_NUMBER,e.F_NAME F_DRUG_INTRO_NAME
+			,d.F_EXPIRY_DATE
+		 FROM t_user_drug a LEFT JOIN t_drug_only b ON a.F_DRUG_ID=b.F_ID LEFT JOIN t_user_drugonly_price c ON a.F_USER_ID=c.F_USER_ID AND a.F_DRUG_ID=c.F_DRUG_ONLY_ID
+				LEFT JOIN t_drug d ON b.F_ID=d.F_DRUG_ONLY_ID LEFT JOIN t_drug_intro e ON b.F_DRUG_INTRO_ID=e.F_ID
+		WHERE a.F_USER_ID=#{userId} AND d.F_NUMBER !=0 
+		
+		<if test="fName!=null and fName!=''">
+			and b.F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fDrugIntroName != null and fDrugIntroName !=''">
+			and e.F_NAME like CONCAT("%",#{fDrugIntroName} ,"%") and e.F_STATE=0
+		</if>
+		ORDER BY e.F_ID,b.F_ID ASC, d.F_EXPIRY_DATE ASC
+		  
+	</select>
+<!-- 产品展示   end -->
+
+	<select id="getSelectedListTotal" resultType="int">
+		select count(1) from 
+		t_drug_only where F_ID=#{fId}
+	</select>
+	<select id="getSelectedList" resultMap="BaseResultMap">
+		SELECT
+		F_ID,
+		F_NAME,
+		F_SPECIFICATION,
+		F_ADDRESS,
+		F_TIME,
+		F_STATE
+		FROM
+		t_drug_only 
+		where F_ID=#{fId} 
+		order by f_id desc 
+		LIMIT #{page}, #{rows}  
+	</select>
+
+	<select id="getDrugOnlyList" resultMap="BaseResultMap">
+		SELECT
+		F_ID,
+		F_NAME,
+		F_SPECIFICATION,
+		F_ADDRESS,
+		F_TIME,
+		F_DEPARTMENT_ID,
+		F_STATE
+		FROM
+		t_drug_only 
+		where F_STATE=0  
+	</select>
+	<select id="getCheckedDrugOnlyList" resultType="map">
+		SELECT 
+		F_DRUG_ID
+		FROM
+		t_user_drug where F_USER_ID=#{userId}
+	</select>
+	
+	<select id="exportAllBean" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List"></include>
+		FROM
+		t_drug_only 
+	</select>
+	
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.DrugOnly">
+		INSERT INTO t_drug_only 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			
+			<if test="fAddress != null">
+				F_ADDRESS,
+			</if>
+			<if test="fName != null">
+				F_NAME,
+			</if>
+			<if test="fState != null">
+				F_STATE,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+			<if test="fSpecification != null">
+				F_SPECIFICATION,
+			</if>
+			<if test="fSupplyPrice != null">
+				F_SUPPLY_PRICE,
+			</if>
+			<if test="fRetailPrice != null">
+				F_RETAIL_PRICE,
+			</if>
+			<if test="fImg != null">
+				F_IMG,
+			</if>
+			<if test="fIntro != null">
+				F_INTRO,
+			</if>
+			<if test="fDrugIntroId != null">
+				F_DRUG_INTRO_ID,
+			</if>
+			<if test="fDrugPrinterId != null">
+				F_DRUG_PRINTER_ID,
+			</if>
+			<if test="fDepartmentId != null">
+				F_DEPARTMENT_ID,
+			</if>
+			<if test="fXqTc != null">
+				F_XQ_TC,
+			</if>
+			<if test="fDqTc != null">
+				F_DQ_TC,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			
+			<if test="fAddress != null">
+				#{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fName != null">
+				#{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				#{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fSpecification != null">
+				#{fSpecification,jdbcType=VARCHAR},
+			</if>
+			<if test="fSupplyPrice != null">
+				#{fSupplyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fRetailPrice != null">
+				#{fRetailPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fImg != null">
+				#{fImg,jdbcType=VARCHAR},
+			</if>
+			<if test="fIntro != null">
+				#{fIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fDrugIntroId != null">
+				#{fDrugIntroId,jdbcType=INTEGER},
+			</if>
+			<if test="fDrugPrinterId != null">
+				#{fDrugPrinterId,jdbcType=INTEGER},
+			</if>
+			<if test="fDepartmentId != null">
+				#{fDepartmentId,jdbcType=INTEGER},
+			</if>
+			<if test="fXqTc != null">
+				#{fXqTc,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc != null">
+				#{fDqTc,jdbcType=DOUBLE},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="edit">
+		UPDATE t_drug_only 
+		<set>
+			<if test="fAddress != null">
+				F_ADDRESS = #{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fName != null">
+				F_NAME = #{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				F_STATE = #{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fSpecification != null">
+				F_SPECIFICATION = #{fSpecification,jdbcType=VARCHAR},
+			</if>
+			<if test="fSupplyPrice != null">
+				F_SUPPLY_PRICE = #{fSupplyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fRetailPrice != null">
+				F_RETAIL_PRICE = #{fRetailPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fImg != null">
+				F_IMG = #{fImg,jdbcType=VARCHAR},
+			</if>
+			<if test="fIntro != null">
+				F_INTRO = #{fIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fDrugIntroId != null">
+				F_DRUG_INTRO_ID = #{fDrugIntroId,jdbcType=INTEGER},
+			</if>
+			<if test="fDrugPrinterId != null">
+				F_DRUG_PRINTER_ID = #{fDrugPrinterId,jdbcType=INTEGER},
+			</if>
+			<if test="fDepartmentId != null">
+				F_DEPARTMENT_ID = #{fDepartmentId,jdbcType=INTEGER},
+			</if>
+			<if test="fXqTc != null">
+				F_XQ_TC = #{fXqTc,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc != null">
+				F_DQ_TC = #{fDqTc,jdbcType=DOUBLE},
+			</if>
+		</set>
+		WHERE F_ID = #{fId}
+	</update>
+	
+	<update id="deleteBeanByDrugIntroId">
+		update t_drug_only set F_DRUG_INTRO_ID = null where F_DRUG_INTRO_ID=#{fId}
+	</update>
+	
+	<update id="deleteBeanByDrugPrinterId">
+		update t_drug_only set F_DRUG_PRINTER_ID = null where F_DRUG_PRINTER_ID=#{fId}
+	</update>
+	
+</mapper>

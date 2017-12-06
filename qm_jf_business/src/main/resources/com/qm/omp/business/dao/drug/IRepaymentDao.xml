@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IRepaymentDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.Repayment">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_ORDER_ID" property="fOrderId" jdbcType="VARCHAR" />
+		<result column="F_MONEY" property="fMoney" jdbcType="DOUBLE" />
+		<result column="F_SOURCE" property="fSource" jdbcType="INTEGER" />
+		<result column="F_INTRO" property="fIntro" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID, F_ORDER_ID, F_MONEY ,F_SOURCE ,F_INTRO ,F_TIME
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) from t_repayment where F_ORDER_ID=#{fOrderId}
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List"></include>
+		FROM t_repayment where F_ORDER_ID=#{fOrderId} 
+		order by F_ID desc
+		LIMIT #{page}, #{rows}  
+	</select>
+
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.Repayment">
+		INSERT INTO t_repayment 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fOrderId != null">
+				F_ORDER_ID,
+			</if>
+			<if test="fMoney != null">
+				F_MONEY,
+			</if>
+			<if test="fSource != null">
+				F_SOURCE,
+			</if>
+			<if test="fIntro != null">
+				F_INTRO,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fOrderId != null">
+				#{fOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="fMoney != null">
+				#{fMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="fSource != null">
+				#{fSource,jdbcType=INTEGER},
+			</if>
+			<if test="fIntro != null">
+				#{fIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="edit">
+		UPDATE t_repayment 
+		<set>
+			<if test="fMoney != null">
+				F_MONEY = #{fMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="fSource != null">
+				F_SOURCE = #{fSource,jdbcType=INTEGER},
+			</if>
+			<if test="fIntro != null">
+				F_INTRO = #{fIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				F_TIME = #{fTime,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE F_ID = #{fId}
+	</update>
+	
+
+</mapper>

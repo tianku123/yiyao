@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.ICustomerDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.Customer">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_ADDRESS" property="fAddress" jdbcType="VARCHAR" />
+		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+		<result column="F_UNIT" property="fUnit" jdbcType="VARCHAR" />
+		<result column="F_PHONE" property="fPhone" jdbcType="VARCHAR" />
+		<result column="F_BEGIN_TIME" property="fBeginTime" jdbcType="VARCHAR" />
+		<result column="F_END_TIME" property="fEndTime" jdbcType="VARCHAR" />
+		<result column="F_REMARK" property="fRemark" jdbcType="VARCHAR" />
+		<result column="F_CITY_ID" property="fCityId" jdbcType="BIGINT" />
+		<result column="F_CITY_NAME" property="fCityName" jdbcType="VARCHAR" />
+		<result column="F_EXPIRY_DATE" property="fExpiryDate" jdbcType="VARCHAR" />
+		<result column="F_BIRTHDAY" property="fBirthday" jdbcType="VARCHAR" />
+		<result column="F_COMPANY_IDS" property="fCompanyIds" jdbcType="VARCHAR" />
+		<result column="F_DRUGPRINTER_IDS" property="fDrugPrinterIds" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID, F_NAME, F_ADDRESS, F_STATE, F_TIME, F_UNIT, F_PHONE, F_BEGIN_TIME, F_END_TIME, F_REMARK, F_CITY_ID, F_BIRTHDAY, F_COMPANY_IDS, F_DRUGPRINTER_IDS
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) 
+		FROM t_customer a left join t_city b on a.F_CITY_ID=b.F_ID where a.F_STATE=0
+		<if test="fName!=null and fName!=''">
+			and a.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%") 
+		</if>
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT a.F_ID, a.F_NAME, a.F_ADDRESS, a.F_STATE, a.F_TIME, a.F_UNIT, a.F_PHONE, a.F_BEGIN_TIME, a.F_END_TIME, a.F_REMARK, a.F_BIRTHDAY,
+			a.F_CITY_ID, b.F_NAME F_CITY_NAME
+			,
+			case
+			when F_BEGIN_TIME &lt;#{nowTime} then '2'
+			when F_END_TIME &lt;#{nowTime} then '2'
+			else '1' end as F_EXPIRY_DATE 
+		FROM t_customer a left join t_city b on a.F_CITY_ID=b.F_ID where a.F_STATE=0
+		<if test="fName!=null and fName!=''">
+			and a.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCityName !=null and fCityName !=''">
+			and b.F_NAME like CONCAT("%",#{fCityName} ,"%") 
+		</if>
+		order by a.F_ID desc 
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	<select id="getListById" resultMap="BaseResultMap">
+		SELECT a.F_ID, a.F_NAME, a.F_ADDRESS, a.F_STATE, a.F_TIME, a.F_UNIT, a.F_PHONE, a.F_BEGIN_TIME, a.F_END_TIME, a.F_REMARK, a.F_BIRTHDAY, a.F_DRUGPRINTER_IDS, a.F_COMPANY_IDS,
+			a.F_CITY_ID, b.F_NAME F_CITY_NAME
+			,
+			case
+			when F_BEGIN_TIME &lt;#{nowTime} then '2'
+			when F_END_TIME &lt;#{nowTime} then '2'
+			else '1' end as F_EXPIRY_DATE 
+		FROM t_customer a left join t_city b on a.F_CITY_ID=b.F_ID where a.F_ID=#{fId}
+	</select>
+	
+
+	<select id="getListTotal_youXiao" resultType="int">
+		select count(1) from(
+			select DISTINCT a.F_ID ,
+				case
+				when F_BEGIN_TIME &lt;#{nowTime} then '2'
+				when F_END_TIME &lt;#{nowTime} then '2'
+				else '1' end as F_EXPIRY_DATE 
+			FROM t_customer a left join t_city b on a.F_CITY_ID=b.F_ID left join t_user_info c ON b.F_ID=c.F_CITY_ID 
+			where a.F_STATE=0 and c.F_ID=#{userId}
+			<if test="fName!=null and fName!=''">
+				and a.F_UNIT like CONCAT("%",#{fName} ,"%") 
+			</if>
+			<if test="fCityName !=null and fCityName !=''">
+				and b.F_NAME like CONCAT("%",#{fCityName} ,"%") 
+			</if>
+		) z where z.F_EXPIRY_DATE=1
+	</select>
+	<select id="getList_youXiao" resultMap="BaseResultMap">
+		select * from(
+			SELECT DISTINCT a.F_ID, a.F_NAME, a.F_ADDRESS, a.F_STATE, a.F_TIME, a.F_UNIT, a.F_PHONE, a.F_BEGIN_TIME, a.F_END_TIME, a.F_REMARK, a.F_DRUGPRINTER_IDS, a.F_COMPANY_IDS,
+				a.F_CITY_ID, b.F_NAME F_CITY_NAME
+				,
+				case
+				when F_BEGIN_TIME &lt;#{nowTime} then '2'
+				when F_END_TIME &lt;#{nowTime} then '2'
+				else '1' end as F_EXPIRY_DATE 
+			FROM t_customer a left join t_city b on a.F_CITY_ID=b.F_ID  left join t_user_info c ON b.F_ID=c.F_CITY_ID 
+			where a.F_STATE=0 and c.F_ID=#{userId}
+			<if test="fName!=null and fName!=''">
+				and a.F_UNIT like CONCAT("%",#{fName} ,"%") 
+			</if>
+			<if test="fCityName !=null and fCityName !=''">
+				and b.F_NAME like CONCAT("%",#{fCityName} ,"%") 
+			</if>
+		) z where z.F_EXPIRY_DATE=1
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.Customer" useGeneratedKeys="true" keyProperty="fId">
+		INSERT INTO t_customer 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fAddress != null">
+				F_ADDRESS,
+			</if>
+			<if test="fName != null">
+				F_NAME,
+			</if>
+			<if test="fState != null">
+				F_STATE,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+			<if test="fUnit != null">
+				F_UNIT,
+			</if>
+			<if test="fPhone != null">
+				F_PHONE,
+			</if>
+			<if test="fBeginTime != null">
+				F_BEGIN_TIME,
+			</if>
+			<if test="fEndTime != null">
+				F_END_TIME,
+			</if>
+			<if test="fRemark != null">
+				F_REMARK,
+			</if>
+			<if test="fCityId != null">
+				F_CITY_ID,
+			</if>
+			<if test="fBirthday != null">
+				F_BIRTHDAY,
+			</if>
+			<if test="fDrugPrinterIds != null">
+				F_DRUGPRINTER_IDS,
+			</if>
+			<if test="fCompanyIds != null">
+				F_COMPANY_IDS,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fAddress != null">
+				#{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fName != null">
+				#{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				#{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fUnit != null">
+				#{fUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="fPhone != null">
+				#{fPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="fBeginTime != null">
+				#{fBeginTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fEndTime != null">
+				#{fEndTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fRemark != null">
+				#{fRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="fCityId != null">
+				#{fCityId,jdbcType=INTEGER},
+			</if>
+			<if test="fBirthday != null">
+				#{fBirthday,jdbcType=VARCHAR},
+			</if>
+			<if test="fDrugPrinterIds != null">
+				#{fDrugPrinterIds,jdbcType=VARCHAR},
+			</if>
+			<if test="fCompanyIds != null">
+				#{fCompanyIds,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="edit">
+		UPDATE t_customer 
+		<set>
+			<if test="fAddress != null">
+				F_ADDRESS = #{fAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="fName != null">
+				F_NAME = #{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				F_STATE = #{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fUnit != null">
+				F_UNIT = #{fUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="fPhone != null">
+				F_PHONE = #{fPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="fBeginTime != null">
+				F_BEGIN_TIME = #{fBeginTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fEndTime != null">
+				F_END_TIME = #{fEndTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fRemark != null">
+				F_REMARK = #{fRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="fBirthday != null">
+				F_BIRTHDAY = #{fBirthday,jdbcType=VARCHAR},
+			</if>
+			<if test="fCityId != null">
+				F_CITY_ID = #{fCityId,jdbcType=INTEGER},
+			</if>
+			<if test="fDrugPrinterIds != null">
+				F_DRUGPRINTER_IDS = #{fDrugPrinterIds,jdbcType=VARCHAR},
+			</if>
+			<if test="fCompanyIds != null">
+				F_COMPANY_IDS = #{fCompanyIds,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE F_ID = #{fId}
+	</update>
+	
+	
+	<update id="deleteBeanByCityId">
+		UPDATE t_customer SET F_CITY_ID = NULL WHERE F_CITY_ID=#{fId,jdbcType=INTEGER}
+	</update>
+	
+	<insert id="saveCustomer_DrugPrinter">
+		insert into t_customer_drugprinter(F_CUSTOMER_ID, F_DRUG_PRINTER_ID) values(#{customerId}, #{drugPrinterId})
+	</insert>
+	
+	<delete id="deleteCustomer_DrugPrinter">
+		delete from t_customer_drugprinter where F_CUSTOMER_ID=#{customerId}
+	</delete>
+	
+	<delete id="deleteCustomer_DrugPrinterByDrugPrinterId">
+		delete from t_customer_drugprinter where F_DRUG_PRINTER_ID=#{drugPrinterId}
+	</delete>
+	
+	<insert id="saveCustomer_Company">
+		insert into t_customer_company(F_CUSTOMER_ID, F_COMPANY_ID) values(#{customerId}, #{companyId})
+	</insert>
+	
+	<delete id="deleteCustomer_Company">
+		delete from t_customer_company where F_CUSTOMER_ID=#{customerId}
+	</delete>
+</mapper>

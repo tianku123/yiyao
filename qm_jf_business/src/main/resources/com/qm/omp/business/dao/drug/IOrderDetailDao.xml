@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IOrderDetailDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.OrderDetail">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_ORDER_ID" property="fOrderId" jdbcType="VARCHAR" />
+		<result column="F_DRUG_ID" property="fDrugId" jdbcType="INTEGER" />
+		<result column="F_DRUG_NAME" property="fDrugName" jdbcType="VARCHAR" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_SPECIFICATION" property="fSpecification" jdbcType="VARCHAR" />
+		<result column="F_BATCH_NUMBER" property="fBatchNumber" jdbcType="VARCHAR" />
+		<result column="F_EXPIRY_DATE" property="fExpiryDate" jdbcType="VARCHAR" />
+		<result column="F_ADDRESS" property="fAddress" jdbcType="VARCHAR" />
+		<result column="F_NUMBER" property="fNumber" jdbcType="INTEGER" />
+		<result column="F_SALES_NUMBER" property="fSalesNumber" jdbcType="INTEGER" />
+		<result column="F_PRICE" property="fPrice" jdbcType="DOUBLE" />
+		<result column="F_GONGYE_PRICE" property="fGongyePrice" jdbcType="DOUBLE" />
+		<result column="F_KAIPIAO_PRICE" property="fKaiPiaoPrice" jdbcType="DOUBLE" />
+		<result column="F_GUOJIFEI" property="fGuoJiFei" jdbcType="DOUBLE" />
+		<result column="F_FANDIAN" property="fFanDian" jdbcType="DOUBLE" />
+		<result column="F_GAOKAIFEI" property="fGaoKaiFei" jdbcType="DOUBLE" />
+		<result column="F_MONEY" property="fMoney" jdbcType="DOUBLE" />
+		<result column="F_MONEY_NOTAX" property="fMoney_noTax" jdbcType="DOUBLE" />
+		<result column="F_MONEY_BUYINGPRICE" property="fMoney_buyingPrice" jdbcType="DOUBLE" />
+		<result column="F_BUYING_PRICE" property="fBuyingPrice" jdbcType="DOUBLE" />
+		
+		<result column="F_XQ_TC" property="fXqTc" jdbcType="DOUBLE" />
+		<result column="F_XQ_TC_MONEY" property="fXqTc_Money" jdbcType="DOUBLE" />
+		<result column="F_DQ_TC" property="fDqTc" jdbcType="DOUBLE" />
+		<result column="F_DQ_TC_MONEY" property="fDqTc_Money" jdbcType="DOUBLE" />
+		
+		<result column="F_DEPARTMENT_ID" property="fDepartmentId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID,
+		F_XQ_TC,
+		F_XQ_TC_MONEY,
+		F_DQ_TC,
+		F_DQ_TC_MONEY,
+		F_ORDER_ID,
+		F_DRUG_ID,
+		F_DRUG_NAME,
+		F_NUMBER,
+		F_PRICE,
+		F_GONGYE_PRICE,
+		F_KAIPIAO_PRICE,
+		F_GUOJIFEI,
+		F_FANDIAN,
+		F_GAOKAIFEI,
+		F_MONEY_NOTAX,
+		F_MONEY_BUYINGPRICE,
+		F_MONEY
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) from t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID where 1=1
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if>
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_ORDER_ID,
+		a.F_DRUG_ID,
+		a.F_DRUG_NAME,
+		a.F_DRUG_NAME F_NAME,
+		a.F_NUMBER,
+		a.F_NUMBER F_SALES_NUMBER,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_KAIPIAO_PRICE,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY,
+		a.F_XQ_TC,
+		a.F_XQ_TC_MONEY,
+		a.F_DQ_TC,
+		a.F_DQ_TC_MONEY,
+		b.F_BATCH_NUMBER,
+		b.F_SPECIFICATION,
+		b.F_EXPIRY_DATE,
+		b.F_BUYING_PRICE,
+		b.F_ADDRESS
+		FROM
+		t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID
+		where 1=1 
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if>
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+
+	<select id="getListTotal_EditOrder" resultType="int">
+		select count(1) from t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID where 1=1
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if>
+	</select>
+	<select id="getList_EditOrder" resultMap="BaseResultMap">
+		SELECT
+		a.F_ORDER_ID,
+		a.F_DRUG_ID F_ID,
+		a.F_DRUG_NAME,
+		a.F_DRUG_NAME F_NAME,
+		a.F_NUMBER,
+		a.F_NUMBER F_SALES_NUMBER,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_KAIPIAO_PRICE,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY,
+		b.F_BATCH_NUMBER,
+		b.F_SPECIFICATION,
+		b.F_EXPIRY_DATE,
+		b.F_BUYING_PRICE,
+		b.F_ADDRESS
+		FROM
+		t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID
+		where 1=1 
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if>
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	<select id="printer" resultType="map">
+		SELECT
+		a.F_ID,
+		a.F_ORDER_ID,
+		a.F_DRUG_ID,
+		a.F_DRUG_NAME,
+		a.F_NUMBER,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_KAIPIAO_PRICE,
+		a.F_MONEY_NOTAX,
+		b.F_BATCH_NUMBER,
+		b.F_SPECIFICATION,
+		b.F_ADDRESS,
+		h.F_NAME F_WAREHOUSE_NAME,
+		c.F_ADDRESS SHOUHUO_ADDRESS,
+		c.F_PHONE,
+		c.F_NAME SHOUHUO_NAME,
+		d.F_UNIT,
+		f.F_NAME PRINTER_NAME
+		FROM
+		t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID LEFT JOIN t_order c ON a.F_ORDER_ID=c.F_ID LEFT JOIN t_customer d ON c.F_CUSTOMER_ID=d.F_ID LEFT JOIN t_drug_only e ON b.F_DRUG_ONLY_ID=e.F_ID
+		LEFT JOIN t_drug_printer f ON e.F_DRUG_PRINTER_ID=f.F_ID LEFT JOIN t_warehouse h ON b.F_WAREHOUSE_ID=h.F_ID
+		where 1=1 
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if> 
+		ORDER BY f.F_ID
+	</select>
+	
+	<select id="getListByOrderId" resultMap="BaseResultMap">
+		SELECT
+		 <include refid="Base_Column_List"></include>
+		FROM
+		t_order_detail
+		where 1=1 
+		<if test="fId !=null and fId !=''">
+			and F_ORDER_ID = #{fId}
+		</if>  
+	</select>
+	
+	<select id="getListMapByOrderId" resultType="map">
+		SELECT
+		a.F_ID,
+		a.F_ORDER_ID,
+		a.F_DRUG_ID,
+		a.F_NUMBER,
+		a.F_GONGYE_PRICE,
+		a.F_KAIPIAO_PRICE,
+		b.F_BUYING_PRICE
+		FROM
+		t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID 
+		where 1=1 
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if>  
+	</select>
+	
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.OrderDetail">
+		INSERT INTO t_order_detail 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fOrderId != null">
+				F_ORDER_ID,
+			</if>
+			<if test="fDrugId != null">
+				F_DRUG_ID,
+			</if>
+			<if test="fDrugName != null">
+				F_DRUG_NAME,
+			</if>
+			<if test="fNumber != null">
+				F_NUMBER,
+			</if>
+			<if test="fPrice != null">
+				F_PRICE,
+			</if>
+			<if test="fGongyePrice != null">
+				F_GONGYE_PRICE,
+			</if>
+			<if test="fKaiPiaoPrice != null">
+				F_KAIPIAO_PRICE,
+			</if>
+			<if test="fGuoJiFei != null">
+				F_GUOJIFEI,
+			</if>
+			<if test="fFanDian != null">
+				F_FANDIAN,
+			</if>
+			<if test="fGaoKaiFei != null">
+				F_GAOKAIFEI,
+			</if>
+			<if test="fMoney != null">
+				F_MONEY,
+			</if>
+			<if test="fMoney_noTax != null">
+				F_MONEY_NOTAX,
+			</if>
+			<if test="fMoney_buyingPrice != null">
+				F_MONEY_BUYINGPRICE,
+			</if>
+			
+			<if test="fXqTc_Money != null">
+				F_XQ_TC_MONEY,
+			</if>
+			<if test="fDqTc_Money != null">
+				F_DQ_TC_MONEY,
+			</if>
+			<if test="fXqTc != null">
+				F_XQ_TC,
+			</if>
+			<if test="fDqTc != null">
+				F_DQ_TC,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fOrderId != null">
+				#{fOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="fDrugId != null">
+				#{fDrugId,jdbcType=INTEGER},
+			</if>
+			<if test="fDrugName != null">
+				#{fDrugName,jdbcType=VARCHAR},
+			</if>
+			<if test="fNumber != null">
+				#{fNumber,jdbcType=INTEGER},
+			</if>
+			<if test="fPrice != null">
+				#{fPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGongyePrice != null">
+				#{fGongyePrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fKaiPiaoPrice != null">
+				#{fKaiPiaoPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGuoJiFei != null">
+				#{fGuoJiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fFanDian != null">
+				#{fFanDian,jdbcType=DOUBLE},
+			</if>
+			<if test="fGaoKaiFei != null">
+				#{fGaoKaiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney != null">
+				#{fMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_noTax != null">
+				#{fMoney_noTax,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_buyingPrice != null">
+				#{fMoney_buyingPrice,jdbcType=DOUBLE},
+			</if>
+			
+			<if test="fXqTc_Money != null">
+				#{fXqTc_Money,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc_Money != null">
+				#{fDqTc_Money,jdbcType=DOUBLE},
+			</if>
+			<if test="fXqTc != null">
+				#{fXqTc,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc != null">
+				#{fDqTc,jdbcType=DOUBLE},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="edit">
+		update t_order_detail 
+		<set>
+			<if test="fPrice != null">
+				F_PRICE = #{fPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGongyePrice != null">
+				F_GONGYE_PRICE = #{fGongyePrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fKaiPiaoPrice != null">
+				F_KAIPIAO_PRICE = #{fKaiPiaoPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGuoJiFei != null">
+				F_GUOJIFEI = #{fGuoJiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fFanDian != null">
+				F_FANDIAN = #{fFanDian,jdbcType=DOUBLE},
+			</if>
+			<if test="fGaoKaiFei != null">
+				F_GAOKAIFEI = #{fGaoKaiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney != null">
+				F_MONEY = #{fMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_noTax != null">
+				F_MONEY_NOTAX = #{fMoney_noTax,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_buyingPrice != null">
+				F_MONEY_BUYINGPRICE = #{fMoney_buyingPrice,jdbcType=DOUBLE},
+			</if>
+			
+			
+			<if test="fXqTc_Money != null">
+				F_XQ_TC_MONEY = #{fXqTc_Money,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc_Money != null">
+				F_DQ_TC_MONEY = #{fDqTc_Money,jdbcType=DOUBLE},
+			</if>
+			
+			<if test="fXqTc != null">
+				F_XQ_TC = #{fXqTc,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc != null">
+				F_DQ_TC = #{fDqTc,jdbcType=DOUBLE},
+			</if>
+		</set>
+		where F_ID = #{fId,jdbcType=INTEGER}
+	</update>
+	
+	
+	<update id="editByOrderIdAndDrugId">
+		update t_order_detail 
+		<set>
+			<if test="fPrice != null">
+				F_PRICE = #{fPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGongyePrice != null">
+				F_GONGYE_PRICE = #{fGongyePrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fKaiPiaoPrice != null">
+				F_KAIPIAO_PRICE = #{fKaiPiaoPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="fGuoJiFei != null">
+				F_GUOJIFEI = #{fGuoJiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fFanDian != null">
+				F_FANDIAN = #{fFanDian,jdbcType=DOUBLE},
+			</if>
+			<if test="fGaoKaiFei != null">
+				F_GAOKAIFEI = #{fGaoKaiFei,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney != null">
+				F_MONEY = #{fMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_noTax != null">
+				F_MONEY_NOTAX = #{fMoney_noTax,jdbcType=DOUBLE},
+			</if>
+			<if test="fMoney_buyingPrice != null">
+				F_MONEY_BUYINGPRICE = #{fMoney_buyingPrice,jdbcType=DOUBLE},
+			</if>
+			
+			<if test="fXqTc_Money != null">
+				F_XQ_TC_MONEY = #{fXqTc_Money,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc_Money != null">
+				F_DQ_TC_MONEY = #{fDqTc_Money,jdbcType=DOUBLE},
+			</if>
+			
+			<if test="fXqTc != null">
+				F_XQ_TC = #{fXqTc,jdbcType=DOUBLE},
+			</if>
+			<if test="fDqTc != null">
+				F_DQ_TC = #{fDqTc,jdbcType=DOUBLE},
+			</if>
+		</set>
+		where F_ORDER_ID = #{fOrderId,jdbcType=VARCHAR} and F_DRUG_ID = #{fDrugId,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteBeanByOrderId">
+		delete from t_order_detail where F_ORDER_ID=#{fOrderId}
+	</delete>
+	
+	<select id="getListByOrderIds" resultType="map">
+		SELECT
+		a.F_ID,
+		a.F_ORDER_ID,
+		a.F_DRUG_ID,
+		a.F_DRUG_NAME,
+		a.F_NUMBER,
+		a.F_PRICE,
+		a.F_KAIPIAO_PRICE,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_MONEY,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY_BUYINGPRICE,
+		a.F_GONGYE_PRICE,
+		a.F_XQ_TC,
+		a.F_XQ_TC_MONEY,
+		a.F_DQ_TC,
+		a.F_DQ_TC_MONEY,
+		b.F_SALE_USER_ID,
+		d.F_DEPARTMENT_ID
+		FROM
+		t_order_detail AS a LEFT JOIN t_order b ON a.F_ORDER_ID=b.F_ID 
+		LEFT JOIN t_drug c ON a.F_DRUG_ID=c.F_ID LEFT JOIN t_drug_only d ON c.F_DRUG_ONLY_ID=d.F_ID
+		where a.F_ORDER_ID in 
+		<foreach collection="orderIds" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</select>
+	
+	
+	<select id="getListTotal_zg" resultType="int">
+		select count(1) from t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID where 1=1
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if>
+	</select>
+	<select id="getList_zg" resultMap="BaseResultMap">
+		SELECT
+		a.F_ID,
+		a.F_ORDER_ID,
+		a.F_DRUG_ID,
+		a.F_DRUG_NAME,
+		a.F_DRUG_NAME F_NAME,
+		a.F_NUMBER,
+		a.F_NUMBER F_SALES_NUMBER,
+		a.F_PRICE,
+		a.F_GONGYE_PRICE,
+		a.F_KAIPIAO_PRICE,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY,
+		a.F_XQ_TC,
+		a.F_XQ_TC_MONEY,
+		a.F_DQ_TC,
+		a.F_DQ_TC_MONEY,
+		b.F_BATCH_NUMBER,
+		b.F_SPECIFICATION,
+		b.F_EXPIRY_DATE,
+		b.F_BUYING_PRICE,
+		b.F_ADDRESS,
+		d.F_DEPARTMENT_ID
+		FROM
+		t_order_detail a LEFT JOIN t_drug b ON a.F_DRUG_ID=b.F_ID  LEFT JOIN t_drug_only d ON b.F_DRUG_ONLY_ID=d.F_ID
+		where 1=1 
+		<if test="fOrderId !=null and fOrderId !=''">
+			and a.F_ORDER_ID = #{fOrderId}
+		</if>
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	
+	<!-- 财务除了未提交的其他状态都可以看见  start -->
+	<select id="getOrderDetailListTotal" resultType="int">
+		select count(1) from t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		LEFT JOIN t_order_detail c ON a.F_ID=c.F_ORDER_ID
+		where  a.F_ISEDITPRICE in(0,2) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		<if test="fState !=null and fState !=''">
+			and a.F_STATE = #{fState}
+		</if>
+		<if test="fState ==null or fState ==''">
+			and a.F_STATE in(1,2,3) 
+		</if>
+		<if test="fPaymentState !=null and fPaymentState !=''">
+			and a.F_PAYMENT_STATE = #{fPaymentState} 
+		</if>
+		<if test="fTax !=null and fTax !=''">
+			and a.F_TAX =#{fTax} 
+		</if>
+		<if test="fIsPolicy !=null and fIsPolicy !=''">
+			and a.F_ISPOLICY =#{fIsPolicy} 
+		</if>
+		<if test="beginTime !=null and beginTime !='' and endTime !=null and endTime !=''">
+			and a.F_TIME between #{beginTime} and #{endTime}
+		</if>
+	</select>
+	<select id="getOrderDetailList" resultType="map">
+		SELECT
+		a.F_ID,
+		a.F_EXAMINE,
+		a.F_ADDRESS,
+		a.F_CUSTOMER_ID,
+		a.F_NAME,
+		a.F_PHONE,
+		a.F_SALE_TIME,
+		a.F_SALE_USER_ID,
+		a.F_SALE_USER_NAME,
+		a.F_FINANCE_TIME,
+		a.F_FINANCE_USER_ID,
+		a.F_FINANCE_USER_NAME,
+		a.F_SHIPPER_TIME,
+		a.F_SHIPPER_USER_ID,
+		a.F_SHIPPER_USER_NAME,
+		a.F_PAYMENT_STATE,
+		a.F_EXPRESS_ID,
+		a.F_EXPRESS_NAME,
+		a.F_STATE,
+		a.F_MONEY_NOTAX,
+		a.F_MONEY_BUYINGPRICE,
+		a.F_MONEY,
+		a.F_GUOJIFEI,
+		a.F_FANDIAN,
+		a.F_GAOKAIFEI,
+		a.F_TAX,
+		a.F_TIME,
+		a.F_SALE_INTRO,
+		a.F_FINANCE_INTRO,
+		a.F_SHIPPER_INTRO,
+		a.F_TOWNSHIP,
+		a.F_YAOFNAG,
+		a.F_ISPOLICY,
+		a.F_POLICY_INTRO,
+		a.F_XQ_TC_MONEY,
+		a.F_DQ_TC_MONEY,
+		b.F_NAME F_CUSTOMER_NAME,
+		b.F_UNIT,
+		c.F_DRUG_ID,
+		c.F_DRUG_NAME,
+		c.F_NUMBER,
+		c.F_GUOJIFEI F_GUOJIFEI_DETAIL,
+		c.F_FANDIAN F_FANDIAN_DETAIL,
+		c.F_GAOKAIFEI F_GAOKAIFEI_DETAIL,
+		c.F_MONEY F_MONEY_DETAIL,
+		c.F_MONEY_BUYINGPRICE F_MONEY_BUYINGPRICE_DETAIL,
+		c.F_XQ_TC_MONEY F_XQ_TC_MONEY_DETAIL,
+		c.F_DQ_TC_MONEY F_DQ_TC_MONEY_DETAIL
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		LEFT JOIN t_order_detail c ON a.F_ID=c.F_ORDER_ID
+		where  a.F_ISEDITPRICE in(0,2) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		<if test="fState !=null and fState !=''">
+			and a.F_STATE = #{fState}
+		</if>
+		<if test="fState ==null or fState ==''">
+			and a.F_STATE in(1,2,3) 
+		</if>
+		<if test="fPaymentState !=null and fPaymentState !=''">
+			and a.F_PAYMENT_STATE = #{fPaymentState} 
+		</if>
+		<if test="fTax !=null and fTax !=''">
+			and a.F_TAX =#{fTax} 
+		</if>
+		<if test="fIsPolicy !=null and fIsPolicy !=''">
+			and a.F_ISPOLICY =#{fIsPolicy} 
+		</if>
+		<if test="beginTime !=null and beginTime !='' and endTime !=null and endTime !=''">
+			and a.F_TIME between #{beginTime} and #{endTime}
+		</if>
+		order by a.F_ID desc, c.F_DRUG_ID desc
+		<if test="page != null and rows != null">
+			LIMIT #{page}, #{rows}  
+		</if>
+	</select>
+	
+	<select id="getTotalMoney" resultType="map">
+		SELECT
+		sum(a.F_MONEY_NOTAX) F_MONEY_NOTAX,
+		sum(a.F_MONEY_BUYINGPRICE) F_MONEY_BUYINGPRICE,
+		sum(a.F_MONEY) F_MONEY,
+		sum(a.F_GUOJIFEI) F_GUOJIFEI,
+		sum(a.F_FANDIAN) F_FANDIAN,
+		sum(a.F_GAOKAIFEI) F_GAOKAIFEI,
+		sum(a.F_XQ_TC_MONEY) F_XQ_TC_MONEY,
+		sum(a.F_DQ_TC_MONEY) F_DQ_TC_MONEY
+		FROM
+		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
+		where  a.F_ISEDITPRICE in(0,2) 
+		<if test="fName!=null and fName!=''">
+			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
+		</if>
+		<if test="fCustomName !=null and fCustomName !=''">
+			and a.F_SALE_USER_NAME like CONCAT("%",#{fCustomName} ,"%") 
+		</if>
+		<if test="fState !=null and fState !=''">
+			and a.F_STATE = #{fState}
+		</if>
+		<if test="fState ==null or fState ==''">
+			and a.F_STATE in(1,2,3) 
+		</if>
+		<if test="fPaymentState !=null and fPaymentState !=''">
+			and a.F_PAYMENT_STATE = #{fPaymentState} 
+		</if>
+		<if test="fTax !=null and fTax !=''">
+			and a.F_TAX =#{fTax} 
+		</if>
+		<if test="fIsPolicy !=null and fIsPolicy !=''">
+			and a.F_ISPOLICY =#{fIsPolicy} 
+		</if>
+		<if test="beginTime !=null and beginTime !='' and endTime !=null and endTime !=''">
+			and a.F_TIME between #{beginTime} and #{endTime}
+		</if>
+	</select>
+</mapper>

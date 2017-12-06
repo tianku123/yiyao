@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.system.ISystemLogDao">
+	
+	<!-- 添加系统日志 -->
+	<insert id="saveLog" parameterType="Map">
+		insert into t_system_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="menuName != null">
+				F_MENU,
+			</if>
+			<if test="method != null">
+				F_METHOD,
+			</if>
+			<if test="params != null">
+				F_PARAM,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+			<if test="description != null">
+				F_DESCRIPTION,
+			</if>
+			<if test="fUserCode != null">
+				F_USERCODE,
+			</if>
+			<if test="fIp != null">
+				F_IP,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="menuName != null">
+				#{menuName,jdbcType=VARCHAR},
+			</if>
+			<if test="method != null">
+				#{method,jdbcType=VARCHAR},
+			</if>
+			<if test="params != null">
+				#{params,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="fUserCode != null">
+				#{fUserCode,jdbcType=VARCHAR},
+			</if>
+			<if test="fIp != null">
+				#{fIp,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 查询系统日志 -->
+	<select id="queryLogList" resultType="Map">
+		SELECT
+		a.F_ID,
+		a.F_MENU,
+		a.F_METHOD,
+		a.F_PARAM,
+		a.F_TIME,
+		a.F_DESCRIPTION,
+		a.F_USERCODE,
+		a.F_IP,
+		b.F_USER_NAME,
+		b.F_USER_STATE
+		FROM t_system_log a LEFT JOIN t_user_info b ON a.F_USERCODE=b.F_USER_CODE 
+		where 1=1 
+		<if test="fUserCode!=null and fUserCode!=''">
+			AND a.F_USERCODE like CONCAT('%',#{fUserCode},'%')
+		</if>
+		<if test="fUserName!=null and fUserName!=''">
+			AND b.F_USER_NAME like CONCAT('%',#{fUserName},'%')
+		</if>
+		<if test="beginTime!=null and endTime!=null and beginTime!='' and endTime!=''">
+			AND a.F_TIME between #{beginTime} and #{endTime} 
+		</if>
+		order by a.F_ID desc 
+		limit #{page},#{rows}
+	</select>
+	
+	<!-- 查询系统日志 -->
+	<select id="getLogListTotal" resultType="int">
+		SELECT
+		count(a.F_ID)
+		FROM t_system_log a LEFT JOIN t_user_info b ON a.F_USERCODE=b.F_USER_CODE 
+		where 1=1 
+		<if test="fUserCode!=null and fUserCode!=''">
+			AND a.F_USERCODE like CONCAT('%',#{fUserCode},'%')
+		</if>
+		<if test="fUserName!=null and fUserName!=''">
+			AND b.F_USER_NAME like CONCAT('%',#{fUserName},'%')
+		</if>
+		<if test="beginTime!=null and endTime!=null and beginTime!='' and endTime!=''">
+			AND a.F_TIME between #{beginTime} and #{endTime} 
+		</if>
+	</select>
+	
+	<!-- 删除日志 -->
+	<delete id="deleteLog">
+		delete from t_system_log 
+		where 1=1 
+		<if test="fUserCode!=null and fUserCode!=''">
+			AND F_USERCODE like CONCAT('%',#{fUserCode},'%')
+		</if>
+		<if test="beginTime!=null and endTime!=null and beginTime!='' and endTime!=''">
+			AND F_TIME between #{beginTime} and #{endTime} 
+		</if>
+	</delete>
+	
+</mapper>

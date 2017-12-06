@@ -1,0 +1,20 @@
+/*login page*/
+body{background:none; background-color:#0066b3;}
+#login_container{width:100%; height:346px; margin:auto; position:absolute;  top:50%; margin-top:-173px; background-color:#f3f3f3}
+.login_main{width:1000px; height:330px; padding:8px 0; margin:0 auto; position:relative; background-color:#f3f3f3}
+.loginLeft{float:left; width:530px; text-align:center; height:330px; background:url(../images/loginLine.png) no-repeat right top;}
+.loginLeft img{margin-top:55px;}
+.login_list{padding-top:60px; width:470px; height:270px; float:right;}
+.login_list li{padding:15px 0 0 100px;}
+input.userId, input.userPw{background-color:#FFF; width:250px; padding:6px 5px; padding-left:30px; height:auto; line-height:25px;}
+input.userId{background-position:9px -289px;}
+input.userPw{background-position:9px -326px;}
+.errorBox{position:absolute; top:25px; width:250px; height:32px; line-height:32px; background-color:#ffffcc; border:1px dashed #cc9933; color:#cc9933; background-position: 10px -452px; text-indent:35px;}
+
+
+
+
+
+
+
+

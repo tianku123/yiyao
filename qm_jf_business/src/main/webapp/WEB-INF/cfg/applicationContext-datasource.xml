@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 设置每个分区数 -->
+		<property name="partitionCount" value="${jdbc.partitionCount}" />
+		<!-- 设置每个分区含有connection最大个数 -->
+		<property name="maxConnectionsPerPartition" value="${jdbc.maxConnectionsPerPartition}" />
+		<!-- 设置每个分区含有connection最小个数 -->
+		<property name="minConnectionsPerPartition" value="${jdbc.minConnectionsPerPartition}" />
+		<!-- 设置分区中的connection增长数量 -->
+		<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />
+		<!-- 设置连接池阀值 -->
+		<property name="poolAvailabilityThreshold" value="${jdbc.poolAvailabilityThreshold}"></property>
+		<!-- 设置获取connection超时的时间 -->
+		<property name="connectionTimeoutInMs" value="${jdbc.connectionTimeout}"></property>
+		<!-- 连接池中未使用的链接最大存活时间 -->
+		<property name="idleMaxAgeInMinutes" value="${jdbc.idleMaxAge}" />
+		<!-- 检查数据库连接池中空闲连接的间隔时间 -->
+		<property name="idleConnectionTestPeriodInMinutes" value="${jdbc.idleConnectionTestPeriod}" />
+		<!-- 语句缓存个数，默认是0 -->
+		<property name="statementsCacheSize" value="${jdbc.statementsCacheSize}" />
+	</bean>
+
+	<!-- 写数据源 
+	<bean id="wDataSource" parent="parentDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+    -->
+	<!-- 读数据源 
+	<bean id="rDataSource" parent="parentDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="dataSource" class="com.qm.omp.api.datasource.RoutingDataSourceStrategy">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry value-ref="wDataSource" key="write"></entry>
+				<entry value-ref="rDataSource" key="read"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="wDataSource"></property>
+	</bean>
+    -->
+    
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!-- 指定处理此数据的类 -->
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler"
+		abstract="false" lazy-init="true" autowire="default">
+	</bean>
+
+	<!-- 配置mybatis的sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis_config.xml"></property>
+		<property name="mapperLocations"> 
+		    <list> 
+                <value>classpath:com/qm/omp/api/dao/*.xml</value> 
+			    <value>classpath:com/qm/omp/business/dao/*.xml</value> 
+			</list>
+	    </property>
+	</bean>
+
+	<!--配置mybatis的扫描映射器,自动创建映射器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.qm.omp.api.dao,com.qm.omp.business.dao" />
+	</bean>
+	
+	<bean id="ompBaseCache"
+        class="com.qm.omp.api.cache.MemcachedManagerImpl" init-method="initialize">
+        <property name="poolName" value="${memcached.base.poolName}"></property>
+        <property name="servers" value="${memcached.base.servers}"></property>
+        <property name="weights" value="${memcached.base.weights}"></property>
+        <property name="initConn" value="${memcached.base.initConn}"></property>
+        <property name="minConn" value="${memcached.base.minConn}"></property>
+        <property name="maxConn" value="${memcached.base.maxConn}"></property>
+        <property name="maxIdle" value="${memcached.base.maxIdle}"></property>
+        <property name="maintSleep" value="${memcached.base.maintSleep}"></property>
+        <property name="nagle" value="${memcached.base.nagle}"></property>
+        <property name="socketTo" value="${memcached.base.socketTo}"></property>
+        <property name="socketConnectTo"
+            value="${memcached.base.socketConnectTo}">
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.omp.business.dao.admin.IMenuDao">
+	<resultMap type="com.qm.omp.business.pojo.admin.MenuInfoBean" id="BaseResultMap">
+		<result property="funcId" column="F_FUNC_ID"/>
+		<result property="funcParentId" column="F_PARENT_ID"/>
+	  	<result property="funcName" column="F_FUNC_NAME"/> 
+	  	<result property="funcType" column="F_FUNC_TYPE"/> 
+	  	<result property="funcURI" column="F_FUNC_URI"/>
+	  	<result property="funcOrder" column="F_ORDER"/>
+	  	<result property="funcClass" column="F_CLASS"/>
+	  	
+	</resultMap>
+	
+	 <!-- Base_Column_List 模块功能基本信息-->
+    <sql id="Base_Column_List" >
+    	 F_FUNC_ID, F_FUNC_NAME, F_FUNC_TYPE, F_FUNC_URI, F_JB_NUM, F_JB, F_MJ, F_BZ
+    </sql>
+
+    <!-- queryAllFunListByUserCode 根据用户code获取用户的权限-->
+    <select id="queryAllFunListByUserCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select DISTINCT a.F_FUNC_ID,a.F_PARENT_ID,a.F_FUNC_NAME,a.F_FUNC_TYPE,a.F_FUNC_URI,a.F_ORDER,a.F_CLASS from t_menu_info a left JOIN t_role_menu b on a.F_FUNC_ID = b.F_MENU_ID
+	LEFT JOIN t_role_info c ON b.F_ROLE_ID = c.F_ROLE_CODE LEFT JOIN t_user_info d on c.F_ROLE_CODE = d.F_USER_ROLE_REL WHERE d.F_USER_CODE = #{userCode} AND d.F_USER_TYPE=0 ORDER BY a.F_FUNC_TYPE,a.F_ORDER
+    </select>
+    
+   <!-- 获取URL树，用户权限管理模块 -->
+   <select id="getMenuUrlList" resultMap="BaseResultMap">
+		SELECT
+		F_FUNC_ID,
+		F_PARENT_ID,
+		F_FUNC_NAME,
+		F_FUNC_TYPE,
+		F_FUNC_URI,
+		F_ORDER,
+		F_CLASS
+		FROM
+		t_menu_info
+    </select>
+    
+   <!-- 获取URL树，终端用户权限管理模块 -->
+   <select id="getMenuUrlList_Terminal" resultType="Map">
+		SELECT
+		F_FUNC_ID,
+		F_FUNC_NAME
+		FROM t_menu_terminal_info
+    </select>
+    
+    
+   <!-- 根据角色获取该角色所有拥有的url -->
+   <select id="getMenuUrlListByRoleCode" resultMap="BaseResultMap">
+	select DISTINCT a.F_FUNC_ID,a.F_PARENT_ID,a.F_FUNC_NAME,a.F_FUNC_TYPE,a.F_FUNC_URI,a.F_ORDER,a.F_CLASS from t_menu_info a left JOIN t_role_menu b on a.F_FUNC_ID = b.F_MENU_ID 
+	LEFT JOIN t_role_info c ON b.F_ROLE_ID = c.F_ROLE_CODE WHERE c.F_ROLE_CODE=#{roleCode}
+    </select>
+    
+   <!-- 根据角色获取该角色所有拥有的url -->
+   <select id="getMenuUrlList_TerminalByRoleCode" resultType="Map">
+		SELECT DISTINCT 
+		a.F_FUNC_ID,
+		a.F_FUNC_NAME
+		FROM t_menu_terminal_info a LEFT JOIN t_role_terminal_menu b ON a.F_FUNC_ID=b.F_MENU_ID 
+		LEFT JOIN t_role_info c ON b.F_ROLE_ID=c.F_ROLE_CODE 
+		WHERE c.F_ROLE_CODE=#{roleCode}
+    </select>
+    
+    
+	<!-- 新增角色 -->
+	<insert id="modifyFuncQX">
+		insert into t_role_menu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">
+				F_ROLE_ID,
+			</if>
+			<if test="urlId != null">
+				F_MENU_ID,
+			</if>
+			F_ROLE_TYPE
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">
+				#{roleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="urlId != null">
+				#{urlId,jdbcType=VARCHAR},
+			</if>
+			0
+		</trim>
+	</insert>
+	
+	<insert id="modifyFuncQX_Terminal">
+		insert into t_role_terminal_menu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">
+				F_ROLE_ID,
+			</if>
+			<if test="urlId != null">
+				F_MENU_ID,
+			</if>
+			F_ROLE_TYPE
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">
+				#{roleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="urlId != null">
+				#{urlId,jdbcType=VARCHAR},
+			</if>
+			0
+		</trim>
+	</insert>
+    
+</mapper> 

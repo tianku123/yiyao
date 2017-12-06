@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>qm_jf</artifactId>
+		<groupId>com.qm.jf</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>qm_jf_business</artifactId>
+	<packaging>war</packaging>
+	<name>qm_jf_business</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.38</version>
+		</dependency>
+		<dependency>
+			<groupId>com.qm.jf</groupId>
+			<artifactId>qm_jf_api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.10-FINAL</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.10</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+
+		<!-- axis2 -->
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-aar-maven-plugin</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-adb</artifactId>
+
+			<version>1.6.2</version>
+			
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-adb-codegen</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-ant-plugin</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-clustering</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-codegen</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-integration</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-java2wsdl</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-java2wsdl-maven-plugin</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-jaxbri</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-jaxws</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-jaxws-integration</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-jibx</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-json</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-kernel</artifactId>
+
+			<version>1.6.2</version>
+			
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-mar-maven-plugin</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-metadata</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-mtompolicy</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-repo-maven-plugin</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-resource-bundle</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-saaj</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-soapmonitor-servlet</artifactId>
+
+			<version>1.6.2</version>
+
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-spring</artifactId>
+
+			<version>1.6.2</version>
+			
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-transport-http</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-transport-local</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>axis2-xmlbeans</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.axis2</groupId>
+
+			<artifactId>org.apache.axis2.osgi</artifactId>
+
+			<version>1.6.2</version>
+
+		</dependency>
+
+		<!-- axis2 -->
+
+		
+		
+		
+	</dependencies>
+	<build>
+		<finalName>qm_jf_business</finalName>
+		<plugins>
+			<!-- jetty插件 -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>6.1.5</version>
+				<configuration>
+					<connectors>
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+							<port>9099</port>
+						</connector>
+					</connectors>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<stopKey>foo</stopKey>
+					<stopPort>9999</stopPort>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat6-maven-plugin</artifactId>
+				<version>2.0-SNAPSHOT</version>
+				<configuration>
+					<!-- 默认访问路径为：http://localhost:8080/${project.name} 下面指定访问路径为： http://localhost:8080 -->
+					<path>/</path>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

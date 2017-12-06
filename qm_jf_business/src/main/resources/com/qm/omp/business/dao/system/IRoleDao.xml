@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.system.IRoleDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.system.RoleInfoBean">
+		<id column="F_ROLE_CODE" property="roleCode" jdbcType="VARCHAR" />
+		<result column="F_ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+		<result column="F_ROLE_DATE" property="roleDate" jdbcType="VARCHAR" />
+		<result column="F_ROLE_TYPE" property="roleType" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ROLE_CODE, F_ROLE_NAME
+	</sql>
+
+	<!-- 获取角色数据  -->
+	<select id="getRoleList" resultMap="BaseResultMap">
+		SELECT  
+		F_ROLE_CODE, F_ROLE_NAME, F_ROLE_DATE ,F_ROLE_TYPE
+		FROM T_ROLE_INFO  WHERE F_ROLE_TYPE in 
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	
+	
+	<!-- 根据角色编码查询角色信息 -->
+	<select id="queryRoleDetail" resultMap="BaseResultMap">
+		SELECT  
+		F_ROLE_CODE, F_ROLE_NAME, F_ROLE_DATE  
+		FROM T_ROLE_INFO 
+		WHERE F_ROLE_CODE = #{roleCode}
+	</select>
+	
+	<!-- 新增角色  0:后台角色    1：终端角色 终端角色只有一个-->
+	<insert id="addRole" parameterType="com.qm.omp.business.pojo.system.RoleInfoBean">
+		insert into t_role_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">
+				F_ROLE_CODE,
+			</if>
+			<if test="roleName != null">
+				F_ROLE_NAME,
+			</if>
+			<if test="roleDate != null">
+				F_ROLE_DATE,
+			</if>
+			<if test="roleType != null">
+				F_ROLE_TYPE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">
+				#{roleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="roleDate != null">
+				#{roleDate,jdbcType=VARCHAR},
+			</if>
+			<if test="roleType != null">
+				#{roleType,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 编辑角色 -->
+	<update id="editRole" parameterType="com.qm.omp.business.pojo.system.RoleInfoBean">
+		UPDATE  T_ROLE_INFO  
+		<set>
+			<if test="roleName != null">
+				F_ROLE_NAME = #{roleName}
+			</if>
+		</set>
+		where F_ROLE_CODE = #{roleCode}
+	</update>
+	
+	<!-- 删除角色  级联删除角色对应的URL键值对记录-->
+	 <delete id="deleteRole" >
+	  	DELETE 
+	  		FROM 
+	  	T_ROLE_INFO 
+	  	WHERE F_ROLE_CODE = #{roleCode}
+	  </delete>
+	 <!-- 级联删除角色对应的URL键值对记录 -->
+	 <delete id="deleteRole_Fun_URL" >
+	  	DELETE 
+	  		FROM 
+	  	T_ROLE_MENU  
+	  	WHERE F_ROLE_ID = #{roleCode}
+	  </delete>
+	 <delete id="deleteRole_Fun_URL_Terminal" >
+	  	DELETE 
+	  		FROM 
+	  	t_role_terminal_menu  
+	  	WHERE F_ROLE_ID = #{roleCode}
+	  </delete>
+	  <!-- 级联更改角色对应的用户信息，用户信息的角色项清空 -->
+	  <update id="updateRole_User">
+	  	update t_user_info 
+	  	set F_USER_ROLE_REL = '' 
+	  	where F_USER_ROLE_REL = #{roleCode}
+	  </update>
+</mapper>

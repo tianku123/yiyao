@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qm.omp.business.dao.drug.IDrugPrinterDao">
+	<resultMap id="BaseResultMap"
+		type="com.qm.omp.business.pojo.drug.DrugPrinter">
+		<id column="F_ID" property="fId" jdbcType="BIGINT" />
+		<result column="F_NAME" property="fName" jdbcType="VARCHAR" />
+		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
+		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		F_ID, F_NAME, F_STATE,F_TIME
+	</sql>
+
+	<select id="getListTotal" resultType="int">
+		select count(1) from t_drug_printer where F_STATE=0
+		<if test="fName !=null and fName !=''">
+			and F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+	</select>
+	<select id="getList" resultMap="BaseResultMap">
+		SELECT F_ID, F_NAME, F_STATE,F_TIME 
+		FROM t_drug_printer where F_STATE=0
+		<if test="fName!=null and fName!=''">
+			and F_NAME like CONCAT("%",#{fName} ,"%") 
+		</if>
+		order by F_ID desc 
+		LIMIT #{page}, #{rows}  
+	</select>
+	
+	<select id="getAllBean" resultMap="BaseResultMap">
+		SELECT F_ID, F_NAME 
+		FROM t_drug_printer where F_STATE=0 
+	</select>
+	
+	<select id="exportAllBean" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List"></include> 
+		FROM t_drug_printer 
+	</select>
+	
+	<insert id="save" parameterType="com.qm.omp.business.pojo.drug.DrugPrinter">
+		INSERT INTO t_drug_printer 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fName != null">
+				F_NAME,
+			</if>
+			<if test="fState != null">
+				F_STATE,
+			</if>
+			<if test="fTime != null">
+				F_TIME,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fName != null">
+				#{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				#{fState,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				#{fTime,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="edit">
+		UPDATE t_drug_printer 
+		<set>
+			<if test="fName != null">
+				F_NAME = #{fName,jdbcType=VARCHAR},
+			</if>
+			<if test="fState != null">
+				F_STATE = #{fState,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE F_ID = #{fId}
+	</update>
+	
+	<select id="getCheckedDrugPrinterList" resultType="map">
+		select F_DRUG_PRINTER_ID from t_customer_drugprinter where F_CUSTOMER_ID=#{customerId}
+	</select>
+</mapper>
