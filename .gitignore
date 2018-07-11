@@ -5,10 +5,10 @@ logs/
 .settings/
 */.project
 */.classpath
+.metadata/
 ### Java ###
 # Compiled class file
 *.class
-
 # Log file
 *.log
 
