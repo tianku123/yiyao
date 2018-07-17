@@ -130,8 +130,8 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>utf-8</encoding>
 				</configuration>
 			</plugin>
@@ -141,12 +141,12 @@
 		<repository>
 			<id>releases</id>
 			<name>QM Internal Repository</name>
-			<url>http://www.qmsvn.com:8081/nexus/content/repositories/releases</url>
+			<url>http://localhost:8081/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>QM Internal Repository</name>
-			<url>http://www.qmsvn.com:8081/nexus/content/repositories/snapshots</url>
+			<url>http://localhost:8081/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<modules>
