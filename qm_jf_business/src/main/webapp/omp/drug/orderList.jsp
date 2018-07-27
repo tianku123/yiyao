@@ -59,7 +59,8 @@
 		init : function() {
 			
 			var columns = [ 
-				{field : 'fId',align:'center',checkbox : true},
+				{align:'center',checkbox : true},
+				{field : 'fId', title: '订单号', align:'center'},
 				{field : 'fCustomerName',title : '客户名称',width : 100,align:'center'}, 
 				{field : 'fName',title : '收货人',width : 100,align:'center'}, 
 				{field : 'fUnit',title : '购货单位',width : 100,align:'center'}, 
@@ -87,26 +88,12 @@
 				{field : 'fExpressId',title : '快递单号',width : 100,align:'center'}, 
 				{field : 'fState',title : '订单状态',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "业务员未提交";
-						}else if(value=='1'){
-							return "提交财务审核";
-						}else if(value=='2'){
-							return "财务审核通过";
-						}else if(value=='3'){
-							return "已发货";
-						}else if(value=='4'){
-							return "退单";
-						}
+						return fState2Zh(value);
 					}
 				},
 				{field : 'fTax',title : '是否含税',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "工业票";
-						}else if(value=='1'){
-							return "含税";
-						}
+						return fTax2Zh(value);
 					}
 				},
 				{field : 'fGuoJiFei',title : '过票费',width :100,align:'center',
@@ -322,7 +309,7 @@
 		},
 		showDetail : function(fId, fTax){
 			var url;
-			if(fTax == 0){//工业票
+			if(fTax == 0 || fTax == 3){//工业票
 				url = "/omp/drug/orderDetail_NoTax.jsp?fId="+fId;
 			}else{
 				url = "/omp/drug/orderDetail_HasTax.jsp?fId="+fId;

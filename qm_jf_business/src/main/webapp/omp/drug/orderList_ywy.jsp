@@ -42,8 +42,7 @@
 </body>
 <script type="text/javascript"
 	src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_util.js"></script>
+document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?${updateDate}'></script>"); 
 <script>
 	var ajaxTools = new QM.ajax();
 	var merchantUserInfoComponent = {
@@ -59,16 +58,11 @@
 		init : function() {
 			
 			var columns = [ 
-				{field : 'fId',align:'center',checkbox : true},
+				{align:'center',checkbox : true},
+				{field : 'fId', title: '订单号', align:'center'},
 				{field : 'fTax',title : '是否含税',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "工业票";
-						}else if(value=='1'){
-							return "含税(增值税)";
-						}else if(value=='2'){
-							return "含税(普通)";
-						}
+						return fTax2Zh(value);
 					}
 				},
 				{field : 'isPolicy',title : '政策报单',width :100,align:'center',
@@ -129,21 +123,7 @@
 				{field : 'fExpressId',title : '快递单号',width : 100,align:'center'}, 
 				{field : 'fState',title : '订单状态',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "业务员未提交";
-						}else if(value=='1'){
-							return "提交财务审核";
-						}else if(value=='2'){
-							return "财务审核通过";
-						}else if(value=='3'){
-							return "已发货";
-						}else if(value=='4'){
-							return "财务退单";
-						}else if(value=='8'){
-							return "12小时内财务未审核自动退单";
-						}else if(value=='9'){
-							return "30分钟内未提交自动退单";
-						}
+						return fState2Zh(value);
 					}
 				},
 				{field : 'fGuoJiFei',title : '过票费',width :100,align:'center',
@@ -316,9 +296,9 @@
 							}
 							
 							var param = merchantUserInfoComponent.getPKConds(selRows[0]).queryStr;
-							var editUrl = "${contextPath}/omp/drug/addSaleInfo.jsp?fState=1";
+							var editUrl = "${contextPath}/omp/remarks/addSaleInfo.jsp?fState=1";
 							if(selRows[0]['isPolicy']==1){
-								editUrl = "${contextPath}/omp/drug/addSaleInfo.jsp?fState=10";
+								editUrl = "${contextPath}/omp/remarks/addSaleInfo.jsp?fState=10";
 							}
 							if(editUrl){
 								if(editUrl.indexOf('?') != -1){
@@ -440,7 +420,7 @@
 		},
 		showDetail : function(fId, fTax){
 			var url;
-			if(fTax == 0){//工业票
+			if(fTax == 0 || fTax == 3){//工业票
 				url = "/omp/drug/orderDetail_NoTax.jsp?fId="+fId;
 			}else{
 				url = "/omp/drug/orderDetail_HasTax.jsp?fId="+fId;

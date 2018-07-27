@@ -56,10 +56,10 @@
 											</td>
 											<th width="15%"><label>开票价： </label></th>
 											<td width="20%">
-												<c:if test="${param.tax==0 }">
+												<c:if test="${param.tax==0 || param.tax==3}">
 													<input style="width:100px;" id="fKaiPiaoPrice" type="text" disabled="disabled" placeholder="请输入"  class="easyui-validatebox" value="0"/>  
 												</c:if>
-												<c:if test="${param.tax!=0 }">
+												<c:if test="${param.tax!=0 && param.tax!=3}">
 													<input style="width:100px;" id="fKaiPiaoPrice" type="text" placeholder="请输入"  class="easyui-validatebox" data-options="required:true,validType:'intOrFloat'"/>  
 												</c:if>
 											</td>

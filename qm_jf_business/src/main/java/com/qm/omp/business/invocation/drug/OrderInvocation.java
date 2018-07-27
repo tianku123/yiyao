@@ -307,7 +307,7 @@ public class OrderInvocation implements BaseInvocation{
     
     
     /**
-     * 添加bean
+     * 添加订单
      * @param context
      * @return
      */
@@ -325,14 +325,13 @@ public class OrderInvocation implements BaseInvocation{
     	String fTownship = RequestUtil.getStrParamterAsDef(context.getRequest(), "fTownship", "");
     	String fYaofang = RequestUtil.getStrParamterAsDef(context.getRequest(), "fYaofang", "");
     	Integer fCustomerId = null;
-    	System.out.println(customer + ":cus");
     	if(!"".equals(customer)){
     		JSONArray cArr = JSONArray.parseArray(customer);
     		fCustomerId = cArr.getJSONObject(0).getInteger("fId");
     	}
     	Order bean = new Order();
     	bean.setfName(fName);
-    	bean.setfState(0+"");//保存未提交给财务状态
+    	bean.setfState("0");//保存未提交给财务状态
     	bean.setfIsEditPrice("0");//订单未被修改价格
     	bean.setfTax(fTax);
     	bean.setfAddress(fAddress);
@@ -428,7 +427,7 @@ public class OrderInvocation implements BaseInvocation{
     	
     	List<OrderDetail> ods = new ArrayList<OrderDetail>();
     	OrderDetail od = null;
-    	if("0".equals(fTax)){//不含税  0：不含税，1：含税(增值税)，2：含税(普通)
+    	if("0".equals(fTax) || "3".equals(fTax)){//不含税  0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
     		for(int i=0; i<dArr.size(); i++){
     			obj = dArr.getJSONObject(i);
     			fPrice = obj.getDouble("fPrice");//单价
@@ -601,7 +600,6 @@ public class OrderInvocation implements BaseInvocation{
     	String fYaofang = RequestUtil.getStrParamterAsDef(context.getRequest(), "fYaofang", "");
     	String fPolicyIntro = RequestUtil.getStrParamterAsDef(context.getRequest(), "fPolicyIntro", "");
     	Integer fCustomerId = null;
-    	System.out.println(customer + ":cus");
     	if(!"".equals(customer)){
     		JSONArray cArr = JSONArray.parseArray(customer);
     		fCustomerId = cArr.getJSONObject(0).getInteger("fId");
@@ -693,7 +691,7 @@ public class OrderInvocation implements BaseInvocation{
     	
     	List<OrderDetail> ods = new ArrayList<OrderDetail>();
     	OrderDetail od = null;
-    	if("0".equals(fTax)){//不含税  0：不含税，1：含税(增值税)，2：含税(普通)
+    	if("0".equals(fTax) || "3".equals(fTax)){//不含税  0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
     		for(int i=0; i<dArr.size(); i++){
     			obj = dArr.getJSONObject(i);
     			fPrice = obj.getDouble("fPrice");//单价
@@ -928,7 +926,7 @@ public class OrderInvocation implements BaseInvocation{
     	
     	List<OrderDetail> ods = new ArrayList<OrderDetail>();
     	OrderDetail od = null;
-    	if("0".equals(fTax)){//不含税  0：不含税，1：含税(增值税)，2：含税(普通)
+    	if("0".equals(fTax) || "3".equals(fTax)){//不含税  0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
     		for(int i=0; i<dArr.size(); i++){
     			obj = dArr.getJSONObject(i);
     			fPrice = obj.getDouble("fPrice");//单价
@@ -1193,7 +1191,7 @@ public class OrderInvocation implements BaseInvocation{
     	
     	List<OrderDetail> ods = new ArrayList<OrderDetail>();
     	OrderDetail od = null;
-    	if("0".equals(fTax)){//不含税  0：不含税，1：含税(增值税)，2：含税(普通)
+    	if("0".equals(fTax) || "3".equals(fTax)){//不含税  0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
     		for(int i=0; i<dArr.size(); i++){
     			obj = dArr.getJSONObject(i);
     			fPrice = obj.getDouble("fPrice");//单价

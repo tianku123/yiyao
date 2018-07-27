@@ -77,9 +77,10 @@
 						</th>
 						<td width="20%">
 							<select id="tax">
-								<option value="0">工业票</option>
-								<option value="1">含税(增值税)</option>
-								<option value="2">含税(普通)</option>
+								<option value="0">普通发票</option>
+								<option value="3">专用发票</option>
+								<option value="1">高开(增值税)</option>
+								<option value="2">高开(普通)</option>
 							</select>
 						</td>
 						

@@ -52,10 +52,10 @@
 											</td>
 											<th width="20%"><label>开票价： </label></th>
 											<td width="30%">
-												<c:if test="${param.tax==0 }">
+												<c:if test="${param.tax==0 || param.tax==3}">
 													<input id="fKaiPiaoPrice" type="text" disabled="disabled" placeholder="请输入"  class="easyui-validatebox" value="0"/>  
 												</c:if>
-												<c:if test="${param.tax!=0 }">
+												<c:if test="${param.tax!=0 && param.tax!=3}">
 													<input id="fKaiPiaoPrice" type="text" placeholder="请输入"  class="easyui-validatebox" data-options="required:true,validType:'intOrFloat'"/>  
 												</c:if>
 											</td>
@@ -108,11 +108,11 @@
 						return value+"元";
 					}
 				},
-				{field : 'fGongyePrice',title : '工业票价',width :100,align:'center',
+				/* {field : 'fGongyePrice',title : '工业票价',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
-				},
+				}, */
 				{field : 'fWareHouseName',title : '仓库名称',width :100,align:'center'},
 				{field : 'fNumber',title : '库存',width :100,align:'center'}
 			];

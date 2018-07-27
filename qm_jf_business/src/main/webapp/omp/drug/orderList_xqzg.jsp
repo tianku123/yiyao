@@ -73,8 +73,7 @@
 </body>
 <script type="text/javascript"
 	src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_util.js"></script>
+document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?${updateDate}'></script>"); 
 <script>
 	var ajaxTools = new QM.ajax();
 	var merchantUserInfoComponent = {
@@ -96,16 +95,11 @@
 			merchantUserInfoComponent.totalTc();
 			// 总提成 end
 			var columns = [ 
-				{field : 'fId',align:'center',checkbox : true},
+				{align:'center',checkbox : true},
+				{field : 'fId', title: '订单号', align:'center'},
 				{field : 'fTax',title : '是否含税',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "工业票";
-						}else if(value=='1'){
-							return "含税(增值税)";
-						}else if(value=='2'){
-							return "含税(普通)";
-						}
+						return fTax2Zh(value);
 					}
 				},
 				{field : 'fCustomerName',title : '客户名称',width : 100,align:'center'}, 
@@ -118,17 +112,7 @@
 				 
 				{field : 'fState',title : '订单状态',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "业务员未提交";
-						}else if(value=='1'){
-							return "提交财务审核";
-						}else if(value=='2'){
-							return "财务审核通过";
-						}else if(value=='3'){
-							return "已发货";
-						}else if(value=='4'){
-							return "退单";
-						}
+						return fState2Zh(value);
 					}
 				},
 				{field : 'fXqTc_Money',title : '小区主管提成',width :100,align:'center',
@@ -258,7 +242,7 @@
 		showDetail : function(fId, fTax, fSaleUserId){
 			console.log(fSaleUserId);
 			var url;
-			if(fTax == 0){//工业票
+			if(fTax == 0 || fTax == 3){//工业票
 				url = "/omp/zhuguan/orderDetail_NoTax.jsp?fId="+fId + "&fSaleUserId=" + fSaleUserId;
 			}else{
 				url = "/omp/zhuguan/orderDetail_HasTax.jsp?fId="+fId + "&fSaleUserId=" + fSaleUserId;

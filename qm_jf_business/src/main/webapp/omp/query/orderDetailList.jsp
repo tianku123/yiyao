@@ -125,13 +125,7 @@
 				{field : 'F_ID',title : '订单号',align:'center'},
 				{field : 'F_TAX',title : '是否含税',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "工业票";
-						}else if(value=='1'){
-							return "含税(增值税)";
-						}else if(value=='2'){
-							return "含税(普通)";
-						}
+						return fTax2Zh(value);
 					}
 				},
 				{field : 'F_ISPOLICY',title : '政策报单',width :100,align:'center',
@@ -145,30 +139,12 @@
 				},
 				{field : 'F_PAYMENT_STATE',title : '付款情况',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "<span style='color:red;'>借款</span>";
-						}else if(value=='1'){
-							return "已付款";
-						}else if(value=='2'){
-							return "<span style='color:green;'>已还款</span>";
-						}
+						return fPaymentState2Zh(value);
 					}
 				}, 
 				{field : 'F_STATE',title : '订单状态',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "业务员未提交";
-						}else if(value=='1'){
-							return "<span style='color:red;'>未审核</span>";
-						}else if(value=='2'){
-							return "<span style='color:green;'>审核通过</span>";
-						}else if(value=='3'){
-							return "已发货";
-						}else if(value=='4'){
-							return "手动退单";
-						}else if(value=='8'){
-							return "超时自动退单";
-						}
+						return fState2Zh(value);
 					}
 				},
 				{field : 'F_EXAMINE',title : '复核',width :100,align:'center',
