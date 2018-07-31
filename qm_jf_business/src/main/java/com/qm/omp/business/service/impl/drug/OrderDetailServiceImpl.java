@@ -1,5 +1,6 @@
 package com.qm.omp.business.service.impl.drug;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.qm.omp.business.dao.drug.IOrderDetailDao;
 import com.qm.omp.business.dao.drug.IZgYWYDao;
 import com.qm.omp.business.pojo.admin.ZgYWYBean;
 import com.qm.omp.business.pojo.drug.OrderDetail;
+import com.qm.omp.business.util.DateTimeUtil;
 import com.qm.omp.business.util.PoiUtil;
 
 @Service("orderDetailService")
@@ -69,7 +71,7 @@ public class OrderDetailServiceImpl {
 
 	
 	public void save(OrderDetail bean) {
-		this.drugDao.minusNumber(bean.getfDrugId(), -bean.getfNumber().intValue());//减少库存
+//		this.drugDao.minusNumber(bean.getfDrugId(), -bean.getfNumber().intValue());//减少库存
 		
 		this.orderDetailDao.save(bean);
 	}
@@ -295,7 +297,8 @@ public class OrderDetailServiceImpl {
  			cell.setCellStyle(cellStyle);
  			// 下单时间
  			cell = row.createCell(cellNum++);
- 			cell.setCellValue(MapUtils.getString(map, "F_SALE_TIME"));
+ 			
+ 			cell.setCellValue(DateTimeUtil.formatDateStrToOtherStr6ByDateFormat(MapUtils.getString(map, "F_SALE_TIME")));
  			cell.setCellStyle(cellStyle);
  			// 财务
  			cell = row.createCell(cellNum++);
@@ -303,7 +306,7 @@ public class OrderDetailServiceImpl {
  			cell.setCellStyle(cellStyle);
  			// 财务审批时间
  			cell = row.createCell(cellNum++);
- 			cell.setCellValue(MapUtils.getString(map, "F_FINANCE_TIME"));
+ 			cell.setCellValue(DateTimeUtil.formatDateStrToOtherStr6ByDateFormat(MapUtils.getString(map, "F_FINANCE_TIME")));
  			cell.setCellStyle(cellStyle);
  			// 发货员
  			cell = row.createCell(cellNum++);
@@ -311,7 +314,7 @@ public class OrderDetailServiceImpl {
  			cell.setCellStyle(cellStyle);
  			// 发货时间
  			cell = row.createCell(cellNum++);
- 			cell.setCellValue(MapUtils.getString(map, "F_SHIPPER_TIME"));
+ 			cell.setCellValue(DateTimeUtil.formatDateStrToOtherStr6ByDateFormat(MapUtils.getString(map, "F_SHIPPER_TIME")));
  			cell.setCellStyle(cellStyle);
  			// 快递公司
  			cell = row.createCell(cellNum++);

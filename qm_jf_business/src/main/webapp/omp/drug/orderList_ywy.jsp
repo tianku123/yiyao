@@ -60,7 +60,19 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 			var columns = [ 
 				{align:'center',checkbox : true},
 				{field : 'fId', title: '订单号', align:'center'},
-				{field : 'fTax',title : '是否含税',width :100,align:'center',
+				{field : 'parentId',title : '订单详细',width :100,align:'center',
+					formatter: function(value,row,index){
+						var fId = row['fId'];
+						var fTax = row['fTax'];
+						return '<a  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showDetail(\''+fId+'\',\' ' +fTax+ ' \');">订单详细</a>';
+					}
+				}, 
+				{field : 'fState',title : '订单状态',width :100,align:'center',
+					formatter: function(value,row,index){
+						return fState2Zh(value);
+					}
+				},
+				{field : 'fTax',title : '类型',width :100,align:'center',
 					formatter: function(value,row,index){
 						return fTax2Zh(value);
 					}
@@ -120,22 +132,17 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 					}
 				},
 				{field : 'fExpressName',title : '快递公司',width : 100,align:'center'}, 
-				{field : 'fExpressId',title : '快递单号',width : 100,align:'center'}, 
-				{field : 'fState',title : '订单状态',width :100,align:'center',
-					formatter: function(value,row,index){
-						return fState2Zh(value);
-					}
-				},
+				{field : 'fExpressId',title : '快递单号',width : 100,align:'center'},
 				{field : 'fGuoJiFei',title : '过票费',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
 				},
-				{field : 'fFanDian',title : '返点',width :100,align:'center',
+				/* {field : 'fFanDian',title : '返点',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
-				},
+				}, */
 				{field : 'fGaoKaiFei',title : '高开费',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
@@ -149,13 +156,6 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 				{field : 'fMoney',title : '计算后金额',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
-					}
-				},
-				{field : 'parentId',title : '订单详细',width :100,align:'center',
-					formatter: function(value,row,index){
-						var fId = row['fId'];
-						var fTax = row['fTax'];
-						return '<a  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showDetail(\''+fId+'\',\' ' +fTax+ ' \');">订单详细</a>';
 					}
 				}
 			];
@@ -296,9 +296,9 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 							}
 							
 							var param = merchantUserInfoComponent.getPKConds(selRows[0]).queryStr;
-							var editUrl = "${contextPath}/omp/remarks/addSaleInfo.jsp?fState=1";
-							if(selRows[0]['isPolicy']==1){
-								editUrl = "${contextPath}/omp/remarks/addSaleInfo.jsp?fState=10";
+							var editUrl = "${contextPath}/omp/remarks/commit2Finance.jsp?fState=1";
+							if(selRows[0]['isPolicy']==1){// 政策报单
+								editUrl = "${contextPath}/omp/remarks/commit2Finance.jsp?fState=10";
 							}
 							if(editUrl){
 								if(editUrl.indexOf('?') != -1){

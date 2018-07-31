@@ -426,9 +426,9 @@ function fState2Zh(value) {
 	if(value=='0'){
 		return "业务员未提交";
 	}else if(value=='1'){
-		return "<span style='color:red;'>未审核</span>";
+		return "<span style='color:red;'>财务未审核</span>";
 	}else if(value=='2'){
-		return "<span style='color:green;'>审核通过</span>";
+		return "<span style='color:green;'>财务审核通过</span>";
 	}else if(value=='3'){
 		return "已发货";
 	}else if(value=='4'){
@@ -437,6 +437,8 @@ function fState2Zh(value) {
 		return "超时自动退单";
 	}else if(value=='9'){
 		return "30分钟内未提交自动退单";
+	}else if(value=='10'){
+		return "政策报单未审核";
 	}
 	return "";
 }

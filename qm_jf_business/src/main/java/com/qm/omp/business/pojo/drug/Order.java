@@ -1,6 +1,8 @@
 package com.qm.omp.business.pojo.drug;
 
 import java.io.Serializable;
+
+import com.qm.common.util.RequestUtil;
 /**
  * 主订单
  * @author Administrator
@@ -126,7 +128,10 @@ public class Order implements Serializable {
 	private Integer fPaymentSource;
 	// 付款时间
 	private String fPaymentTime;
-	
+	// 发货方式，0：物流，1：自提，2：快递
+	private Integer fSendType;
+	// 选择物流发货输入的物流公司名称
+	private String fLogistics;
 	
 	
 	public Integer getfPaymentSource() {
@@ -464,6 +469,18 @@ public class Order implements Serializable {
 	}
 	public void setfExamine(String fExamine) {
 		this.fExamine = fExamine;
+	}
+	public Integer getfSendType() {
+		return fSendType;
+	}
+	public void setfSendType(Integer fSendType) {
+		this.fSendType = fSendType;
+	}
+	public String getfLogistics() {
+		return fLogistics;
+	}
+	public void setfLogistics(String fLogistics) {
+		this.fLogistics = fLogistics;
 	}
 	
 	

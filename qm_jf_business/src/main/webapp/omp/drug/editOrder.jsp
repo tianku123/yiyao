@@ -73,7 +73,7 @@
 				<table cellpadding="0" cellspacing="0" class="formTable" width="100%">
 					
 					<tr>
-						<th width="15%"><label>药品名称：</label>
+						<th width="15%"><label>类型：</label>
 						</th>
 						<td width="20%">
 							<select id="tax">
@@ -95,7 +95,7 @@
 						</th>
 						<td width="20%"><input id="fPhone" name="fPhone" type="text" autofocus="autofocus" class="easyui-validatebox" data-options="required:true,validType:'number'"
 							maxlength="50" /></td>
-						<th width="15%"><label>购货单位：</label>
+						<th width="15%"><label>购货地址：</label>
 						</th>
 						<td width="50%"><input id="fAddress" name="fAddress" type="text" autofocus="autofocus" class="easyui-validatebox" data-options="required:true" style="width:300px;"
 							maxlength="100" />

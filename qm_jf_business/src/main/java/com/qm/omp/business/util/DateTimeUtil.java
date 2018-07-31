@@ -663,14 +663,14 @@ public class DateTimeUtil
         return strResult;
     }
 
-    private static SimpleDateFormat dateFormat   = new SimpleDateFormat("yyyyMMddHHmmss");
-    private static SimpleDateFormat dateFormat_1 = new SimpleDateFormat("yyyyMM");
-    private static SimpleDateFormat dateFormat_2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static SimpleDateFormat dateFormat_3 = new SimpleDateFormat("yyyy-MM-dd");
-    private static SimpleDateFormat dateFormat_4 = new SimpleDateFormat("yyyy年MM月");
-    private static SimpleDateFormat dateFormat_5 = new SimpleDateFormat("yyyy年MM月dd日");
-    private static SimpleDateFormat dateFormat_6 = new SimpleDateFormat("yyyyMMdd");
-    private static SimpleDateFormat dateFormat_7 = new SimpleDateFormat("yyyyMMddHHmmss");
+    public static SimpleDateFormat dateFormat   = new SimpleDateFormat("yyyyMMddHHmmss");
+    public static SimpleDateFormat dateFormat_1 = new SimpleDateFormat("yyyyMM");
+    public static SimpleDateFormat dateFormat_2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat dateFormat_3 = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat dateFormat_4 = new SimpleDateFormat("yyyy年MM月");
+    public static SimpleDateFormat dateFormat_5 = new SimpleDateFormat("yyyy年MM月dd日");
+    public static SimpleDateFormat dateFormat_6 = new SimpleDateFormat("yyyyMMdd");
+    public static SimpleDateFormat dateFormat_7 = new SimpleDateFormat("yyyyMMddHHmmss");
 
     public static String formatDateStrToOtherStr(String time)
     {
@@ -683,6 +683,18 @@ public class DateTimeUtil
         {
         }
         return reTime;
+    }
+    public static String formatDateStrToOtherStr6ByDateFormat(String time)
+    {
+    	String reTime = "";
+    	try
+    	{
+    		reTime = dateFormat_6.format(dateFormat.parse(time));
+    	}
+    	catch (ParseException e)
+    	{
+    	}
+    	return reTime;
     }
 
     public static String formatDateStrToOtherStr3(String time)

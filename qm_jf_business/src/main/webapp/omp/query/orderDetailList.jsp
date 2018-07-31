@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>医药管理系统</title>
+<title>每日订单</title>
 <meta content="" name="keywords" />
 <meta content="" name="description" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -128,6 +128,11 @@
 						return fTax2Zh(value);
 					}
 				},
+				{field : 'F_STATE',title : '订单状态',width :100,align:'center',
+					formatter: function(value,row,index){
+						return fState2Zh(value);
+					}
+				},
 				{field : 'F_ISPOLICY',title : '政策报单',width :100,align:'center',
 					formatter: function(value,row,index){
 						if(value=='0'){
@@ -142,11 +147,6 @@
 						return fPaymentState2Zh(value);
 					}
 				}, 
-				{field : 'F_STATE',title : '订单状态',width :100,align:'center',
-					formatter: function(value,row,index){
-						return fState2Zh(value);
-					}
-				},
 				{field : 'F_EXAMINE',title : '复核',width :100,align:'center',
 					formatter: function(value,row,index){
 						if(value=='0'){
@@ -182,11 +182,6 @@
 				{field : 'F_EXPRESS_NAME',title : '快递公司',width : 100,align:'center'}, 
 				{field : 'F_EXPRESS_ID',title : '快递单号',width : 100,align:'center'},
 				{field : 'F_GUOJIFEI',title : '过票费',width :100,align:'center',
-					formatter: function(value,row,index){
-						return value+"元";
-					}
-				},
-				{field : 'F_FANDIAN',title : '返点',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
@@ -228,8 +223,6 @@
 				{field : 'F_NUMBER',title : '销售数量',width :100,align:'center'}
 				,
 				{field : 'F_GUOJIFEI_DETAIL',title : '过票费',width :100,align:'center'}
-				,
-				{field : 'F_FANDIAN_DETAIL',title : '返点',width :100,align:'center'}
 				,
 				{field : 'F_GAOKAIFEI_DETAIL',title : '高开费',width :100,align:'center'}
 				,

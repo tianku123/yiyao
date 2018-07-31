@@ -34,7 +34,7 @@ public class DeleteOrderTimerTask extends TimerTask {
 	@Override
 	public void run() {
 		System.out.println("DeleteOrderTimerTask====run");
-		ywy10Minu();
+//		ywy10Minu();
 		cw12Minu();
 	}
 	
@@ -66,7 +66,7 @@ public class DeleteOrderTimerTask extends TimerTask {
 	}
 	
 	/**
-	 * 业务员提交的订单，超过12小时未审核的则删除订单，恢复库存
+	 * 业务员提交的订单，超过24小时未审核的则删除订单，恢复库存
 	 */
 	private void cw12Minu() {
 		long now = new Date().getTime();

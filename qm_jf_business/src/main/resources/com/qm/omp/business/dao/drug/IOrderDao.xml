@@ -61,10 +61,15 @@
 		
 		<result column="F_PAYMENT_TIME" property="fPaymentTime" jdbcType="VARCHAR" />
 		<result column="F_PAYMENT_SOURCE" property="fPaymentSource" jdbcType="INTEGER" />
+		
+		<result column="F_LOGISTICS" property="fLogistics" jdbcType="VARCHAR" />
+		<result column="F_SEND_TYPE" property="fSendType" jdbcType="INTEGER" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		F_ID,
+		F_SEND_TYPE,
+		F_LOGISTICS,
 		F_PAYMENT_TIME,
 		F_PAYMENT_SOURCE,
 		F_EXAMINE,
@@ -674,11 +679,17 @@
 	<update id="edit">
 		UPDATE t_order 
 		<set>
+			<if test="fSendType != null">
+				F_SEND_TYPE = #{fSendType,jdbcType=INTEGER},
+			</if>
+			<if test="fLogistics != null">
+				F_LOGISTICS = #{fLogistics,jdbcType=VARCHAR},
+			</if>
 			<if test="fPaymentSource != null">
 				F_PAYMENT_SOURCE = #{fPaymentSource,jdbcType=INTEGER},
 			</if>
 			<if test="fPaymentTime != null">
-				F_PAYMENT_TIME = #{fPaymentTime,jdbcType=INTEGER},
+				F_PAYMENT_TIME = #{fPaymentTime,jdbcType=VARCHAR},
 			</if>
 			<if test="fState != null">
 				F_STATE = #{fState,jdbcType=VARCHAR},
