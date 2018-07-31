@@ -14,7 +14,7 @@
 <body>
 	<div id="login_container">
   <div class="login_main">
-     <div class="loginLeft"></div>
+     <!-- <div class="loginLeft"></div> -->
      <ul class="login_list">
        <li><input type="text" class="userId" name="loginId" id="loginId"  placeholder="用户编码" autofocus="autofocus" onkeydown="loginComponent.treatKeyEvent(event);"/></li>
        <li><input type="password" class="userPw" name="loginPassword" id="loginPassword"  placeholder="密码"  onkeydown="loginComponent.treatKeyEvent(event);"/></li>

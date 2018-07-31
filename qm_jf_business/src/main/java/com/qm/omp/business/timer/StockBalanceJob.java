@@ -47,7 +47,7 @@ public class StockBalanceJob {
 				bean.setfBalanceId(bean.getfId());
 				bean.setfNumberBak(bean.getfNumber());
 				bean.setfState("3");
-				bean.setfTime(DateTimeUtil.getTodayChar14());
+				bean.setfTime(bean.getfTime());
 				// 库存为零了就不结转到下个月
 				this.drugService.save(bean);
 				

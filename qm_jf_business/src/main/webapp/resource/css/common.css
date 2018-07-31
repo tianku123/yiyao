@@ -64,7 +64,7 @@ select{padding:5px 0; border:1px solid #DDD;}
 input.fileMore{background-color:#DDD; width:25px; height:25px;  vertical-align:middle; color:#000; font-family:Arial}
 button{color:#FFF; border:none; font-weight:bold; cursor:pointer; outline:none; margin-right:5px;}
 button.grayBtn{background-position: -109px -117px; width:95px; height:33px; text-align:center; vertical-align:middle; color:#666666; margin-left:5px;}
-button.loginBtn{background-color:#ffdd00; width:250px; height:41px; line-height:40px; text-align:center; font-size:14px; color:#0066b3; font-weight:normal; margin-top:35px;}
+button.loginBtn{background-color:#ffdd00; width:287px; height:41px; line-height:41px; text-align:center; font-size:16px; color:#0066b3; font-weight:bold; margin-top:25px;}
 button.orangeBtn{background-position: 0px -117px; width:95px; height:33px; text-align:center; vertical-align:middle; margin-left:5px;}
 button.grayBtnbulge{background-position:-140px -68px; width:135px; height:38px; color:#666; font-weight:bold;}
 button.grayBtnbulge:hover, .onclickBtn{border:1px solid #c7c7c7; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#E5E5E5,endColorstr=#D6D6D6,GradientType=0); background:-webkit-linear-gradient(top,#E5E5E5 0,#D6D6D6 100%); background:-moz-linear-gradient(top,#E5E5E5 0,#D6D6D6 100%); display:inline-block;}
@@ -84,7 +84,7 @@ input::-moz-placeholder{color:#b8b5b5;}
 .centerTable td.right{text-align:right;}
 
 /*pageTop*/
-.pageTop{height:60px;}
+.pageTop{height:30px;}
 .logo{float:left;width:300px; height:50px; vertical-align:middle; padding:0 10px; line-height:60px; }
 .logo a{  font-size:18px;  text-align:left; color:#fff; font-family:'Microsoft YaHei'; text-decoration:none;}
 .logo a i{background:url(../images/icons.png) 0 -10px no-repeat; top:8px;height:40px; position:relative;  width:110px; display:inline-block;*display:inline;}

@@ -55,7 +55,7 @@
 			id="Bg_img2" src="../resource/images/bg.jpg">
 	</div>
 	<!--end body background image-->
-	<div data-options="region:'north',border:false" style="height:60px;" id="container">
+	<div data-options="region:'north',border:false" style="height:30px;" id="container">
 		<div class="pageTop">
 			<div class="logo">
 				<%-- <a href="${contextPath}/omp/main.jsp" title="返回首页"><i></i>商户管理端</a> --%>
