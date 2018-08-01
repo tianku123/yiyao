@@ -9,6 +9,7 @@
 		<result column="F_ADDRESS" property="fAddress" jdbcType="VARCHAR" />
 		<result column="F_STATE" property="fState" jdbcType="VARCHAR" />
 		<result column="F_TIME" property="fTime" jdbcType="VARCHAR" />
+		<result column="F_BALANCE_TIME" property="fBalanceTime" jdbcType="VARCHAR" />
 		<result column="F_BATCH_NUMBER" property="fBatchNumber"
 			jdbcType="VARCHAR" />
 		<result column="F_EXPIRY_DATE" property="fExpiryDate" jdbcType="VARCHAR" />
@@ -50,6 +51,7 @@
 		F_NUMBER_BAK,
 		F_WAREHOUSE_ID,
 		F_TIME,
+		F_BALANCE_TIME,
 		F_STATE,
 		F_IMG,
 		F_INTRO,
@@ -91,6 +93,7 @@
 		a.F_WAREHOUSE_ID,
 		a.F_DRUG_ONLY_ID,
 		a.F_TIME,
+		a.F_BALANCE_TIME,
 		a.F_STATE,
 		a.F_IMG,
 		a.F_INTRO,
@@ -150,6 +153,7 @@
 		a.F_WAREHOUSE_ID,
 		a.F_DRUG_ONLY_ID,
 		a.F_TIME,
+		a.F_BALANCE_TIME,
 		a.F_STATE,
 		a.F_IMG,
 		a.F_INTRO,
@@ -229,7 +233,7 @@
 			and a.F_TIME like CONCAT("",#{time} ,"%")
 		</if>
 	</select>
-	
+
 	<select id="getListByUser" resultMap="BaseResultMap">
 		SELECT
 		a.F_ID,
@@ -242,6 +246,7 @@
 		a.F_NUMBER,
 		a.F_WAREHOUSE_ID,
 		a.F_TIME,
+		a.F_BALANCE_TIME,
 		a.F_STATE,
 		a.F_IMG,
 		a.F_INTRO,
@@ -276,6 +281,7 @@
 		a.F_NUMBER,
 		a.F_WAREHOUSE_ID,
 		a.F_TIME,
+		a.F_BALANCE_TIME,
 		a.F_STATE,
 		a.F_IMG,
 		a.F_INTRO,
@@ -287,12 +293,14 @@
 		d.F_DQ_TC,
 		d.F_XQ_TC
 		FROM
-		t_drug a JOIN t_warehouse b ON a.F_WAREHOUSE_ID=b.F_ID 
-		JOIN t_user_drug c ON a.F_DRUG_ONLY_ID=c.F_DRUG_ID 
-		JOIN t_drug_only d ON a.F_DRUG_ONLY_ID=d.F_ID 
-		<!-- JOIN t_drug_printer tp ON d.F_DRUG_PRINTER_ID=tp.F_ID  -->
+		t_drug a JOIN t_warehouse b ON
+		a.F_WAREHOUSE_ID=b.F_ID
+		JOIN t_user_drug c ON a.F_DRUG_ONLY_ID=c.F_DRUG_ID
+		JOIN t_drug_only d ON a.F_DRUG_ONLY_ID=d.F_ID
+		<!-- JOIN t_drug_printer tp ON d.F_DRUG_PRINTER_ID=tp.F_ID -->
 		WHERE c.F_USER_ID=#{userId} and a.F_NUMBER!=0
-		and a.F_STATE in(0,3) AND d.F_STATE=0 AND b.F_STATE=0 <!-- AND tp.F_STATE=0 -->
+		and a.F_STATE in(0,3) AND
+		d.F_STATE=0 AND b.F_STATE=0 <!-- AND tp.F_STATE=0 -->
 		<if test="fCompanyIds !=null and fCompanyIds !=''">
 			AND a.F_COMPANY_ID in(${fCompanyIds})
 		</if>
@@ -319,7 +327,7 @@
 		LIMIT #{page},
 		#{rows}
 	</select>
-	
+
 	<select id="getListByUser_ExceptSelected" resultMap="BaseResultMap">
 		SELECT
 		F_ID,F_NUMBER
@@ -343,6 +351,7 @@
 		a.F_NUMBER,
 		a.F_WAREHOUSE_ID,
 		a.F_TIME,
+		a.F_BALANCE_TIME,
 		a.F_STATE,
 		a.F_IMG,
 		a.F_INTRO,
@@ -361,7 +370,15 @@
 		<include refid="Base_Column_List"></include>
 		FROM
 		t_drug
-		where F_ID=#{fDrugId}
+		where F_ID=#{fDrugId} and F_STATE in(0,3)
+	</select>
+
+	<select id="getBeanByBalanceId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM
+		t_drug
+		where F_BALANCE_ID=#{fDrugId} and F_STATE in(0,3)
 	</select>
 
 	<select id="getBeanByDrugOnlyId" resultMap="BaseResultMap">
@@ -375,6 +392,7 @@
 		a.F_NUMBER,
 		a.F_WAREHOUSE_ID,
 		a.F_TIME,
+		a.F_BALANCE_TIME,
 		a.F_STATE,
 		a.F_IMG,
 		a.F_INTRO,
@@ -433,6 +451,9 @@
 			</if>
 			<if test="fTime != null">
 				F_TIME,
+			</if>
+			<if test="fBalanceTime != null">
+				F_BALANCE_TIME,
 			</if>
 			<if test="fSpecification != null">
 				F_SPECIFICATION,
@@ -496,6 +517,9 @@
 			<if test="fTime != null">
 				#{fTime,jdbcType=VARCHAR},
 			</if>
+			<if test="fBalanceTime != null">
+				#{fBalanceTime,jdbcType=VARCHAR},
+			</if>
 			<if test="fSpecification != null">
 				#{fSpecification,jdbcType=VARCHAR},
 			</if>
@@ -547,6 +571,9 @@
 	<update id="edit">
 		UPDATE t_drug
 		<set>
+			<if test="fBalanceTime != null">
+				F_BALANCE_TIME = #{fBalanceTime,jdbcType=VARCHAR},
+			</if>
 			<if test="fAddress != null">
 				F_ADDRESS = #{fAddress,jdbcType=VARCHAR},
 			</if>
@@ -635,8 +662,14 @@
 		F_USER_ID=#{userId} and F_DRUG_ONLY_ID=#{drugOnlyId}
 	</select>
 
-	<update id="minusNumber">
+	<update id="addNumber">
 		UPDATE t_drug SET F_NUMBER=F_NUMBER+#{fNumber} WHERE
+		F_ID=#{fDrugId}
+	</update>
+
+	<update id="addNumberAndNumberBak">
+		UPDATE t_drug SET F_NUMBER=F_NUMBER+#{fNumber},  F_NUMBER_BAK=F_NUMBER_BAK+#{fNumber} 
+		WHERE
 		F_ID=#{fDrugId}
 	</update>
 

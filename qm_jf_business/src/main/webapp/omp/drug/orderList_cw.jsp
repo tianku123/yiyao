@@ -80,6 +80,13 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 			var columns = [ 
 				{align:'center',checkbox : true},
 				{field : 'fId', title: '订单号', align:'center'},
+				{field : 'parentId',title : '订单详细',width :100,align:'center',
+					formatter: function(value,row,index){
+						var fId = row['fId'];
+						var fTax = row['fTax'];
+						return '<a  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showDetail(\''+fId+'\',\' ' +fTax+ ' \');">订单详细</a>';
+					}
+				},
 				{field : 'fTax',title : '是否含税',width :100,align:'center',
 					formatter: function(value,row,index){
 						return fTax2Zh(value);
@@ -189,13 +196,6 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 				{field : 'fDqTc_Money',title : '大区主管提成',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
-					}
-				},
-				{field : 'parentId',title : '订单详细',width :100,align:'center',
-					formatter: function(value,row,index){
-						var fId = row['fId'];
-						var fTax = row['fTax'];
-						return '<a  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showDetail(\''+fId+'\',\' ' +fTax+ ' \');">订单详细</a>';
 					}
 				}
 			];

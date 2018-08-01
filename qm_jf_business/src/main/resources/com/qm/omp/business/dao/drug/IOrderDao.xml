@@ -166,7 +166,8 @@
 	<select id="getList_State0" resultMap="BaseResultMap">
 		SELECT
 		F_ID,
-		F_TIME
+		F_TIME,
+		F_SALE_TIME
 		FROM
 		t_order 
 		where F_STATE=#{fState}  
@@ -690,6 +691,9 @@
 			</if>
 			<if test="fPaymentTime != null">
 				F_PAYMENT_TIME = #{fPaymentTime,jdbcType=VARCHAR},
+			</if>
+			<if test="fTime != null">
+				F_TIME = #{fTime,jdbcType=VARCHAR},
 			</if>
 			<if test="fState != null">
 				F_STATE = #{fState,jdbcType=VARCHAR},

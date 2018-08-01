@@ -129,7 +129,7 @@
 		    </property> 
 		    <!--这里定义程序启动两分钟后开始执行--> 
 		    <property name="delay"> 
-		     	<value>120000</value> 
+		     	<value>20000</value> 
 		    </property> 
 		</bean> 
     <!-- 业务员订单自动删除end   -->

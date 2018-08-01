@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.qm.common.util.DateTimeUtil;
 import com.qm.common.util.RequestUtil;
 import com.qm.common.util.SequenceGenerator;
 import com.qm.common.util.SessionUtil;
@@ -31,6 +30,7 @@ import com.qm.omp.business.service.impl.drug.DrugServiceImpl;
 import com.qm.omp.business.service.impl.drug.OrderDetailServiceImpl;
 import com.qm.omp.business.service.impl.drug.OrderServiceImpl;
 import com.qm.omp.business.service.impl.drug.ZgYWYServiceImpl;
+import com.qm.omp.business.util.DateTimeUtil;
 
 /**
  * @ClassName: OrderInvocation
@@ -893,7 +893,7 @@ public class OrderInvocation implements BaseInvocation {
 			fSalesNumber22 = drugObj.getIntValue("fSalesNumber");
 			drugId = drugObj.getIntValue("fId");
 			drug1 = this.drugService.getBean(drugId);
-			if (drug1.getfNumber() < fSalesNumber22) {// 库存不足
+			if (drug1 == null || drug1.getfNumber() < fSalesNumber22) {// 库存不足
 				flag = true;
 				break;
 			}
@@ -1103,16 +1103,16 @@ public class OrderInvocation implements BaseInvocation {
 			 * 清空订单详细，再重新生成，达到修改的目的
 			 */
 			// 退单恢复订单内所有药品的库存
-//			List<OrderDetail> detailList = this.orderDetailService
-//					.getListByOrderId(orderId);
-//			for (OrderDetail detail : detailList) {
-//				this.drugService.minusNumber(detail.getfDrugId(),
-//						detail.getfNumber());
-//			}
+			// List<OrderDetail> detailList = this.orderDetailService
+			// .getListByOrderId(orderId);
+			// for (OrderDetail detail : detailList) {
+			// this.drugService.minusNumber(detail.getfDrugId(),
+			// detail.getfNumber());
+			// }
 			this.orderDetailService.deleteBeanByOrderId(bean.getfId());
 			for (OrderDetail b : ods) {
-//				this.drugService.minusNumber(b.getfDrugId(), -b.getfNumber()
-//						.intValue());// 减少库存
+				// this.drugService.minusNumber(b.getfDrugId(), -b.getfNumber()
+				// .intValue());// 减少库存
 				this.orderDetailService.save(b);
 			}
 			orderService.edit(bean);
@@ -1186,7 +1186,7 @@ public class OrderInvocation implements BaseInvocation {
 			fSalesNumber22 = drugObj.getIntValue("fSalesNumber");
 			drugId = drugObj.getIntValue("fId");
 			drug1 = this.drugService.getBean(drugId);
-			if (drug1.getfNumber() < fSalesNumber22) {// 库存不足
+			if (drug1 == null || drug1.getfNumber() < fSalesNumber22) {// 库存不足
 				flag = true;
 				break;
 			}
@@ -1345,16 +1345,16 @@ public class OrderInvocation implements BaseInvocation {
 
 		try {
 			// 退单恢复订单内所有药品的库存
-//			List<OrderDetail> detailList = this.orderDetailService
-//					.getListByOrderId(orderId);
-//			for (OrderDetail detail : detailList) {
-//				this.drugService.minusNumber(detail.getfDrugId(),
-//						detail.getfNumber());
-//			}
+			// List<OrderDetail> detailList = this.orderDetailService
+			// .getListByOrderId(orderId);
+			// for (OrderDetail detail : detailList) {
+			// this.drugService.minusNumber(detail.getfDrugId(),
+			// detail.getfNumber());
+			// }
 			this.orderDetailService.deleteBeanByOrderId(bean.getfId());
 			for (OrderDetail b : ods) {
-//				this.drugService.minusNumber(b.getfDrugId(), -b.getfNumber()
-//						.intValue());// 减少库存
+				// this.drugService.minusNumber(b.getfDrugId(), -b.getfNumber()
+				// .intValue());// 减少库存
 				this.orderDetailService.save(b);
 			}
 			orderService.edit(bean);
@@ -1422,22 +1422,36 @@ public class OrderInvocation implements BaseInvocation {
 			// 退单恢复订单内所有药品的库存
 			List<OrderDetail> list = this.orderDetailService
 					.getListByOrderId(fId);
+			Drug stock;
 			for (OrderDetail detail : list) {
-				this.drugService.minusNumber(detail.getfDrugId(),
+				// 有可能是结转前的库存，恢复保持数据一致性
+				// 大部分情况下都是当月库存，只有跨月才会走下面的if
+				this.drugService.addNumber(detail.getfDrugId(),
 						detail.getfNumber());
+				/**
+				 * 跨月
+				 * 情况：当月底那天下单，下个月再提交的情况，这时因为库存又生成了一份，drugId变化了，
+				 * 有可能结转到下个月的balanceId中，这是需要判断drugId, 如果没有值，
+				 * 则取结转后的库存信息（balanceId）,恢复库存也要恢复这个结转后的库存信息
+				 */
+				stock = this.drugService.getBean(detail.getfDrugId());
+				if (stock == null) {
+					// 结转后新的库存信息，drugId是新的
+					stock = this.drugService.getBeanByBalanceId(detail.getfDrugId());
+					if (stock == null) {
+						continue;
+					}
+					// 结转后的id
+					detail.setfDrugId(stock.getfId());
+					this.drugService.addNumberAndNumberBak(detail.getfDrugId(),
+							detail.getfNumber());
+				}
 			}
 		} else if ("5".equals(fState)) {// 业务员删除订单
 			bean.setfSaleTime(DateTimeUtil.getTodayChar14());
 			bean.setfSaleUserId(userInfo.getId());
 			bean.setfSaleUserName(userInfo.getfUserCode());
 
-			// 退单恢复订单内所有药品的库存
-			List<OrderDetail> list = this.orderDetailService
-					.getListByOrderId(fId);
-			for (OrderDetail detail : list) {
-				this.drugService.minusNumber(detail.getfDrugId(),
-						detail.getfNumber());
-			}
 		} else if ("11".equals(fState)) {// 提交政策报单给管理员-->管理员修改后提交给财务
 			bean.setfState("1");
 			bean.setfPolicyTime(DateTimeUtil.getTodayChar14());
@@ -1507,7 +1521,20 @@ public class OrderInvocation implements BaseInvocation {
 				fSalesNumber = od.getfNumber();
 				drugId = od.getfDrugId();
 				stock = this.drugService.getBean(drugId);
-				if (stock.getfNumber() < fSalesNumber) {// 库存不足
+				/**
+				 * 情况：当月底那天下单，下个月再提交的情况，这时因为库存又生成了一份，drugId变化了，
+				 * 有可能结转到下个月的balanceId中，这是需要判断drugId如果没有值，
+				 * 则取结转后的库存信息（balanceId）,减库存也要减这个结转后的库存信息
+				 */
+				if (stock == null) {
+					// 结转后新的库存信息，drugId是新的
+					stock = this.drugService.getBeanByBalanceId(drugId);
+					// 结转后的id
+					od.setfDrugId(stock.getfId());
+					// 订单时间改为下个月，纳入下个月统计
+					bean.setfTime(DateTimeUtil.getTodayChar14());
+				}
+				if (stock == null || stock.getfNumber() < fSalesNumber) {// 库存不足
 					flag = true;
 					break;
 				}
@@ -1520,8 +1547,10 @@ public class OrderInvocation implements BaseInvocation {
 			// 判断药品库存是否够下单所用 end
 			// 减库存
 			for (OrderDetail od : orderDetailList) {
-				this.drugDao.minusNumber(od.getfDrugId(), -od.getfNumber()
+				this.drugDao.addNumber(od.getfDrugId(), -od.getfNumber()
 						.intValue());// 减少库存
+				// 更新订单详细表里的药品库存id为结转后id，这个才是真正减库存的记录，方便之后统计
+				this.orderDetailService.edit(od);
 			}
 			// 存储提交信息
 			orderService.edit(bean);

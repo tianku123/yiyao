@@ -1,6 +1,5 @@
 package com.qm.omp.business.timer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,6 +23,7 @@ public class StockBalanceJob {
 	public void stock()
 	{
 		System.out.println("==stockBalancejob=====>run==");
+		logger.info("==stockBalancejob=====>run==" + System.currentTimeMillis());
 		/*
 		 * 库存状态 
 		 * 0：正常入库状态或当月入库当月销售完的状态；
@@ -39,15 +39,16 @@ public class StockBalanceJob {
 		if(list != null && list.size()>0){
 			
 			//状态变为2的上月库存id们
-			List<Integer> idList = new ArrayList<Integer>();
 			Drug source = new Drug();
 			source.setfState("2");
 			for(Drug bean : list){
-				idList.add(bean.getfId());
 				bean.setfBalanceId(bean.getfId());
 				bean.setfNumberBak(bean.getfNumber());
 				bean.setfState("3");
-				bean.setfTime(bean.getfTime());
+				// 真实入库时间
+				bean.setfBalanceTime(bean.getfTime());
+				// 结转时间，表示当月的库存，用于统计库存
+				bean.setfTime(DateTimeUtil.getTodayChar14());
 				// 库存为零了就不结转到下个月
 				this.drugService.save(bean);
 				
@@ -56,11 +57,7 @@ public class StockBalanceJob {
 				System.out.println(bean.getfId() + ":" + bean.getfName());
 			}
 		}
-		
+		logger.info("==stockBalancejob=====>run==end:" + System.currentTimeMillis());
 	}
-	
-	public static void main(String args[])
-	{
-		
-	}
+
 }

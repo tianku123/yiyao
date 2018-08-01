@@ -85,7 +85,12 @@
 				{field : 'fGongyePrice',title : '工业票价',width :100,align:'center'},
 				{field : 'fWareHouseName',title : '仓库名称',width :100,align:'center'},
 				{field : 'fCompanyName',title : '公司',width :100,align:'center'},
-				{field : 'fTime',title : '入库时间',width :100,align:'center',
+				{field : 'fTime',title : '结转时间',width :100,align:'center',
+					formatter: function(value,row,index){
+						return formatDate14(value);
+					}
+				},
+				{field : 'fBalanceTime',title : '入库时间',width :100,align:'center',
 					formatter: function(value,row,index){
 						return formatDate14(value);
 					}

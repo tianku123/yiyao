@@ -99,6 +99,11 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 						return '<a title="' + value + '"  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showIntro(\''+fId+'\',\' ' +fTax+ ' \');">备注</a>';
 					}
 				}, 
+				{field : 'fTime',title : '创建时间',width :100,align:'center',
+					formatter: function(value,row,index){
+						return formatDate14(value);
+					}
+				},
 				{field : 'fSaleTime',title : '下单时间',width :100,align:'center',
 					formatter: function(value,row,index){
 						return formatDate14(value);

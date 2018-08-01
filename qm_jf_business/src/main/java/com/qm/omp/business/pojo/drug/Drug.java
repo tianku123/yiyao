@@ -34,8 +34,10 @@ public class Drug implements Serializable {
 	 * 3：上月结余库存，拥有上月的剩余库存数和一切其他信息（参考2的解释）
 	 */
 	private String fState;
-	//创建时间
+	//创建时间或结转时间
 	private String fTime;
+	//库存自动流转到下个月，记录上个月库存时间，知道从哪流转的
+	private String fBalanceTime;
 	//批号 F_BATCH_NUMBER
 	private String fBatchNumber;
 	//效期 F_EXPIRY_DATE
@@ -255,6 +257,12 @@ public class Drug implements Serializable {
 	}
 	public void setfDqTc(Double fDqTc) {
 		this.fDqTc = fDqTc;
+	}
+	public String getfBalanceTime() {
+		return fBalanceTime;
+	}
+	public void setfBalanceTime(String fBalanceTime) {
+		this.fBalanceTime = fBalanceTime;
 	}
 	
 }

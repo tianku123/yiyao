@@ -347,6 +347,10 @@
 			<if test="fDqTc != null">
 				F_DQ_TC = #{fDqTc,jdbcType=DOUBLE},
 			</if>
+			
+			<if test="fDrugId != null">
+				F_DRUG_ID = #{fDrugId,jdbcType=INTEGER},
+			</if>
 		</set>
 		where F_ID = #{fId,jdbcType=INTEGER}
 	</update>
