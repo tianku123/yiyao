@@ -314,7 +314,7 @@
 			var _d = $("#selectedCustomer").datagrid('getData');
 			var _data;
 			if(_d['total']==0){
-				_data = "[]";
+				_data = "";
 			}else{
 				_data = JSON.encode(_d['rows']);
 			}
