@@ -398,7 +398,7 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 							var param = merchantUserInfoComponent.getPKConds(selRows[0]).queryStr;
 							var fTax = selRows[0]["fTax"];
 							var editUrl;
-							if(fTax==0){
+							if(fTax==0 || fTax==3){
 								editUrl = "${contextPath}/omp/print/printOrder_noTax.jsp?fId="+ selRows[0]["fId"];
 							}else{
 								editUrl = "${contextPath}/omp/print/printOrder_hasTax.jsp?fId="+ selRows[0]["fId"];

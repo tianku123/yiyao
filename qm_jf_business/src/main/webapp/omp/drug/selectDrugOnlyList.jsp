@@ -123,7 +123,7 @@
 			var flag = false;
 			var _d = '${param.data}';
 			var _arrSel;
-			if(_d!=null && _d!='[]'){
+			if(_d!=null && _d!=''){
 				_arrSel = JSON.decode(_d);
 				for(var j=0;j<_arrSel.length;j++){
 						var node2 = _arrSel[j];
