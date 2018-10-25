@@ -12,6 +12,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="${contextPath}/resource/css/common.css" rel="stylesheet"
 	type="text/css" />
+<link href="${contextPath}/resource/css/custom.css" rel="stylesheet"
+	type="text/css" />
 <link
 	href="${contextPath}/resource/scripts/plugin/easyui/themes/${skin}/easyui.css"
 	rel="stylesheet" type="text/css" />
@@ -37,10 +39,12 @@
 			request.setAttribute("now", now);
 		 %>
 <body class="easyui-layout" id="filter">
-		<div data-options="region:'north',border:false" style="height:77px;">
+		<div data-options="region:'north',border:false" style="height:100px;">
 		
 		  <div class="searchColumn">
 			<div class="keySearch">
+				订单号： <input type="search" placeholder="订单号" id="fId" onkeyup="enterEvent(event, 'merchantUserInfoComponent.userDataGrid.formQry()');"/>
+				药品名： <input type="search" placeholder="药品名" id="fDrugName" onkeyup="enterEvent(event, 'merchantUserInfoComponent.userDataGrid.formQry()');"/>
 				购货单位： <input type="search" placeholder="购货单位" id="fUserCode" onkeyup="enterEvent(event, 'merchantUserInfoComponent.userDataGrid.formQry()');"/>
 				业务员： <input type="search" placeholder="业务员" id="fCustomName" onkeyup="enterEvent(event, 'merchantUserInfoComponent.userDataGrid.formQry()');"/>
 				订单状态：<select id="fState">
@@ -48,7 +52,7 @@
 					<option value="1">未审核</option>
 					<option value="2">已审核</option>
 					<option value="3">已发货</option>
-				</select>
+				</select><br/>
 				付款情况：<select id="fPaymentState">
 					<option value="">全部</option>
 					<option value="0">借款</option>
@@ -58,7 +62,7 @@
 					<option value="">全部</option>
 					<option value="0">未复核</option>
 					<option value="1">已复核</option>
-				</select><br/>
+				</select>
 				是否含税：<select id="fTax">
 					<option value="">全部</option>
 					<option value="0">工业票</option>
@@ -70,10 +74,15 @@
 					<option value="0">否</option>
 					<option value="1">是</option>
 				</select>
-				日期：<input id="beginTime" name="beginTime" type="text" class="Wdate"  onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'endTime\')}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false,readOnly:true})" style="width:150px;"/>   
+				时间类型：<select id="fTimeType">
+					<option value="1">下单时间</option>
+					<option value="2">审核时间</option>
+					<option value="3">发货时间</option>
+				</select>
+				<input id="beginTime" name="beginTime" type="text" class="Wdate"  onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'endTime\')}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true,readOnly:true})" style="width:150px;"/>   
 						至 
-					<input id="endTime" name="endTime" type="text" class="Wdate"  onFocus="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false,readOnly:true})" style="width:150px;"/>   
-				
+					<input id="endTime" name="endTime" type="text" class="Wdate"  onFocus="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true,readOnly:true})" style="width:150px;"/>   
+
 				<button class="grayBtn"
 					onclick="merchantUserInfoComponent.userDataGrid.formQry()">查询</button>
 				<button class="grayBtn" onclick="merchantUserInfoComponent.exportA()">导出</button>
@@ -96,24 +105,54 @@
 	var merchantUserInfoComponent = {
 		userDataGrid : null,
 		getQueryParams : function() {
+			var fId = $("#fId").val();
+			var fDrugName = $("#fDrugName").val();
 			var fName = $("#fUserCode").val();
 			var fCustomName = $("#fCustomName").val();
 			var fState = $("#fState").val();
 			var fPaymentState = $("#fPaymentState").val();
 			var fExamine = $("#fExamine").val();
-			var beginTime = $("#beginTime").val();
-			var endTime = $("#endTime").val();
+			var beginTimeVal = $("#beginTime").val();
+			var endTimeVal = $("#endTime").val();
+			var fTimeType = $("#fTimeType").val();
+			var beginTime;
+			var endTime;
+			var financeBeginTime;
+			var financeEndTime;
+			var shipperBeginTime;
+			var shipperEndTime;
+			// 下单时间
+			if (fTimeType == 1) {
+				beginTime = beginTimeVal;
+				endTime = endTimeVal;
+			}
+			// 财务审核时间
+			if (fTimeType == 2) {
+				financeBeginTime = beginTimeVal;
+				financeEndTime = endTimeVal;
+			}
+			// 发货时间
+			if (fTimeType == 3) {
+				shipperBeginTime = beginTimeVal;
+				shipperEndTime = endTimeVal;
+			}
 			var fTax = $("#fTax").val();
 			var fIsPolicy = $("#fIsPolicy").val();
 			return {
 				"reqUrl" : "orderDetail",
 				"reqMethod" : "getOrderDetailList",
+				"fDrugName" : fDrugName,
+				"fId" : fId,
 				"fName" : fName,
 				"fCustomName" : fCustomName,
 				"fPaymentState" : fPaymentState,
 				"fExamine" : fExamine,
 				"beginTime" : beginTime,
 				"endTime" : endTime,
+				"financeBeginTime" : financeBeginTime,
+				"financeEndTime" : financeEndTime,
+				"shipperBeginTime" : shipperBeginTime,
+				"shipperEndTime" : shipperEndTime,
 				"fTax" : fTax,
 				"fIsPolicy" : fIsPolicy,
 				"fState" : fState

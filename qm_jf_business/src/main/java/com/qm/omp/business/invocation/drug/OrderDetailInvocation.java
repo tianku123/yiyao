@@ -187,6 +187,12 @@ public class OrderDetailInvocation implements BaseInvocation{
     	InvocationResult result = InvocationResult.newInstance();
     	int page = RequestUtil.getIntParamterAsDef(context.getRequest(), "page", 1);
     	int rows = RequestUtil.getIntParamterAsDef(context.getRequest(), "rows", 50);
+    	// 订单号
+    	String fId = RequestUtil.getStrParamterAsDef(context.getRequest(), "fId", "");
+    	// 药品名
+    	String fDrugName = RequestUtil.getStrParamterAsDef(context.getRequest(), "fDrugName", "");
+    	// 部门
+    	String fDepartmentName = RequestUtil.getStrParamterAsDef(context.getRequest(), "fDepartmentName", "");
     	// 默认状态1，未审核
     	String fState = RequestUtil.getStrParamterAsDef(context.getRequest(), "fState", "");
     	// 付款情况
@@ -199,9 +205,19 @@ public class OrderDetailInvocation implements BaseInvocation{
     	String fIsPolicy = RequestUtil.getStrParamterAsDef(context.getRequest(), "fIsPolicy", "");
     	String fName = RequestUtil.getStrParamterAsDef(context.getRequest(), "fName", "");
     	String fCustomName = RequestUtil.getStrParamterAsDef(context.getRequest(), "fCustomName", "");
+    	// 业务员下单时间
     	String beginTime = RequestUtil.getStrParamterAsDef(context.getRequest(), "beginTime", "");
     	String endTime = RequestUtil.getStrParamterAsDef(context.getRequest(), "endTime", "");
+    	// 财务审核时间 F_FINANCE_TIME
+    	String financeBeginTime = RequestUtil.getStrParamterAsDef(context.getRequest(), "financeBeginTime", "");
+    	String financeEndTime = RequestUtil.getStrParamterAsDef(context.getRequest(), "financeEndTime", "");
+    	// 发货时间 F_SHIPPER_TIME
+    	String shipperBeginTime = RequestUtil.getStrParamterAsDef(context.getRequest(), "shipperBeginTime", "");
+    	String shipperEndTime = RequestUtil.getStrParamterAsDef(context.getRequest(), "shipperEndTime", "");
     	Map<String, Object> params = new HashMap<String, Object>();
+    	params.put("fId", fId);
+    	params.put("fDrugName", fDrugName);
+    	params.put("fDepartmentName", fDepartmentName);
     	params.put("fName", fName);
     	params.put("fCustomName", fCustomName);
     	params.put("fState", fState);
@@ -211,6 +227,12 @@ public class OrderDetailInvocation implements BaseInvocation{
     	params.put("fIsPolicy", fIsPolicy);
     	params.put("beginTime", DateTimeUtil.get_yyyyMMddHHmmss(beginTime));
     	params.put("endTime", DateTimeUtil.get_yyyyMMddHHmmss(endTime));
+    	// 财务审核时间
+    	params.put("financeBeginTime", DateTimeUtil.get_yyyyMMddHHmmss(financeBeginTime));
+    	params.put("financeEndTime", DateTimeUtil.get_yyyyMMddHHmmss(financeEndTime));
+    	// 发货时间
+    	params.put("shipperBeginTime", DateTimeUtil.get_yyyyMMddHHmmss(shipperBeginTime));
+    	params.put("shipperEndTime", DateTimeUtil.get_yyyyMMddHHmmss(shipperEndTime));
     	try
     	{
     		Map<String, Object> map = orderDetailService.getOrderDetailList(page, rows, params);
@@ -218,7 +240,7 @@ public class OrderDetailInvocation implements BaseInvocation{
     	}
     	catch (Exception ex)
     	{
-    		logger.error("OrderInvocation getList_cw happen execption.", ex);
+    		logger.error("OrderInvocation getOrderDetailList happen execption.", ex);
     		result.setRetCode(ISystemConstants.SYS_FAILED);
     	}
     	return result;

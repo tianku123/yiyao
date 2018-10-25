@@ -509,8 +509,29 @@
 		<if test="fIsPolicy !=null and fIsPolicy !=''">
 			and a.F_ISPOLICY =#{fIsPolicy} 
 		</if>
+		<!-- 财务复核情况 -->
+		<if test="fExamine !=null and fExamine !=''">
+			and a.F_EXAMINE = #{fExamine}
+		</if>
+		<!-- 业务员下单时间 -->
 		<if test="beginTime !=null and beginTime !='' and endTime !=null and endTime !=''">
 			and a.F_TIME between #{beginTime} and #{endTime}
+		</if>
+		<!-- 财务审核时间 -->
+		<if test="financeBeginTime !=null and financeBeginTime !='' and financeEndTime !=null and financeEndTime !=''">
+			and a.F_FINANCE_TIME between #{financeBeginTime} and #{financeEndTime}
+		</if>
+		<!-- 发货时间 -->
+		<if test="shipperBeginTime !=null and shipperBeginTime !='' and shipperEndTime !=null and shipperEndTime !=''">
+			and a.F_SHIPPER_TIME between #{shipperBeginTime} and #{shipperEndTime}
+		</if>
+		<!-- 订单id -->
+		<if test="fId !=null and fId !=''">
+			and a.F_ID = #{fId} 
+		</if>
+		<!-- 药品名称 -->
+		<if test="fDrugName !=null and fDrugName !=''">
+			and c.F_DRUG_NAME like CONCAT("%", #{fDrugName} ,"%") 
 		</if>
 	</select>
 	<select id="getOrderDetailList" resultType="map">
@@ -588,8 +609,29 @@
 		<if test="fIsPolicy !=null and fIsPolicy !=''">
 			and a.F_ISPOLICY =#{fIsPolicy} 
 		</if>
+		<!-- 财务复核情况 -->
+		<if test="fExamine !=null and fExamine !=''">
+			and a.F_EXAMINE = #{fExamine}
+		</if>
+		<!-- 业务员下单时间 -->
 		<if test="beginTime !=null and beginTime !='' and endTime !=null and endTime !=''">
 			and a.F_TIME between #{beginTime} and #{endTime}
+		</if>
+		<!-- 财务审核时间 -->
+		<if test="financeBeginTime !=null and financeBeginTime !='' and financeEndTime !=null and financeEndTime !=''">
+			and a.F_FINANCE_TIME between #{financeBeginTime} and #{financeEndTime}
+		</if>
+		<!-- 发货时间 -->
+		<if test="shipperBeginTime !=null and shipperBeginTime !='' and shipperEndTime !=null and shipperEndTime !=''">
+			and a.F_SHIPPER_TIME between #{shipperBeginTime} and #{shipperEndTime}
+		</if>
+		<!-- 订单id -->
+		<if test="fId !=null and fId !=''">
+			and a.F_ID = #{fId} 
+		</if>
+		<!-- 药品名称 -->
+		<if test="fDrugName !=null and fDrugName !=''">
+			and c.F_DRUG_NAME like CONCAT("%", #{fDrugName} ,"%") 
 		</if>
 		order by a.F_ID desc, c.F_DRUG_ID desc
 		<if test="page != null and rows != null">
