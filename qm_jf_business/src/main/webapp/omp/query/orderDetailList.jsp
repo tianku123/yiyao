@@ -39,7 +39,7 @@
 			request.setAttribute("now", now);
 		 %>
 <body class="easyui-layout" id="filter">
-		<div data-options="region:'north',border:false" style="height:100px;">
+		<div data-options="region:'north',border:false" style="height:120px;">
 		
 		  <div class="searchColumn">
 			<div class="keySearch">
@@ -82,7 +82,7 @@
 				<input id="beginTime" name="beginTime" type="text" class="Wdate"  onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'endTime\')}',startDate:'%y-%M-%d 00:00:00',dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true,readOnly:true})" style="width:150px;"/>   
 						至 
 					<input id="endTime" name="endTime" type="text" class="Wdate"  onFocus="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',startDate:'%y-%M-%d 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true,readOnly:true})" style="width:150px;"/>   
-
+				<br/>
 				<button class="grayBtn"
 					onclick="merchantUserInfoComponent.userDataGrid.formQry()">查询</button>
 				<button class="grayBtn" onclick="merchantUserInfoComponent.exportA()">导出</button>

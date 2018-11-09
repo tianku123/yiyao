@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>医药管理系统</title>
+<title>入库查询</title>
 <meta content="" name="keywords" />
 <meta content="" name="description" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
