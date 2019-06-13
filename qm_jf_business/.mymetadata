@@ -3,10 +3,11 @@
   type="WEB"
   name="qm_jf_business"
   id="myeclipse.1504619447598"
-  j2ee-spec="1.4"
+  context-root="/qm_jf_business"
+  j2ee-spec="1.7"
   archive="qm_jf_business.war">
   <attributes>
-    <attribute name="webrootdir" value="WebRoot" />
+    <attribute name="webrootdir" value="src/main/webapp" />
   </attributes>
 </project-module>
 

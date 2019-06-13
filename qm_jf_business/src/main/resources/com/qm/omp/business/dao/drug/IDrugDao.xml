@@ -119,7 +119,9 @@
 			and a.F_TIME like CONCAT("",#{time} ,"%")
 		</if>
 		order by a.F_ID desc
-		LIMIT #{page}, #{rows}
+		<if test="page !=null and rows !=null">
+			LIMIT #{page}, #{rows}
+		</if>
 	</select>
 
 	<select id="queryStockTotal" resultType="int">
