@@ -304,7 +304,7 @@ public class ExportServiceImpl {
 		HSSFCellStyle titleStyle = PoiUtil.getTitleStyle(wb);
 		HSSFCellStyle cellStyle = PoiUtil.getCellStyle(wb);
 		String[] headers = {"药品名称","药品规格","产地","状态","库存"
-				,"批号","效期","价格","工业票价","进货价","仓库名称","公司","结转时间","入库时间"};
+				,"批号","效期","价格","工业票价","税率","仓库名称","公司","结转时间","入库时间"};
 		HSSFRow row = sheet.createRow(0);
 		HSSFCell cell = null;
 		for(int i=0;i<headers.length;i++){

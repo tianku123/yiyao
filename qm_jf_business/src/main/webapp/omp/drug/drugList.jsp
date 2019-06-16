@@ -83,7 +83,7 @@
 				{field : 'fExpiryDate',title : '效期',width :100,align:'center'},
 				{field : 'fPrice',title : '价格',width :100,align:'center'},
 				{field : 'fGongyePrice',title : '工业票价',width :100,align:'center'},
-				{field : 'fBuyingPrice',title : '进货价',width :100,align:'center'},
+				{field : 'fBuyingPrice',title : '税率',width :100,align:'center'},
 				{field : 'fWareHouseName',title : '仓库名称',width :100,align:'center'},
 				{field : 'fCompanyName',title : '公司',width :100,align:'center'},
 				{field : 'fTime',title : '结转时间',width :100,align:'center',

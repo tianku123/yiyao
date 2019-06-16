@@ -118,11 +118,15 @@
 			<groupId>com.danga</groupId>
 			<artifactId>java_memcached</artifactId>
 			<version>2.0.1</version>
+			<scope>system</scope>
+			<systemPath>C:\Users\18121254\.m2\repository\com\danga\java_memcached\2.0.1\java_memcached-2.0.1.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.qm.common</groupId>
 			<artifactId>qm_common</artifactId>
 			<version>0.0.1</version>
+			<scope>system</scope>
+			<systemPath>C:\Users\18121254\.m2\repository\com\qm\common\qm_common\0.0.1\qm_common-0.0.1.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<build>
