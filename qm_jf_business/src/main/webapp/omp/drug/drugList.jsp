@@ -64,6 +64,7 @@
 			
 			var columns = [ 
 				{field : 'fId',align:'center',checkbox : true},
+				{field : 'fDepartmentName',title : '部门',width : 100,align:'center'}, 
 				{field : 'fName',title : '药品名称',width : 100,align:'center'}, 
 				{field : 'fSpecification',title : '药品规格',width : 100,align:'center'}, 
 				{field : 'fAddress',title : '产地',width :100,align:'center'},

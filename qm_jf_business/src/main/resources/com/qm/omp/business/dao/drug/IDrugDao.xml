@@ -33,6 +33,8 @@
 		<result column="F_COMPANY_ID" property="fCompanyId" jdbcType="BIGINT" />
 		<result column="F_COMPANY_NAME" property="fCompanyName"
 			jdbcType="VARCHAR" />
+		<result column="F_DEPARTMENT_NAME" property="fDepartmentName"
+			jdbcType="VARCHAR" />
 		<result column="F_DRUG_ONLY_ID" property="fDrugOnlyId"
 			jdbcType="BIGINT" />
 		<result column="F_BALANCE_ID" property="fBalanceId" jdbcType="BIGINT" />
@@ -104,10 +106,12 @@
 		a.F_SUPPLY_PRICE,
 		a.F_COMPANY_ID,
 		b.F_NAME F_WAREHOUSE_NAME,
-		c.F_NAME F_COMPANY_NAME
+		c.F_NAME F_COMPANY_NAME,
+		e.F_NAME F_DEPARTMENT_NAME
 		FROM
 		t_drug a LEFT JOIN t_warehouse b ON a.F_WAREHOUSE_ID=b.F_ID left join
-		t_company c on a.F_COMPANY_ID=c.F_ID
+		t_company c on a.F_COMPANY_ID=c.F_ID  LEFT JOIN t_drug_only d ON a.F_DRUG_ONLY_ID=d.F_ID 
+		LEFT JOIN t_department e ON d.F_DEPARTMENT_ID=e.F_ID
 		where a.F_STATE in(0,3)
 		<if test="fName!=null and fName!=''">
 			and a.F_NAME like CONCAT("%",#{fName} ,"%")

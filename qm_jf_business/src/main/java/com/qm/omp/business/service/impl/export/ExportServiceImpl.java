@@ -303,7 +303,7 @@ public class ExportServiceImpl {
 		sheet.setColumnWidth(5, 10000);//第一个参数代表列id(从0开始),第2个参数代表宽度值  参考 ："2012-08-10"的宽度为2500
 		HSSFCellStyle titleStyle = PoiUtil.getTitleStyle(wb);
 		HSSFCellStyle cellStyle = PoiUtil.getCellStyle(wb);
-		String[] headers = {"药品名称","药品规格","产地","状态","库存"
+		String[] headers = {"部门","药品名称","药品规格","产地","状态","库存"
 				,"批号","效期","价格","工业票价","税率","仓库名称","公司","结转时间","入库时间"};
 		HSSFRow row = sheet.createRow(0);
 		HSSFCell cell = null;
@@ -315,20 +315,24 @@ public class ExportServiceImpl {
 		
 		for(int i=0;i<data.size();i++){
 			row = sheet.createRow(i+1);
+			int c = 0;
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfDepartmentName());
+			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(0);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfName());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(1);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfSpecification());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(2);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfAddress());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(3);
+			cell = row.createCell(c++);
 			String st = "";
 			if ("0".equals(data.get(i).getfState())) {
 				st = "入库";
@@ -340,43 +344,43 @@ public class ExportServiceImpl {
 			cell.setCellValue(st);
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(4);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfNumber());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(5);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfBatchNumber());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(6);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfExpiryDate());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(7);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfPrice());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(8);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfGongyePrice());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(9);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfBuyingPrice());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(10);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfWareHouseName());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(11);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfCompanyName());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(12);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfTime());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(13);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfBalanceTime());
 			cell.setCellStyle(cellStyle);
 			
