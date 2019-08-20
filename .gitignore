@@ -6,6 +6,7 @@ logs/
 */.project
 */.classpath
 .metadata/
+.myumldata
 ### Java ###
 # Compiled class file
 *.class
