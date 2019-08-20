@@ -158,8 +158,8 @@
 	</div>
 	</form>
 </body>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script>
 	var ajaxTools = new QM.ajax();
 	//管理门店编码，以.分割

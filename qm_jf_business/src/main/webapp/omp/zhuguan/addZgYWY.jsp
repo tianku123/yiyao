@@ -71,8 +71,8 @@
 		<button class="orangeBtn" onclick="merchantUserInfoComponent.commit();return false;">新增</button><button class="grayBtn" onclick="merchantUserInfoComponent.close();">关闭</button>
 	</div>
 </body>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script>
 	var ajaxTools = new QM.ajax();
 	//管理门店编码，以.分割

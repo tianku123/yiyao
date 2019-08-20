@@ -56,6 +56,9 @@
 					<select id="fPaymentState">
 						<option value="1">已付款</option>
 						<option value="0">借款</option>
+						<option value="3">扫码付(信)</option>
+						<option value="4">扫码付(邮)</option>
+						<option value="5">直营借款</option>
 					</select>
 				</td>
 				<th width="20%">
@@ -87,8 +90,8 @@
 	</div>
 
 </body>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script>
 	var ajaxTools = new QM.ajax();
 	//管理门店编码，以.分割

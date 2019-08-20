@@ -20,8 +20,8 @@
 <textarea rows="10" cols="80"><c:out value="${param.intro}"></c:out></textarea>
 </div>
 </body>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script>
 </script>
 </html>

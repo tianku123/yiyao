@@ -62,8 +62,8 @@ window.onresize = function(){
 	        </p>
 	</div>
 </body>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script language=javascript>
 	var ajaxTools = new QM.ajax();
 	var funcQxComponent =

@@ -63,8 +63,8 @@
 			<button class="orangeBtn" onclick="merchantRoleInfoComponent.comit();return false;">提交</button><button class="grayBtn" onclick="merchantRoleInfoComponent.close()">关闭</button>
 		</div>
 </body>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script>
 	var ajaxTools = new QM.ajax();
 	var merchantRoleInfoComponent = {

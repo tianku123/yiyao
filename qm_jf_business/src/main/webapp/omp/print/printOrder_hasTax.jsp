@@ -73,9 +73,9 @@
 </body>
 </html>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_main.js"></script>
+	src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_util.js"></script>
+	src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script type="text/javascript">
 	var ajaxTools = new QM.ajax();
 	ajaxTools.singleReq({

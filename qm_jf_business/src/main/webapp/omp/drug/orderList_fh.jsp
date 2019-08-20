@@ -53,8 +53,8 @@
 		</div>
 </body>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_main.js"></script>
-document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?${updateDate}'></script>"); 
+	src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?v=${js_version}'></script>"); 
 <script>
 	var ajaxTools = new QM.ajax();
 	var merchantUserInfoComponent = {

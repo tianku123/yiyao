@@ -455,6 +455,12 @@ function fPaymentState2Zh(value) {
 		return "<span style='color:green;'>已付款</span>";
 	}else if(value=='2'){
 		return "<span style='color:green;'>已还款</span>";
+	}else if(value=='3'){
+		return "<span style='color:green;'>扫码付(信)</span>";
+	}else if(value=='4'){
+		return "<span style='color:green;'>扫码付(邮)</span>";
+	}else if(value=='5'){
+		return "<span style='color:green;'>直营借款</span>";
 	}
 	return "";
 }

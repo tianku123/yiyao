@@ -25,8 +25,8 @@
 </div><!--end login_container-->
 </body>
 <script src="${contextPath}/resource/scripts/jquery-1.7.1.min.js" language="javascript" type="text/javascript"></script>
-<script src="${contextPath}/resource/scripts/qm_main.js" language="javascript" type="text/javascript"></script>
-<script src="${contextPath}/resource/scripts/qm_util.js" language="javascript" type="text/javascript"></script>
+<script src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}" language="javascript" type="text/javascript"></script>
+<script src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}" language="javascript" type="text/javascript"></script>
 <script src="${contextPath}/resource/scripts/md5.js" language="javascript" type="text/javascript"></script>
 <script src="${contextPath}/resource/scripts/ie-placeholder.js" language="javascript" type="text/javascript"></script>
 <script language="javascript">
