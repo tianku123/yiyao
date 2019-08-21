@@ -55,7 +55,7 @@ public class OrderDetailServiceImpl {
 
 	
 	public Map<String, Object> getList_EditOrder(String fOrderId, int page,
-			int rows) {
+			int rows, String isZy) {
 		page = (page-1)*rows;
 		Map<String, Object> res = new HashMap<String, Object>();
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -63,7 +63,14 @@ public class OrderDetailServiceImpl {
 		params.put("rows", rows);
 		params.put("fOrderId", fOrderId);
 		res.put("total", orderDetailDao.getListTotal_EditOrder(params));
-		res.put("rows", orderDetailDao.getList_EditOrder(params));
+		// 直营的情况下，更改一下key，fPrice 改成 fSupplyPrice
+		List<OrderDetail> list = orderDetailDao.getList_EditOrder(params);
+		if (list != null && !list.isEmpty()) {
+			for (OrderDetail o : list) {
+				o.setfSupplyPrice(o.getfPrice());
+			}
+		}
+		res.put("rows", list);
 		return res;
 	}
 

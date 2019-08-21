@@ -297,7 +297,8 @@
 		b.F_NAME F_WAREHOUSE_NAME,
 		d.F_DRUG_PRINTER_ID,
 		d.F_DQ_TC,
-		d.F_XQ_TC
+		d.F_XQ_TC,
+		d.F_SUPPLY_PRICE
 		FROM
 		t_drug a JOIN t_warehouse b ON
 		a.F_WAREHOUSE_ID=b.F_ID

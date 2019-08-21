@@ -326,6 +326,17 @@ public class OrderServiceImpl {
 		return res;
 	}
 	
+	public Map<String, Object> getList_zy(int page, int rows,
+			Map<String, Object> params) {
+		page = (page-1)*rows;
+		Map<String, Object> res = new HashMap<String, Object>();
+		params.put("page", page);
+		params.put("rows", rows);
+		res.put("total", orderDao.getListTotal_zy(params));
+		res.put("rows", orderDao.getList_zy(params));
+		return res;
+	}
+	
 	
 	public Map<String, Object> getList_policy(int page, int rows,
 			Map<String, Object> params) {

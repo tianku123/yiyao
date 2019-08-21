@@ -32,6 +32,14 @@ public interface IOrderDao {
 	Integer getListTotal_ywy(Map<String, Object> params);
 	List<Order> getList_ywy(Map<String, Object> params);
 	
+	/**
+	 * 业务员,直营
+	 * @param params
+	 * @return
+	 */
+	Integer getListTotal_zy(Map<String, Object> params);
+	List<Order> getList_zy(Map<String, Object> params);
+	
 	
 	/**
 	 * 主管

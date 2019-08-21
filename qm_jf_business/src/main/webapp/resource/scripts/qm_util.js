@@ -464,3 +464,19 @@ function fPaymentState2Zh(value) {
 	}
 	return "";
 }
+
+/**
+ * 订单类型
+ * @param value
+ * @returns {String}
+ */
+function isPolicy2Zh(value) {
+	if(value=='0'){
+		return "否";
+	}else if(value=='1'){
+		return "是";
+	}else if(value=='3'){
+		return "直营";
+	}
+	return "";
+}

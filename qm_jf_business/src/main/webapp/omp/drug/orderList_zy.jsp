@@ -28,7 +28,6 @@
 		  <div class="searchColumn">
 			<div class="keySearch">
 				购货单位： <input type="search" placeholder="购货单位" id="fUserCode" onkeyup="enterEvent(event, 'merchantUserInfoComponent.userDataGrid.formQry()');"/>
-				业务员： <input type="search" placeholder="业务员" id="fCustomName" onkeyup="enterEvent(event, 'merchantUserInfoComponent.userDataGrid.formQry()');"/>
 				
 				<button class="grayBtn"
 					onclick="merchantUserInfoComponent.userDataGrid.formQry()">查询</button>
@@ -43,19 +42,17 @@
 </body>
 <script type="text/javascript"
 	src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
-document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?v=${js_version}'></script>"); 
+<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?v=${js_version}'></script>
 <script>
 	var ajaxTools = new QM.ajax();
 	var merchantUserInfoComponent = {
 		userDataGrid : null,
 		getQueryParams : function() {
 			var fName = $("#fUserCode").val();
-			var fCustomName = $("#fCustomName").val();
 			return {
 				"reqUrl" : "order",
-				"reqMethod" : "getList_policy",
-				"fName" : fName,
-				"fCustomName" : fCustomName
+				"reqMethod" : "getList_zy",
+				"fName" : fName
 			}
 		},	
 		init : function() {
@@ -63,22 +60,26 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 			var columns = [ 
 				{align:'center',checkbox : true},
 				{field : 'fId', title: '订单号', align:'center'},
-				{field : 'fTax',title : '是否含税',width :100,align:'center',
+				{field : 'parentId',title : '订单详细',width :100,align:'center',
+					formatter: function(value,row,index){
+						var fId = row['fId'];
+						var fTax = row['fTax'];
+						return '<a  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showDetail(\''+fId+'\',\' ' +fTax+ ' \');">订单详细</a>';
+					}
+				}, 
+				{field : 'fState',title : '订单状态',width :100,align:'center',
+					formatter: function(value,row,index){
+						return fState2Zh(value);
+					}
+				},
+				{field : 'fTax',title : '类型',width :100,align:'center',
 					formatter: function(value,row,index){
 						return fTax2Zh(value);
 					}
 				},
 				{field : 'isPolicy',title : '政策报单',width :100,align:'center',
 					formatter: function(value,row,index){
-						
 						return isPolicy2Zh(value);
-					}
-				}, 
-				{field : 'fPolicyIntro',title : '政策内容',width : 100,align:'center',
-					formatter: function(value,row,index){
-						var fId = row['fId'];
-						var fTax = 4;//1:业务员备注，2:财务备注，3:发货备注，4：政策内容，10：政策审批备注
-						return '<a title="' + value + '"  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showIntro(\''+fId+'\',\' ' +fTax+ ' \');">备注</a>';
 					}
 				},
 				{field : 'fCustomerName',title : '客户名称',width : 100,align:'center'}, 
@@ -94,6 +95,11 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 						return '<a title="' + value + '"  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showIntro(\''+fId+'\',\' ' +fTax+ ' \');">备注</a>';
 					}
 				}, 
+				{field : 'fTime',title : '创建时间',width :100,align:'center',
+					formatter: function(value,row,index){
+						return formatDate14(value);
+					}
+				},
 				{field : 'fSaleTime',title : '下单时间',width :100,align:'center',
 					formatter: function(value,row,index){
 						return formatDate14(value);
@@ -127,22 +133,17 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 					}
 				},
 				{field : 'fExpressName',title : '快递公司',width : 100,align:'center'}, 
-				{field : 'fExpressId',title : '快递单号',width : 100,align:'center'}, 
-				{field : 'fState',title : '订单状态',width :100,align:'center',
-					formatter: function(value,row,index){
-						return fState2Zh(value);
-					}
-				},
+				{field : 'fExpressId',title : '快递单号',width : 100,align:'center'},
 				{field : 'fGuoJiFei',title : '过票费',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
 				},
-				{field : 'fFanDian',title : '返点',width :100,align:'center',
+				/* {field : 'fFanDian',title : '返点',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
-				},
+				}, */
 				{field : 'fGaoKaiFei',title : '高开费',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
@@ -157,40 +158,46 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 					formatter: function(value,row,index){
 						return value+"元";
 					}
-				},
-				{field : 'parentId',title : '订单详细',width :100,align:'center',
-					formatter: function(value,row,index){
-						var fId = row['fId'];
-						var fTax = row['fTax'];
-						return '<a  href="javascript:void(0);" style="color:blue;" onclick="merchantUserInfoComponent.showDetail(\''+fId+'\',\' ' +fTax+ ' \');">订单详细</a>';
-					}
 				}
 			];
 			var toolbars = {};
+			toolbars.btns = [ "ADD"];
+			toolbars.urls = {
+				"ADD" : GLOBAL_INFO.CONTEXTPATH
+						+ "/omp/drug/addOrderZy.jsp"
+			};
 			toolbars.newBtns = [
-				
-				 {iconCls: 'icon-edit',text:'修改订单信息',handler: function(){
-						var selRows = $("#userDataGrid").datagrid("getSelections");
-						if(!selRows || selRows.length != 1)
-						{
-							QM.dialog.showFailedDialog("请选择要操作的数据，只能选取单个数据操作！");
-							return false;
-						}else{
-							if(selRows[0]['fState']!=10){
+ 				{iconCls: 'icon-edit',text:'编辑',handler: function(){
+							var selRows = $("#userDataGrid").datagrid("getSelections");
+							/*
+							 *如果此条促销记录处于启用状态则不可编辑，目的是保持该促销的唯一性，如果可以编辑了则后期根据该促销id查询该促销时则可能不知道促销的是什么商品
+							 *启用状态的促销只可以停用和删除，这是该促销终止
+							 */
+							 
+							if(!selRows || selRows.length != 1)
+							{	
+								top.QM.dialog.showFailedDialog("请选择要修改的记录，只能选取单行修改！");
+								return ;
+							}
+							if(selRows[0]['fState']!=0){
 								top.QM.dialog.showFailedDialog("已提交,不可编辑！");
 								return;
 							}
-								
-							var fId = selRows[0]['fId'];
-							var fTax = selRows[0]['fTax'];
-							
-							var url;
-							if(fTax == 0 || fTax == 3){//工业票
-								url = "/omp/order/orderDetail_NoTax_EditPrice.jsp?fId="+fId + "&fTax=" + fTax;
-							}else{
-								url = "/omp/order/orderDetail_HasTax_EditPrice.jsp?fId="+fId + "&fTax=" + fTax;
+							if(selRows[0]['isPolicy']!=3){
+								top.QM.dialog.showFailedDialog("无法编辑非直营报单！");
+								return;
 							}
-							var options = {"title":"修改订单价格"};
+							
+							var param = merchantUserInfoComponent.getPKConds(selRows[0]).queryStr;
+							var editUrl = "${contextPath}/omp/drug/editOrderZy.jsp";
+							if(editUrl){
+								if(editUrl.indexOf('?') != -1){
+									editUrl = editUrl + "&" + param;
+								}else{
+									editUrl = editUrl + "?" + param;
+								}
+							} 
+							var options = {"title":"编辑"};
 							top.QM.dialog.winCallback = function(result)
 							{
 								if(result && result.a == GLOBAL_INFO.SUCCESS_CODE)
@@ -204,8 +211,7 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 									top.QM.dialog.showFailedDialog("操作失败.");
 								}
 							};
-							top.QM.dialog.openWin(options, GLOBAL_INFO.CONTEXTPATH + url);	
-						}
+							top.QM.dialog.openWin(options, editUrl);
 				  	 }
 				 },
 				 {iconCls: 'icon-ok',text:'提交',handler: function(){
@@ -216,13 +222,16 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 								top.QM.dialog.showFailedDialog("请选择要修改的记录，只能选取单行修改！");
 								return ;
 							}
-							if(selRows[0]['fState']!=10){
+							if(selRows[0]['fState']!=0){
 								top.QM.dialog.showFailedDialog("不可重复提交！");
 								return;
 							}
 							
 							var param = merchantUserInfoComponent.getPKConds(selRows[0]).queryStr;
-							var editUrl = "${contextPath}/omp/drug/addPolicyInfo.jsp?fState=11";
+							var editUrl = "${contextPath}/omp/remarks/commit2Finance.jsp?fState=1";
+							if(selRows[0]['isPolicy']==1){// 政策报单
+								editUrl = "${contextPath}/omp/remarks/commit2Finance.jsp?fState=10";
+							}
 							if(editUrl){
 								if(editUrl.indexOf('?') != -1){
 									editUrl = editUrl + "&" + param;
@@ -245,6 +254,27 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 								}
 							};
 							top.QM.dialog.openWin(options, editUrl);
+				  	 }
+				 },
+				 {iconCls: 'icon-remove',text:'删除',handler: function(){
+						var selRows = $("#userDataGrid").datagrid("getSelections");
+						if(!selRows || selRows.length != 1)
+						{
+							QM.dialog.showFailedDialog("请选择要操作的数据，只能选取单个数据操作！");
+							return false;
+						}else{	
+							if(selRows[0].fState == 0){
+								QM.dialog.showConfirmDialog("是否确定删除?", function(flg) {
+									if(flg) {
+										merchantUserInfoComponent.updateOrder(selRows[0].fId, 5);
+									}else {
+										return false;
+									}
+								});
+							}else{
+								QM.dialog.showFailedDialog("已提交,不可删除！");
+							}	
+						}
 				  	 }
 				 }
 			];

@@ -36,6 +36,8 @@ public class OrderDetail implements Serializable {
 	private Integer fSalesNumber;
 	//药品单价
 	private Double fPrice;
+	//药品管理-供货价
+	private Double fSupplyPrice;
 	//工业票价
 	private Double fGongyePrice;
 	//药品进价
@@ -221,6 +223,12 @@ public class OrderDetail implements Serializable {
 	}
 	public void setfDepartmentId(Integer fDepartmentId) {
 		this.fDepartmentId = fDepartmentId;
+	}
+	public Double getfSupplyPrice() {
+		return fSupplyPrice;
+	}
+	public void setfSupplyPrice(Double fSupplyPrice) {
+		this.fSupplyPrice = fSupplyPrice;
 	}
 	
 	

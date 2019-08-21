@@ -98,11 +98,7 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 				},
 				{field : 'isPolicy',title : '政策报单',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "否";
-						}else if(value=='1'){
-							return "<span style='color:yellow;'>是</span>";
-						}
+						return isPolicy2Zh(value);
 					}
 				},
 				{field : 'fPaymentState',title : '付款情况',width :100,align:'center',
