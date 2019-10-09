@@ -236,8 +236,12 @@ public class OrderDetailServiceImpl {
  			cell.setCellStyle(cellStyle);
  			if (flag == 0) {
  				flagStr = "否";
- 			} else {
- 				flagStr = "是"; 				
+ 			}else if(flag==1){
+ 				flagStr = "是";
+ 			}else if(flag==3){
+ 				flagStr = "直营";
+ 			}else if(flag==4){
+ 				flagStr = "直营(政策报单)";
  			}
  			cell.setCellValue(flagStr);
  			// 付款情况
