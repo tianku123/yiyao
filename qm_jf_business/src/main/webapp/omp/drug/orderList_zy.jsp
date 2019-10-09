@@ -214,6 +214,75 @@
 							top.QM.dialog.openWin(options, editUrl);
 				  	 }
 				 },
+				 {iconCls: 'icon-add',text:'新增政策报单',handler: function(){
+							var selRows = $("#userDataGrid").datagrid("getSelections");
+							
+							var editUrl = "${contextPath}/omp/order/addOrder_policy_zy.jsp";
+							
+							var options = {"title":"新增政策报单","height":"600"};
+							top.QM.dialog.winCallback = function(result)
+							{
+								if(result && result.a == GLOBAL_INFO.SUCCESS_CODE)
+								{
+									top.QM.dialog.showSuccessDialog("操作成功.");
+									$("#userDataGrid").datagrid('reload');
+									$("#userDataGrid").datagrid('clearSelections');
+								}
+								else
+								{
+									top.QM.dialog.showFailedDialog("操作失败.");
+								}
+							};
+							top.QM.dialog.openWin(options, editUrl);
+				  	 }
+				 },
+				 {iconCls: 'icon-edit',text:'编辑政策报单',handler: function(){
+							var selRows = $("#userDataGrid").datagrid("getSelections");
+							/*
+							 *如果此条促销记录处于启用状态则不可编辑，目的是保持该促销的唯一性，如果可以编辑了则后期根据该促销id查询该促销时则可能不知道促销的是什么商品
+							 *启用状态的促销只可以停用和删除，这是该促销终止
+							 */
+							 
+							if(!selRows || selRows.length != 1)
+							{	
+								top.QM.dialog.showFailedDialog("请选择要修改的记录，只能选取单行修改！");
+								return ;
+							}
+							if(selRows[0]['fState']!=0){
+								top.QM.dialog.showFailedDialog("已提交,不可编辑！");
+								return;
+							}
+							if(selRows[0]['isPolicy']!=4){// 4表示直营政策报单
+								top.QM.dialog.showFailedDialog("请使用编辑功能！");
+								return;
+							}
+							
+							var param = merchantUserInfoComponent.getPKConds(selRows[0]).queryStr;
+							var editUrl = "${contextPath}/omp/order/editOrder_policy_zy.jsp";
+							if(editUrl){
+								if(editUrl.indexOf('?') != -1){
+									editUrl = editUrl + "&" + param;
+								}else{
+									editUrl = editUrl + "?" + param;
+								}
+							} 
+							var options = {"title":"编辑政策报单","height":"600"};
+							top.QM.dialog.winCallback = function(result)
+							{
+								if(result && result.a == GLOBAL_INFO.SUCCESS_CODE)
+								{
+									top.QM.dialog.showSuccessDialog("操作成功.");
+									$("#userDataGrid").datagrid('reload');
+									$("#userDataGrid").datagrid('clearSelections');
+								}
+								else
+								{
+									top.QM.dialog.showFailedDialog("操作失败.");
+								}
+							};
+							top.QM.dialog.openWin(options, editUrl);
+				  	 }
+				 },
 				 {iconCls: 'icon-ok',text:'提交',handler: function(){
 							var selRows = $("#userDataGrid").datagrid("getSelections");
 							

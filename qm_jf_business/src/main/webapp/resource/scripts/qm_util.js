@@ -477,6 +477,8 @@ function isPolicy2Zh(value) {
 		return "是";
 	}else if(value=='3'){
 		return "直营";
+	}else if(value=='4'){
+		return "直营(政策报单)";
 	}
 	return "";
 }

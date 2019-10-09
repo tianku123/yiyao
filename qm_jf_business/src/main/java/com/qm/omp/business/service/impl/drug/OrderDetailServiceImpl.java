@@ -445,7 +445,6 @@ public class OrderDetailServiceImpl {
 			 else {
 				 int index = i - span;
 				 int length = mergeField.length - 1;
-				 System.out.println(index + "====" + i + "====" + span);
 				 for (int k = length; k >= 0; k--) {
 					 sheet.addMergedRegion(new CellRangeAddress(index + 1, i, k, k));
 				 }

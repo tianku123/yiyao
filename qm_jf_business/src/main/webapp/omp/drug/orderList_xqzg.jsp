@@ -240,7 +240,6 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 			});
 		},
 		showDetail : function(fId, fTax, fSaleUserId){
-			console.log(fSaleUserId);
 			var url;
 			if(fTax == 0 || fTax == 3){//工业票
 				url = "/omp/zhuguan/orderDetail_NoTax.jsp?fId="+fId + "&fSaleUserId=" + fSaleUserId;
