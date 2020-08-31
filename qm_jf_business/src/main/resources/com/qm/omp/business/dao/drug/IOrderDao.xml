@@ -175,7 +175,7 @@
 
 	<!-- 业务员只可以看到自己的订单的所有状态  start -->
 	<select id="getListTotal_ywy" resultType="int">
-		select count(1) from t_order where F_SALE_USER_ID in (${userId}) and F_STATE in(0,1,2,3,4,8,9) AND F_ISEDITPRICE in(0,1)
+		select count(1) from t_order where F_SALE_USER_ID in (${userId}) and F_STATE in(0,1,2,3,4,8,9,10) AND F_ISEDITPRICE in(0,1)
 		<if test="fName !=null and fName !=''">
 			and F_NAME like CONCAT("%",#{fName} ,"%") 
 		</if>
@@ -217,7 +217,7 @@
 		b.F_UNIT 
 		FROM
 		t_order a LEFT JOIN t_customer b ON a.F_CUSTOMER_ID=b.F_ID
-		where a.F_SALE_USER_ID in (${userId})  and a.F_STATE in(0,1,2,3,4,8,9) AND F_ISEDITPRICE in(0,1) 
+		where a.F_SALE_USER_ID in (${userId})  and a.F_STATE in(0,1,2,3,4,8,9,10) AND F_ISEDITPRICE in(0,1) 
 		<if test="fName!=null and fName!=''">
 			and b.F_UNIT like CONCAT("%",#{fName} ,"%") 
 		</if>
