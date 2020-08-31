@@ -68,6 +68,8 @@ public class Drug implements Serializable {
 	private Integer fCompanyId;
 	//药品公司名称
 	private String fCompanyName;
+	//部门名称
+	private String fDepartmentName;
 	// 小区提成
 	private Double fXqTc;
 	// 大区提成
@@ -263,6 +265,12 @@ public class Drug implements Serializable {
 	}
 	public void setfBalanceTime(String fBalanceTime) {
 		this.fBalanceTime = fBalanceTime;
+	}
+	public String getfDepartmentName() {
+		return fDepartmentName;
+	}
+	public void setfDepartmentName(String fDepartmentName) {
+		this.fDepartmentName = fDepartmentName;
 	}
 	
 }

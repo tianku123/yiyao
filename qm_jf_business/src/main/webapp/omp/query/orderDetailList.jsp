@@ -96,9 +96,9 @@
 		</div>
 </body>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_main.js"></script>
+	src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_util.js"></script>
+	src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script>
 
 	var ajaxTools = new QM.ajax();
@@ -174,11 +174,7 @@
 				},
 				{field : 'F_ISPOLICY',title : '政策报单',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "否";
-						}else if(value=='1'){
-							return "<span style='color:yellow;'>是</span>";
-						}
+						return isPolicy2Zh(value);
 					}
 				},
 				{field : 'F_PAYMENT_STATE',title : '付款情况',width :100,align:'center',
@@ -261,17 +257,27 @@
 				,
 				{field : 'F_NUMBER',title : '销售数量',width :100,align:'center'}
 				,
+				// 单价 20191009
+				{field : 'F_PRICE',title : '单价',width :100,align:'center'}
+				,
 				{field : 'F_GUOJIFEI_DETAIL',title : '过票费',width :100,align:'center'}
 				,
 				{field : 'F_GAOKAIFEI_DETAIL',title : '高开费',width :100,align:'center'}
 				,
 				{field : 'F_MONEY_DETAIL',title : '计算后金额',width :100,align:'center'}
 				,
-				{field : 'F_MONEY_BUYINGPRICE_DETAIL',title : '成本金额',width :100,align:'center'}
-				,
 				{field : 'F_XQ_TC_MONEY_DETAIL',title : '小区提成',width :100,align:'center'}
 				,
 				{field : 'F_DQ_TC_MONEY_DETAIL',title : '大区提成',width :100,align:'center'}
+				,
+				//进货价
+				{field : 'F_BUYING_PRICE',title : '税率',width :100,align:'center'}
+				,
+				//进货价 * 数量
+				{field : 'F_MONEY_BUYINGPRICE_DETAIL',title : '税率金额',width :100,align:'center'}
+				,
+				//利润=计算后金额-过票费-高开费-进货价 * 数量
+				{field : 'LIRUN',title : '备注',width :100,align:'center'}
 			];
 			var toolbars = {};
 			

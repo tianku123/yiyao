@@ -114,9 +114,10 @@ public class OrderDetailInvocation implements BaseInvocation{
     	int page = RequestUtil.getIntParamterAsDef(context.getRequest(), "page", 1);
     	int rows = RequestUtil.getIntParamterAsDef(context.getRequest(), "rows", 50);
     	String fOrderId = RequestUtil.getStrParamterAsDef(context.getRequest(), "fOrderId", "");
+    	String isZy = RequestUtil.getStrParamterAsDef(context.getRequest(), "isZy", "0");
     	try
     	{
-    		Map<String, Object> map = this.orderDetailService.getList_EditOrder(fOrderId, page, rows);
+    		Map<String, Object> map = this.orderDetailService.getList_EditOrder(fOrderId, page, rows, isZy);
     		result.setRetObj(map);
     	}
     	catch (Exception ex)

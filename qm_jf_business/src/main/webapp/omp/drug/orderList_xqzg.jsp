@@ -72,8 +72,8 @@
 		</div>
 </body>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_main.js"></script>
-document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?${updateDate}'></script>"); 
+	src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?v=${js_version}'></script>"); 
 <script>
 	var ajaxTools = new QM.ajax();
 	var merchantUserInfoComponent = {
@@ -240,7 +240,6 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 			});
 		},
 		showDetail : function(fId, fTax, fSaleUserId){
-			console.log(fSaleUserId);
 			var url;
 			if(fTax == 0 || fTax == 3){//工业票
 				url = "/omp/zhuguan/orderDetail_NoTax.jsp?fId="+fId + "&fSaleUserId=" + fSaleUserId;

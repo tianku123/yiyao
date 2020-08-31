@@ -162,8 +162,8 @@
 <script type="text/javascript" src="${contextPath}/resource/scripts/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="${contextPath}/resource/scripts/jquery.pager.js"></script>
 <script type="text/javascript" src="${contextPath}/resource/scripts/jquery.ajaxfileupload.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script type="text/javascript">
 // 全局变量 上传文件类型
 var imgType  =".gif,.jpg,.jpeg,.png";

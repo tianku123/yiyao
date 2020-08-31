@@ -7,6 +7,6 @@
 <%
 	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/";
 	pageContext.setAttribute("ctx",basePath);
-	pageContext.setAttribute("updateDate",new Date().getTime());
+	pageContext.setAttribute("js_version","0.3");
 %>
 <c:set var="skin" value="gray" scope="request"/>

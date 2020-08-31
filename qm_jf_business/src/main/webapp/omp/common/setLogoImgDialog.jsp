@@ -67,8 +67,8 @@
 <script type="text/javascript" src="${contextPath}/resource/scripts/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="${contextPath}/resource/scripts/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript" src="${contextPath}/resource/scripts/jquery.Jcrop.min.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js"></script>
-<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
+<script type="text/javascript" src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 </html>
 <script type="text/javascript">
 	var ajaxTools = null;

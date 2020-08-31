@@ -491,8 +491,6 @@ public class DrugInvocation implements BaseInvocation {
 			params.put("fCompanyIds", fCompanyIds);
 			params.put("fDrugPrinterIds", fDrugPrinterIds);
 		}
-		System.out.println("ids:" + ids);
-		System.out.println("nums:" + nums);
 		Map<Integer, Integer> map = null;
 		if (null != ids && !"".equals(ids)) {
 			map = new HashMap<Integer, Integer>();
@@ -525,11 +523,9 @@ public class DrugInvocation implements BaseInvocation {
 				}
 			}
 
-			System.out.println("idList:" + idList);
 			params.put("fDrugOnlyId", fDrugOnlyId);
 			params.put("idList", idList);
 			List<Drug> list = this.drugService.getBeanByDrugOnlyId(params);// 根据药品id获取此药品多个库存信息
-			System.out.println("list:" + list.size());
 			if (drugId == list.get(0).getfId().intValue()) {// 如果选择的效期是未选择的最近效期，也就是排序后的数据的第一个则可以添加，不然则报不可以
 				// 判断未被选择销售完最近效期的药是否已被选择，并且正好选择完库存 start
 				int drugIdSel;// 已选择的药品库存id

@@ -1,5 +1,6 @@
 package com.qm.omp.business.service.impl.export;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.qm.omp.business.pojo.drug.DrugOnly;
 import com.qm.omp.business.pojo.drug.DrugPrinter;
 import com.qm.omp.business.pojo.drug.WareHouse;
 import com.qm.omp.business.service.impl.drug.DrugOnlyServiceImpl;
+import com.qm.omp.business.util.DateTimeUtil;
 import com.qm.omp.business.util.PoiUtil;
 
 @Service("exportService")
@@ -291,15 +293,18 @@ public class ExportServiceImpl {
 
 	
 	public HSSFWorkbook exportDrug() {
-		List<Drug> data = this.drugDao.exportAllBean();
+		Map<String, Object> params = new HashMap<String, Object>();
+		String time = DateTimeUtil.getTodayChar6();
+		params.put("time", time);
+		List<Drug> data = this.drugDao.getList(params);
 		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet("药品");
+		HSSFSheet sheet = wb.createSheet("库存");
 		sheet.setDefaultColumnWidth(15);
 		sheet.setColumnWidth(5, 10000);//第一个参数代表列id(从0开始),第2个参数代表宽度值  参考 ："2012-08-10"的宽度为2500
 		HSSFCellStyle titleStyle = PoiUtil.getTitleStyle(wb);
 		HSSFCellStyle cellStyle = PoiUtil.getCellStyle(wb);
-		String[] headers = {"id","名称","规格","产地","状态(0:正常，1:删除)","创建时间"
-				,"供货价","零售价","图片","药品介绍分类id","药品经营分类id","药品介绍"};
+		String[] headers = {"部门","药品名称","药品规格","产地","状态","库存"
+				,"批号","效期","价格","工业票价","税率","仓库名称","公司","结转时间","入库时间"};
 		HSSFRow row = sheet.createRow(0);
 		HSSFCell cell = null;
 		for(int i=0;i<headers.length;i++){
@@ -310,52 +315,73 @@ public class ExportServiceImpl {
 		
 		for(int i=0;i<data.size();i++){
 			row = sheet.createRow(i+1);
-			cell = row.createCell(0);
-			cell.setCellValue(data.get(i).getfId());
+			int c = 0;
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfDepartmentName());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(1);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfName());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(2);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfSpecification());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(3);
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfAddress());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(4);
-			cell.setCellValue(data.get(i).getfState());
+			cell = row.createCell(c++);
+			String st = "";
+			if ("0".equals(data.get(i).getfState())) {
+				st = "入库";
+			} else if ("2".equals(data.get(i).getfState())) {
+				st = "当月剩余";
+			} else if ("3".equals(data.get(i).getfState())) {
+				st = "上月剩余";
+			}
+			cell.setCellValue(st);
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(5);
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfNumber());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfBatchNumber());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfExpiryDate());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfPrice());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfGongyePrice());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfBuyingPrice());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfWareHouseName());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfCompanyName());
+			cell.setCellStyle(cellStyle);
+			
+			cell = row.createCell(c++);
 			cell.setCellValue(data.get(i).getfTime());
 			cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(6);
-			cell.setCellValue(data.get(i).getfSupplyPrice());
-			cell.setCellStyle(cellStyle);
-			
-			cell = row.createCell(7);
-			cell.setCellValue(data.get(i).getfRetailPrice());
-			cell.setCellStyle(cellStyle);
-			
-			cell = row.createCell(8);
-			cell.setCellValue(data.get(i).getfImg());
-			cell.setCellStyle(cellStyle);
-			
-			cell = row.createCell(9);
-//			cell.setCellValue(data.get(i).getfDrugIntroId()+"");
-			cell.setCellStyle(cellStyle);
-			
-			cell = row.createCell(10);
-//			cell.setCellValue(data.get(i).getfDrugPrinterId()+"");
-			cell.setCellStyle(cellStyle);
-			
-			cell = row.createCell(11);
-			cell.setCellValue(data.get(i).getfIntro());
+			cell = row.createCell(c++);
+			cell.setCellValue(data.get(i).getfBalanceTime());
 			cell.setCellStyle(cellStyle);
 			
 		}

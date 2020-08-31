@@ -73,8 +73,6 @@ public class DrugServiceImpl {
 			Drug bean = null;
 			for (Entry<Integer, Integer> en : sel.entrySet()) {
 				drugL = data.listIterator();
-				System.out.println("getListByUser_ExceptSelected==idList:"
-						+ en.getKey().intValue());
 				while (drugL.hasNext()) {// 如果和已选择的药品id相同并且库存和销量一致则删除该药（隐藏药品）,这里收集需要排除掉的药品id
 					bean = drugL.next();
 					if (bean.getfId().intValue() == en.getKey().intValue()
@@ -85,8 +83,6 @@ public class DrugServiceImpl {
 					}
 				}
 			}
-			System.out
-					.println("getListByUser_ExceptSelected==idList:" + idList);
 			params.put("idList", idList);
 		}
 		res.put("total", drugDao.getListByUser_ExceptSelectedIdsTotal(params));
@@ -147,7 +143,7 @@ public class DrugServiceImpl {
 
 				this.drugDao.saveUserDrug(userId, drugId);
 			} else {
-				System.out.println(drugId);
+				
 			}
 		}
 	}

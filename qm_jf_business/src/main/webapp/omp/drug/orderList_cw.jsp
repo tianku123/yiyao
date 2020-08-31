@@ -40,6 +40,10 @@
 					<option value="">全部</option>
 					<option value="0">借款</option>
 					<option value="1">已付款</option>
+					<option value="2">已还款</option>
+					<option value="3">扫码付(信)</option>
+					<option value="4">扫码付(邮)</option>
+					<option value="5">直营借款</option>
 				</select>
 				<button class="grayBtn"
 					onclick="merchantUserInfoComponent.userDataGrid.formQry()">查询</button>
@@ -53,9 +57,9 @@
 		</div>
 </body>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_main.js"></script>
+	src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
 
-document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?${updateDate}'></script>"); 
+document.write("<script type='text/javascript' src='${contextPath}/resource/scripts/qm_util.js?v=${js_version}'></script>"); 
 <script>
 
 	var ajaxTools = new QM.ajax();
@@ -94,11 +98,7 @@ document.write("<script type='text/javascript' src='${contextPath}/resource/scri
 				},
 				{field : 'isPolicy',title : '政策报单',width :100,align:'center',
 					formatter: function(value,row,index){
-						if(value=='0'){
-							return "否";
-						}else if(value=='1'){
-							return "<span style='color:yellow;'>是</span>";
-						}
+						return isPolicy2Zh(value);
 					}
 				},
 				{field : 'fPaymentState',title : '付款情况',width :100,align:'center',

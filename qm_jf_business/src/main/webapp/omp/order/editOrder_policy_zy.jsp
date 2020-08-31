@@ -212,7 +212,8 @@
 					{field : 'fSpecification',title : '药品规格',width : 100,align:'center'}, 
 					{field : 'fExpiryDate',title : '效期',width :100,align:'center'},
 					{field : 'fBuyingPrice',title : '批号',width :100,align:'center',hidden:true},
-					{field : 'fPrice',title : '价格',width :100,align:'center',
+					// 直营，采用药品管理里面的供货价
+					{field : 'fSupplyPrice',title : '价格',width :100,align:'center',
 						formatter: function(value,row,index){
 							return value+"元";
 						}
@@ -343,7 +344,9 @@
 					"fTax" : tax,
 					"fPolicyIntro" : fPolicyIntro,
 					"fId" : "${param.fId}",
-					"fName" : fName
+					"fName" : fName,
+					"isZy" : 1 // 是否为直营：1表示直营，非1表示正常订单
+				
 				},
 				success : function(ret) {
 					
@@ -437,7 +440,7 @@
 								"height" : "520"
 							},
 							GLOBAL_INFO.CONTEXTPATH
-									+ "/omp/order/selectDrugList.jsp?ids="+ids + "&tax="+tax 
+									+ "/omp/order/selectDrugList_zy.jsp?ids="+ids + "&tax="+tax 
 									+ "&nums="+nums
 									+ "&fCompanyIds="+fCompanyIds
 									+ "&fDrugPrinterIds="+fDrugPrinterIds

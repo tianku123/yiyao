@@ -455,6 +455,30 @@ function fPaymentState2Zh(value) {
 		return "<span style='color:green;'>已付款</span>";
 	}else if(value=='2'){
 		return "<span style='color:green;'>已还款</span>";
+	}else if(value=='3'){
+		return "<span style='color:green;'>扫码付(信)</span>";
+	}else if(value=='4'){
+		return "<span style='color:green;'>扫码付(邮)</span>";
+	}else if(value=='5'){
+		return "<span style='color:green;'>直营借款</span>";
+	}
+	return "";
+}
+
+/**
+ * 订单类型
+ * @param value
+ * @returns {String}
+ */
+function isPolicy2Zh(value) {
+	if(value=='0'){
+		return "否";
+	}else if(value=='1'){
+		return "是";
+	}else if(value=='3'){
+		return "直营";
+	}else if(value=='4'){
+		return "直营(政策报单)";
 	}
 	return "";
 }

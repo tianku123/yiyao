@@ -46,17 +46,21 @@
 							<div data-options="region:'south',border:false" style="height:70px;background-color: #FFF;padding-left: 10px;padding-right: 10px; padding-top:10px;">
 									<table cellpadding="0" cellspacing="0" class="formTable" width="100%">
 										<tr>
-											<th width="16%"><label>出售数量： </label></th>
-											<td width="34%">
-												<input id="fSalesNumber" type="text" placeholder="请输入整数"  class="easyui-validatebox" data-options="required:true,validType:'number'"/>
+											<th width="15%"><label>出售数量： </label></th>
+											<td width="15%">
+												<input style="width:100px;" id="fSalesNumber" type="text" placeholder="请输入整数"  class="easyui-validatebox" data-options="required:true,validType:'integer'"/>
 											</td>
-											<th width="20%"><label>开票价： </label></th>
-											<td width="30%">
+											<th width="15%"><label>单价： </label></th>
+											<td width="20%">
+												<input style="width:100px;" id="fPrice_user" type="text" placeholder="请输入"  class="easyui-validatebox" data-options="required:true,validType:'intOrFloat'"/>
+											</td>
+											<th width="15%"><label>开票价： </label></th>
+											<td width="20%">
 												<c:if test="${param.tax==0 || param.tax==3}">
-													<input id="fKaiPiaoPrice" type="text" disabled="disabled" placeholder="请输入"  class="easyui-validatebox" value="0"/>  
+													<input style="width:100px;" id="fKaiPiaoPrice" type="text" disabled="disabled" placeholder="请输入"  class="easyui-validatebox" value="0"/>  
 												</c:if>
 												<c:if test="${param.tax!=0 && param.tax!=3}">
-													<input id="fKaiPiaoPrice" type="text" placeholder="请输入"  class="easyui-validatebox" data-options="required:true,validType:'intOrFloat'"/>  
+													<input style="width:100px;" id="fKaiPiaoPrice" type="text" placeholder="请输入"  class="easyui-validatebox" data-options="required:true,validType:'intOrFloat'"/>  
 												</c:if>
 											</td>
 										</tr>
@@ -103,16 +107,17 @@
 				//{field : 'fAddress',title : '产地',width :100,align:'center'},
 				{field : 'fBatchNumber',title : '批号',width :100,align:'center'},
 				{field : 'fExpiryDate',title : '效期',width :100,align:'center'},
-				{field : 'fPrice',title : '价格',width :100,align:'center',
+				// 直营，采用药品管理里面的供货价
+				{field : 'fSupplyPrice',title : '价格',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
 				},
-				/* {field : 'fGongyePrice',title : '工业票价',width :100,align:'center',
+				{field : 'fGongyePrice',title : '工业票价',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
-				}, */
+				},
 				{field : 'fWareHouseName',title : '仓库名称',width :100,align:'center'},
 				{field : 'fNumber',title : '库存',width :100,align:'center'}
 			];
@@ -125,6 +130,7 @@
 				selectOnCheck : true,
 				remoteSort : false,
 				sortOrder : 'asc',
+				fitColumns : false,
 				columns : [ columns ]
 			}, toolbars, this.getQueryParams);
 			this.userDataGrid.init();
@@ -133,13 +139,14 @@
 		ok :function(){
 			var fKaiPiaoPrice = $("#fKaiPiaoPrice").val();
 			var fSalesNumber = $("#fSalesNumber").val();
+			var fPrice_user = $("#fPrice_user").val();//政策报单药品自定义单价
 			
 			var _arr = $('#userDataGrid').datagrid('getChecked');
 			//开票价大于单价
 			if(_arr == 'undefined' || _arr.length<=0){
 				QM.dialog.showFailedDialog("请选择要添加的记录！");
 			}else{
-				var fPrice;//药品单价
+				var fSupplyPrice;//药品单价
 				var fNumber;//库存
 				var fDrugOnlyId;//药品id
 				var res = "[";
@@ -147,7 +154,7 @@
 					for(var i=0;i<_arr.length;i++){
 						var node = _arr[i];
 						var fId = ''+node['fId'];//药品编码
-						fPrice = node['fPrice'];
+						fSupplyPrice = node['fSupplyPrice'];
 						fNumber = node['fNumber'];
 						fDrugOnlyId = node['fDrugOnlyId'];
 						
@@ -157,26 +164,22 @@
 								+"',fName:'"+node['fName']
 								+"',fSpecification:'"+node['fSpecification']
 								+"',fExpiryDate:'"+node['fExpiryDate']
-								+"',fPrice:'"+node['fPrice']
-								+"',fGongyePrice:'"+node['fGongyePrice']
+								+"',fSupplyPrice:'"+fPrice_user
 								+"',fBuyingPrice:'"+node['fBuyingPrice']
+								+"',fGongyePrice:'"+node['fGongyePrice']
 								+"',fKaiPiaoPrice:'"+fKaiPiaoPrice
 								+"',fSalesNumber:'"+fSalesNumber
-								+"',fXqTc:'"+node['fXqTc']
-								+"',fDqTc:'"+node['fDqTc']
 								+"',fState:'"+node['fState']+"'}";
 							}else{
 								res += "{fId:'"+node['fId']
 								+"',fName:'"+node['fName']
 								+"',fSpecification:'"+node['fSpecification']
 								+"',fExpiryDate:'"+node['fExpiryDate']
-								+"',fPrice:'"+node['fPrice']
-								+"',fGongyePrice:'"+node['fGongyePrice']
+								+"',fSupplyPrice:'"+fPrice_user
 								+"',fBuyingPrice:'"+node['fBuyingPrice']
+								+"',fGongyePrice:'"+node['fGongyePrice']
 								+"',fKaiPiaoPrice:'"+fKaiPiaoPrice
 								+"',fSalesNumber:'"+fSalesNumber
-								+"',fXqTc:'"+node['fXqTc']
-								+"',fDqTc:'"+node['fDqTc']
 								+"',fState:'"+node['fState']+"'},";
 							}
 						}
@@ -218,9 +221,14 @@
 				//同种药品选择效期最近的卖，强制性限制  end
 				
 				if(!$("#fSalesNumber").validatebox('isValid')){
+					QM.dialog.showFailedDialog("请输入出售数量！");
 					return;
 				}
-				if(parseInt(fSalesNumber,10) > parseInt(fNumber,10)){//
+				if(!$("#fPrice_user").validatebox('isValid')){
+					QM.dialog.showFailedDialog("请输入单价！");
+					return;
+				}
+				if(fSalesNumber > fNumber){//
 					QM.dialog.showFailedDialog("库存不足！");
 					return;
 				}
@@ -229,7 +237,7 @@
 				}
 				if(fKaiPiaoPrice == 0){
 				}else{
-					if(parseInt(fKaiPiaoPrice,10) < parseInt(fPrice,10)){
+					if(parseInt(fKaiPiaoPrice,10) < parseInt(fPrice_user,10)){
 						QM.dialog.showFailedDialog("开票价必须要大于等于单价！");
 						return;
 					}

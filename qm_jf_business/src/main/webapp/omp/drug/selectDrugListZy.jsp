@@ -103,7 +103,8 @@
 				//{field : 'fAddress',title : '产地',width :100,align:'center'},
 				{field : 'fBatchNumber',title : '批号',width :100,align:'center'},
 				{field : 'fExpiryDate',title : '效期',width :100,align:'center'},
-				{field : 'fPrice',title : '价格',width :100,align:'center',
+				// 直营，采用药品管理里面的供货价
+				{field : 'fSupplyPrice',title : '价格',width :100,align:'center',
 					formatter: function(value,row,index){
 						return value+"元";
 					}
@@ -139,7 +140,7 @@
 			if(_arr == 'undefined' || _arr.length<=0){
 				QM.dialog.showFailedDialog("请选择要添加的记录！");
 			}else{
-				var fPrice;//药品单价
+				var fSupplyPrice;//药品单价
 				var fNumber;//库存
 				var fDrugOnlyId;//药品id
 				var res = "[";
@@ -147,7 +148,7 @@
 					for(var i=0;i<_arr.length;i++){
 						var node = _arr[i];
 						var fId = ''+node['fId'];//药品编码
-						fPrice = node['fPrice'];
+						fSupplyPrice = node['fSupplyPrice'];
 						fNumber = node['fNumber'];
 						fDrugOnlyId = node['fDrugOnlyId'];
 						
@@ -157,7 +158,7 @@
 								+"',fName:'"+node['fName']
 								+"',fSpecification:'"+node['fSpecification']
 								+"',fExpiryDate:'"+node['fExpiryDate']
-								+"',fPrice:'"+node['fPrice']
+								+"',fSupplyPrice:'"+node['fSupplyPrice']
 								+"',fGongyePrice:'"+node['fGongyePrice']
 								+"',fBuyingPrice:'"+node['fBuyingPrice']
 								+"',fKaiPiaoPrice:'"+fKaiPiaoPrice
@@ -170,7 +171,7 @@
 								+"',fName:'"+node['fName']
 								+"',fSpecification:'"+node['fSpecification']
 								+"',fExpiryDate:'"+node['fExpiryDate']
-								+"',fPrice:'"+node['fPrice']
+								+"',fSupplyPrice:'"+node['fSupplyPrice']
 								+"',fGongyePrice:'"+node['fGongyePrice']
 								+"',fBuyingPrice:'"+node['fBuyingPrice']
 								+"',fKaiPiaoPrice:'"+fKaiPiaoPrice
@@ -229,7 +230,7 @@
 				}
 				if(fKaiPiaoPrice == 0){
 				}else{
-					if(parseInt(fKaiPiaoPrice,10) < parseInt(fPrice,10)){
+					if(parseInt(fKaiPiaoPrice,10) < parseInt(fSupplyPrice,10)){
 						QM.dialog.showFailedDialog("开票价必须要大于等于单价！");
 						return;
 					}

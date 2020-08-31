@@ -43,9 +43,9 @@
 		</div>
 </body>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_main.js"></script>
+	src="${contextPath}/resource/scripts/qm_main.js?v=${js_version}"></script>
 <script type="text/javascript"
-	src="${contextPath}/resource/scripts/qm_util.js"></script>
+	src="${contextPath}/resource/scripts/qm_util.js?v=${js_version}"></script>
 <script>
 	var ajaxTools = new QM.ajax();
 	var merchantUserInfoComponent = {
@@ -64,6 +64,7 @@
 			
 			var columns = [ 
 				{field : 'fId',align:'center',checkbox : true},
+				{field : 'fDepartmentName',title : '部门',width : 100,align:'center'}, 
 				{field : 'fName',title : '药品名称',width : 100,align:'center'}, 
 				{field : 'fSpecification',title : '药品规格',width : 100,align:'center'}, 
 				{field : 'fAddress',title : '产地',width :100,align:'center'},
@@ -83,6 +84,7 @@
 				{field : 'fExpiryDate',title : '效期',width :100,align:'center'},
 				{field : 'fPrice',title : '价格',width :100,align:'center'},
 				{field : 'fGongyePrice',title : '工业票价',width :100,align:'center'},
+				{field : 'fBuyingPrice',title : '税率',width :100,align:'center'},
 				{field : 'fWareHouseName',title : '仓库名称',width :100,align:'center'},
 				{field : 'fCompanyName',title : '公司',width :100,align:'center'},
 				{field : 'fTime',title : '结转时间',width :100,align:'center',

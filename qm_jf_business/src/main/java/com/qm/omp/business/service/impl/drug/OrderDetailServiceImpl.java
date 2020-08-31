@@ -55,7 +55,7 @@ public class OrderDetailServiceImpl {
 
 	
 	public Map<String, Object> getList_EditOrder(String fOrderId, int page,
-			int rows) {
+			int rows, String isZy) {
 		page = (page-1)*rows;
 		Map<String, Object> res = new HashMap<String, Object>();
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -63,7 +63,14 @@ public class OrderDetailServiceImpl {
 		params.put("rows", rows);
 		params.put("fOrderId", fOrderId);
 		res.put("total", orderDetailDao.getListTotal_EditOrder(params));
-		res.put("rows", orderDetailDao.getList_EditOrder(params));
+		// 直营的情况下，更改一下key，fPrice 改成 fSupplyPrice
+		List<OrderDetail> list = orderDetailDao.getList_EditOrder(params);
+		if (list != null && !list.isEmpty()) {
+			for (OrderDetail o : list) {
+				o.setfSupplyPrice(o.getfPrice());
+			}
+		}
+		res.put("rows", list);
 		return res;
 	}
 
@@ -188,8 +195,9 @@ public class OrderDetailServiceImpl {
 				,"下单时间", "财务", "财务审批时间", "发货员", "发货时间", "快递公司"
 				,"快递单号", "过票费", "返点", "高开费", "成本金额", "金额"
 				,"计算后金额", "小区主管提成", "大区主管提成"
-				,"药品名称", "销售数量", "过票费", "返点", "高开费", "计算后金额"
-				,"成本金额", "小区提成", "大区提成"
+				,"药品名称", "销售数量","单价", "过票费", "返点", "高开费", "计算后金额"
+				,"小区提成", "大区提成"
+				,"税率", "税率金额", "备注"
 		};
 		HSSFRow row = sheet.createRow(0);
 		HSSFCell cell = null;
@@ -228,8 +236,12 @@ public class OrderDetailServiceImpl {
  			cell.setCellStyle(cellStyle);
  			if (flag == 0) {
  				flagStr = "否";
- 			} else {
- 				flagStr = "是"; 				
+ 			}else if(flag==1){
+ 				flagStr = "是";
+ 			}else if(flag==3){
+ 				flagStr = "直营";
+ 			}else if(flag==4){
+ 				flagStr = "直营(政策报单)";
  			}
  			cell.setCellValue(flagStr);
  			// 付款情况
@@ -366,6 +378,10 @@ public class OrderDetailServiceImpl {
  			cell = row.createCell(cellNum++);
  			cell.setCellValue(MapUtils.getInteger(map, "F_NUMBER"));
  			cell.setCellStyle(cellStyle);
+ 			// 单价
+ 			cell = row.createCell(cellNum++);
+ 			cell.setCellValue(MapUtils.getInteger(map, "F_PRICE"));
+ 			cell.setCellStyle(cellStyle);
  			// 过票费
  			cell = row.createCell(cellNum++);
  			cell.setCellValue(MapUtils.getDoubleValue(map, "F_GUOJIFEI_DETAIL"));
@@ -382,10 +398,6 @@ public class OrderDetailServiceImpl {
  			cell = row.createCell(cellNum++);
  			cell.setCellValue(MapUtils.getDoubleValue(map, "F_MONEY_DETAIL"));
  			cell.setCellStyle(cellStyle);
- 			// 成本金额
- 			cell = row.createCell(cellNum++);
- 			cell.setCellValue(MapUtils.getDoubleValue(map, "F_MONEY_BUYINGPRICE_DETAIL"));
- 			cell.setCellStyle(cellStyle);
  			// 小区提成
  			cell = row.createCell(cellNum++);
  			cell.setCellValue(MapUtils.getDoubleValue(map, "F_XQ_TC_MONEY_DETAIL"));
@@ -393,6 +405,18 @@ public class OrderDetailServiceImpl {
  			// 大区提成
  			cell = row.createCell(cellNum++);
  			cell.setCellValue(MapUtils.getDoubleValue(map, "F_DQ_TC_MONEY_DETAIL"));
+ 			cell.setCellStyle(cellStyle);
+ 			// 税率  进货价
+ 			cell = row.createCell(cellNum++);
+ 			cell.setCellValue(MapUtils.getDoubleValue(map, "F_BUYING_PRICE"));
+ 			cell.setCellStyle(cellStyle);
+ 			// 税率金额  进货价 * 数量
+ 			cell = row.createCell(cellNum++);
+ 			cell.setCellValue(MapUtils.getDoubleValue(map, "F_MONEY_BUYINGPRICE_DETAIL"));
+ 			cell.setCellStyle(cellStyle);
+ 			// 备注  利润=计算后金额-过票费-高开费-进货价 * 数量
+ 			cell = row.createCell(cellNum++);
+ 			cell.setCellValue(MapUtils.getDoubleValue(map, "LIRUN"));
  			cell.setCellStyle(cellStyle);
  			
  		}
@@ -438,7 +462,6 @@ public class OrderDetailServiceImpl {
 			 else {
 				 int index = i - span;
 				 int length = mergeField.length - 1;
-				 System.out.println(index + "====" + i + "====" + span);
 				 for (int k = length; k >= 0; k--) {
 					 sheet.addMergedRegion(new CellRangeAddress(index + 1, i, k, k));
 				 }

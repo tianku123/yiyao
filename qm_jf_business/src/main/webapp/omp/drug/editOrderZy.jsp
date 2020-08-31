@@ -73,7 +73,7 @@
 				<table cellpadding="0" cellspacing="0" class="formTable" width="100%">
 					
 					<tr>
-						<th width="20%"><label>类型：</label>
+						<th width="15%"><label>类型：</label>
 						</th>
 						<td width="20%">
 							<select id="tax">
@@ -86,27 +86,19 @@
 						
 						<th width="15%"><label>收货人：</label>
 						</th>
-						<td width="45%"><input id="fName" name="fName" type="text" autofocus="autofocus" class="easyui-validatebox" data-options="required:true"
+						<td width="50%"><input id="fName" name="fName" type="text" autofocus="autofocus" class="easyui-validatebox" data-options="required:true"
 							maxlength="50" /></td>
 					</tr>
 				
 					<tr>
-						<th width="20%"><label>收货电话：</label>
+						<th width="15%"><label>收货电话：</label>
 						</th>
 						<td width="20%"><input id="fPhone" name="fPhone" type="text" autofocus="autofocus" class="easyui-validatebox" data-options="required:true,validType:'number'"
 							maxlength="50" /></td>
 						<th width="15%"><label>购货地址：</label>
 						</th>
-						<td width="45%"><input id="fAddress" name="fAddress" type="text" autofocus="autofocus" class="easyui-validatebox" data-options="required:true" style="width:300px;"
+						<td width="50%"><input id="fAddress" name="fAddress" type="text" autofocus="autofocus" class="easyui-validatebox" data-options="required:true" style="width:300px;"
 							maxlength="100" />
-						</td>
-					</tr>
-				
-					<tr>
-						<th width="20%"><label>政策内容：</label>
-						</th>
-						<td width="80%" colspan="3">
-							<textarea id="fPolicyIntro" name="fPolicyIntro" rows="5" cols="80"><c:out value="${param.fPolicyIntro}"></c:out></textarea>
 						</td>
 					</tr>
 					
@@ -147,7 +139,7 @@
 			$("#fTownship").val("${param.fTownship}");
 			$("#fYaofang").val("${param.fYaofang}");
 			$("#tax").val("${param.fTax}");
-			//$("#tax").triggerHandler("change");
+			$("#tax").triggerHandler("change");
 			$("#tax").attr("disabled","disabled");
 			$("#selectedCustomer").datagrid({
 				title : '已选客户',
@@ -212,7 +204,13 @@
 					{field : 'fSpecification',title : '药品规格',width : 100,align:'center'}, 
 					{field : 'fExpiryDate',title : '效期',width :100,align:'center'},
 					{field : 'fBuyingPrice',title : '批号',width :100,align:'center',hidden:true},
-					{field : 'fPrice',title : '价格',width :100,align:'center',
+					// 药品管理里的供货价
+					{field : 'fSupplyPrice',title : '价格',width :100,align:'center',
+						formatter: function(value,row,index){
+							return value+"元";
+						}
+					},
+					{field : 'fGongyePrice',title : '工业票价',width :100,align:'center',
 						formatter: function(value,row,index){
 							return value+"元";
 						}
@@ -257,7 +255,8 @@
 				{
 					"reqUrl" : "orderDetail",
 					"reqMethod" : "getList_EditOrder",
-					"fOrderId" : "${param.fId}"
+					"fOrderId" : "${param.fId}",
+					"isZy" : 1 // 是否为直营：1表示直营，非1表示正常订单
 				},
 				success : function(ret)
 				{	
@@ -272,7 +271,6 @@
 			var tax = $("#tax").val();
 			var fTownship = $("#fTownship").val();
 			var fYaofang = $("#fYaofang").val();
-			var fPolicyIntro = $("#fPolicyIntro").val();
 			
 			if(!$("#fName").validatebox('isValid')){
 				return;
@@ -333,7 +331,7 @@
 			ajaxTools.singleReq({
 				data : {
 					"reqUrl" : "order",
-					"reqMethod" : "editOrder_policy",
+					"reqMethod" : "editOrder",
 					"drug" : JSON.encode(drug),
 					"customer" : customer,
 					"fYaofang" : fYaofang,
@@ -341,9 +339,9 @@
 					"fAddress" : fAddress,
 					"fPhone" : fPhone,
 					"fTax" : tax,
-					"fPolicyIntro" : fPolicyIntro,
 					"fId" : "${param.fId}",
-					"fName" : fName
+					"fName" : fName,
+					"isZy" : 1 // 是否为直营：1表示直营，非1表示正常订单
 				},
 				success : function(ret) {
 					
@@ -437,7 +435,7 @@
 								"height" : "520"
 							},
 							GLOBAL_INFO.CONTEXTPATH
-									+ "/omp/order/selectDrugList.jsp?ids="+ids + "&tax="+tax 
+									+ "/omp/drug/selectDrugListZy.jsp?ids="+ids + "&tax="+tax 
 									+ "&nums="+nums
 									+ "&fCompanyIds="+fCompanyIds
 									+ "&fDrugPrinterIds="+fDrugPrinterIds

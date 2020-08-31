@@ -121,6 +121,40 @@ public class OrderInvocation implements BaseInvocation {
 		}
 		return result;
 	}
+	
+	/**
+	 * 
+	 * @Title: getList_zy
+	 * @Description: (分页查询)
+	 * @param context
+	 * @return
+	 * @return InvocationResult 返回类型
+	 * @throws
+	 */
+	public InvocationResult getList_zy(InvocationContext context) {
+		// 返回结果对象
+		InvocationResult result = InvocationResult.newInstance();
+		int page = RequestUtil.getIntParamterAsDef(context.getRequest(),
+				"page", 1);
+		int rows = RequestUtil.getIntParamterAsDef(context.getRequest(),
+				"rows", 50);
+		String fName = RequestUtil.getStrParamterAsDef(context.getRequest(),
+				"fName", "");
+		UserInfoBean userInfo = (UserInfoBean) SessionUtil.getObjectAttribute(
+				context.getRequest(), RequestConstants.ADMIN_SESSION_KEY);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("fName", fName);
+		params.put("userId", userInfo.getId());
+		try {
+			Map<String, Object> map = orderService.getList_zy(page, rows,
+					params);
+			result.setRetObj(map);
+		} catch (Exception ex) {
+			logger.error("OrderInvocation getList_zy happen execption.", ex);
+			result.setRetCode(ISystemConstants.SYS_FAILED);
+		}
+		return result;
+	}
 
 	/**
 	 * 
@@ -348,6 +382,9 @@ public class OrderInvocation implements BaseInvocation {
 				context.getRequest(), "fTownship", "");
 		String fYaofang = RequestUtil.getStrParamterAsDef(context.getRequest(),
 				"fYaofang", "");
+		// 是否为直营：1表示直营，非1表示正常订单，直接采用药品管理里面的供货价代替 库存管理里面的价格 计算
+		String isZy = RequestUtil.getStrParamterAsDef(context.getRequest(),
+				"isZy", "0");
 		Integer fCustomerId = null;
 		if (!"".equals(customer)) {
 			JSONArray cArr = JSONArray.parseArray(customer);
@@ -364,7 +401,11 @@ public class OrderInvocation implements BaseInvocation {
 		bean.setfId(orderId);
 		bean.setfTownship(fTownship);
 		bean.setfYaofang(fYaofang);
-		bean.setIsPolicy("0");
+		if ("1".equals(isZy)) {// IsPolicy 为3时 :直营订单，为4时表示：直营政策订单
+			bean.setIsPolicy("3");
+		} else {			
+			bean.setIsPolicy("0");
+		}
 		JSONArray dArr = JSONArray.parseArray(drug);// 药品
 
 		// 判断药品库存是否够下单所用 start
@@ -448,7 +489,12 @@ public class OrderInvocation implements BaseInvocation {
 													// 0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");// 单价
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
+				
 				fGongyePrice = obj.getDouble("fGongyePrice");// 工业票价
 				fBuyingPrice = obj.getDouble("fBuyingPrice");// 进货价
 				fSalesNumber = obj.getInteger("fSalesNumber");// 销售数量
@@ -489,6 +535,8 @@ public class OrderInvocation implements BaseInvocation {
 				od.setfDrugId(obj.getInteger("fId"));
 				od.setfDrugName(obj.getString("fName"));
 				od.setfNumber(fSalesNumber);
+									
+				// 单价
 				od.setfPrice(fPrice);
 				od.setfGongyePrice(obj.getDouble("fGongyePrice"));
 				od.setfFanDian(fFanDian);
@@ -508,7 +556,11 @@ public class OrderInvocation implements BaseInvocation {
 		} else {// 含税
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
 				fBuyingPrice = obj.getDouble("fBuyingPrice");
 				fGongyePrice = obj.getDouble("fGongyePrice");
 				fKaiPiaoPrice = obj.getDouble("fKaiPiaoPrice");
@@ -553,7 +605,9 @@ public class OrderInvocation implements BaseInvocation {
 				od.setfDrugId(obj.getInteger("fId"));
 				od.setfDrugName(obj.getString("fName"));
 				od.setfNumber(obj.getInteger("fSalesNumber"));
-				od.setfPrice(obj.getDouble("fPrice"));
+									
+				// 单价
+				od.setfPrice(fPrice);
 				od.setfKaiPiaoPrice(obj.getDouble("fKaiPiaoPrice"));
 				od.setfGongyePrice(fGongyePrice);
 				od.setfGuoJiFei(fGuoJiFei);
@@ -630,6 +684,10 @@ public class OrderInvocation implements BaseInvocation {
 				"fYaofang", "");
 		String fPolicyIntro = RequestUtil.getStrParamterAsDef(
 				context.getRequest(), "fPolicyIntro", "");
+
+		// 是否为直营：1表示直营，非1表示正常订单，直接采用药品管理里面的供货价代替 库存管理里面的价格 计算
+		String isZy = RequestUtil.getStrParamterAsDef(context.getRequest(),
+				"isZy", "0");
 		Integer fCustomerId = null;
 		if (!"".equals(customer)) {
 			JSONArray cArr = JSONArray.parseArray(customer);
@@ -647,7 +705,12 @@ public class OrderInvocation implements BaseInvocation {
 		bean.setfTownship(fTownship);
 		bean.setfYaofang(fYaofang);
 		bean.setfPolicyIntro(fPolicyIntro);
-		bean.setIsPolicy("1");
+		// IsPolicy 为3时 :直营订单，为4时表示：直营政策订单，0：普通订单，1：政策订单
+		if ("1".equals(isZy)) {
+			bean.setIsPolicy("4");
+		} else {			
+			bean.setIsPolicy("1");
+		}
 		JSONArray dArr = JSONArray.parseArray(drug);// 药品
 
 		// 判断药品库存是否够下单所用 start
@@ -719,7 +782,11 @@ public class OrderInvocation implements BaseInvocation {
 													// 0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");// 单价
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
 				fBuyingPrice = obj.getDouble("fBuyingPrice");// 进货价
 				fSalesNumber = obj.getInteger("fSalesNumber");// 销售数量
 				// 单个药品返点= 数量*单价 * 0.07
@@ -761,7 +828,12 @@ public class OrderInvocation implements BaseInvocation {
 		} else {// 含税
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");
+
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
 				fBuyingPrice = obj.getDouble("fBuyingPrice");
 				fGongyePrice = obj.getDouble("fGongyePrice");// 工业票价
 				fKaiPiaoPrice = obj.getDouble("fKaiPiaoPrice");
@@ -862,8 +934,10 @@ public class OrderInvocation implements BaseInvocation {
 				context.getRequest(), "fTownship", "");
 		String fYaofang = RequestUtil.getStrParamterAsDef(context.getRequest(),
 				"fYaofang", "");
+		// 是否为直营：1表示直营，非1表示正常订单，直接采用药品管理里面的供货价代替 库存管理里面的价格 计算
+		String isZy = RequestUtil.getStrParamterAsDef(context.getRequest(),
+				"isZy", "0");
 		Integer fCustomerId = null;
-		System.out.println(customer + ":cus");
 		if (!"".equals(customer)) {
 			JSONArray cArr = JSONArray.parseArray(customer);
 			fCustomerId = cArr.getJSONObject(0).getInteger("fId");
@@ -961,7 +1035,11 @@ public class OrderInvocation implements BaseInvocation {
 													// 0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");// 单价
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
 				fGongyePrice = obj.getDouble("fGongyePrice");// 工业票价
 				fBuyingPrice = obj.getDouble("fBuyingPrice");// 进货价
 				fSalesNumber = obj.getInteger("fSalesNumber");// 销售数量
@@ -1020,7 +1098,11 @@ public class OrderInvocation implements BaseInvocation {
 		} else {// 含税
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
 				fGongyePrice = obj.getDouble("fGongyePrice");
 				fBuyingPrice = obj.getDouble("fBuyingPrice");
 				fKaiPiaoPrice = obj.getDouble("fKaiPiaoPrice");
@@ -1065,7 +1147,7 @@ public class OrderInvocation implements BaseInvocation {
 				od.setfDrugId(obj.getInteger("fId"));
 				od.setfDrugName(obj.getString("fName"));
 				od.setfNumber(obj.getInteger("fSalesNumber"));
-				od.setfPrice(obj.getDouble("fPrice"));
+				od.setfPrice(fPrice);
 				od.setfKaiPiaoPrice(obj.getDouble("fKaiPiaoPrice"));
 				od.setfGongyePrice(fGongyePrice);
 				od.setfGuoJiFei(fGuoJiFei);
@@ -1154,8 +1236,11 @@ public class OrderInvocation implements BaseInvocation {
 				"fYaofang", "");
 		String fPolicyIntro = RequestUtil.getStrParamterAsDef(
 				context.getRequest(), "fPolicyIntro", "");
+
+		// 是否为直营：1表示直营，非1表示正常订单，直接采用药品管理里面的供货价代替 库存管理里面的价格 计算
+		String isZy = RequestUtil.getStrParamterAsDef(context.getRequest(),
+				"isZy", "0");
 		Integer fCustomerId = null;
-		System.out.println(customer + ":cus");
 		if (!"".equals(customer)) {
 			JSONArray cArr = JSONArray.parseArray(customer);
 			fCustomerId = cArr.getJSONObject(0).getInteger("fId");
@@ -1242,7 +1327,12 @@ public class OrderInvocation implements BaseInvocation {
 													// 0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");// 单价
+
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
 				fBuyingPrice = obj.getDouble("fBuyingPrice");// 进货价
 				fSalesNumber = obj.getInteger("fSalesNumber");// 销售数量
 				// 单个药品返点= 数量*单价 * 0.07
@@ -1284,7 +1374,12 @@ public class OrderInvocation implements BaseInvocation {
 		} else {// 含税
 			for (int i = 0; i < dArr.size(); i++) {
 				obj = dArr.getJSONObject(i);
-				fPrice = obj.getDouble("fPrice");
+
+				if ("1".equals(isZy)) {
+					fPrice = obj.getDouble("fSupplyPrice");// 供货价
+				} else {					
+					fPrice = obj.getDouble("fPrice");// 单价
+				}
 				fBuyingPrice = obj.getDouble("fBuyingPrice");
 				fKaiPiaoPrice = obj.getDouble("fKaiPiaoPrice");
 				fGongyePrice = obj.getDouble("fGongyePrice");
@@ -1659,13 +1754,13 @@ public class OrderInvocation implements BaseInvocation {
 			// 单价 end
 
 			// 开票价 end
-			if ("0".equals(fTax)) {// 不含税 0：不含税，1：含税(增值税)，2：含税(普通)
+			if ("0".equals(fTax) || "3".equals(fTax)) {// 不含税
+				// 0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
 				for (Map<String, Object> map : detail) {
 					fPrice = drugPriceMap.get(MapUtils.getString(map, "F_ID"));// 单价
 					fBuyingPrice = MapUtils.getDouble(map, "F_BUYING_PRICE");// 进货价
 					fSalesNumber = MapUtils.getInteger(map, "F_NUMBER");// 销售数量
-					System.out.println(fPrice + "==" + fBuyingPrice + "=="
-							+ fSalesNumber);
+					
 					// 单个药品返点= 数量*单价 * 0.07
 					// fFanDian = fPrice.doubleValue() * fSalesNumber.intValue()
 					// * 0.07;
@@ -1890,7 +1985,8 @@ public class OrderInvocation implements BaseInvocation {
 			Double fGaoKaiFei = 0d;// 高开费
 			Double fGaoKaiFeiTotal = 0d;// 高开费合计
 
-			if ("0".equals(fTax)) {
+			if ("0".equals(fTax) || "3".equals(fTax)) {// 不含税
+				// 0：普通发票，1：含税(增值税)，2：含税(普通),3:专用发票
 				fandians = fandians.substring(0, fandians.length() - 1);// 返点
 				List<String> fandianList = Arrays.asList(fandians.split(","));
 				for (int i = 0; i < drugIdList.size(); i++) {
